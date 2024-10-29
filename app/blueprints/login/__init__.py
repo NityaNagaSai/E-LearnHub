@@ -14,7 +14,7 @@ def login():
         if role == 'admin':
             return redirect(url_for('admin.admin_landing'))  # Redirect to Admin landing page
         elif role == 'faculty':
-            return redirect(url_for('faculty.faculty_landing'))  # Redirect to Faculty landing page
+            return redirect(url_for('faculty.faculty_home'))  # Redirect to Faculty landing page
         elif role == 'ta':
             return redirect(url_for('ta.ta_landing'))  # Redirect to TA landing page
         elif role == 'student':

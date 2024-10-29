@@ -1,0 +1,83 @@
+from flask import Blueprint, render_template, redirect, session, url_for, request, flash
+from . import faculty_bp
+
+@faculty_bp.route('/home')
+def faculty_home():
+    return render_template('faculty_landing.html')
+
+# Route for 'Go to Active Course'
+@faculty_bp.route('/active_course')
+def go_to_active_course():
+    if request.method == 'POST':
+        course_id = request.form.get('course_id')
+        option = request.form.get('option')
+        
+        # Save the selected course_id in session for later use
+        session['course_id'] = course_id
+        
+        if not course_id:
+            flash("Please enter a valid Course ID", "error")
+            return redirect(url_for('go_to_active_course'))
+
+        # Redirect based on the selected option
+        if option == '1':
+            return redirect(url_for('view_worklist', course_id=course_id))
+        elif option == '2':
+            return redirect(url_for('approve_enrollment', course_id=course_id))
+        elif option == '3':
+            return redirect(url_for('view_students', course_id=course_id))
+        elif option == '4':
+            return redirect(url_for('add_chapter', course_id=course_id))
+        elif option == '5':
+            return redirect(url_for('modify_chapters', course_id=course_id))
+        elif option == '6':
+            return redirect(url_for('add_ta', course_id=course_id))
+        elif option == '7':
+            return redirect(url_for('faculty_home'))
+        else:
+            flash("Invalid option selected.", "error")
+            return redirect(url_for('go_to_active_course'))
+    return render_template('active_course.html')  # Replace with your template
+
+# Route for 'Go to Evaluation Course'
+@faculty_bp.route('/faculty/evaluation_course')
+def go_to_evaluation_course():
+    # Logic to retrieve evaluation courses
+    return render_template('evaluation_course.html')  # Replace with your template
+
+# Route for 'View Courses'
+@faculty_bp.route('/faculty/view_courses')
+def view_courses():
+    # Logic to retrieve all courses for this faculty
+    return render_template('view_courses.html')  # Replace with your template
+
+# Route for 'Change Password'
+@faculty_bp.route('/faculty/change_password', methods=['GET', 'POST'])
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        # Logic to validate and update password (e.g., check current_password, then update)
+        if new_password == confirm_password:
+            flash("Password updated successfully", "success")
+        else:
+            flash("Passwords do not match", "error")
+        
+    return render_template('change_password.html')  # Replace with your template
+
+# Route for 'Logout'
+@faculty_bp.route('/logout')
+def logout():
+    session.pop('user_role', None)  # Remove user session data
+    return redirect(url_for('login'))
+
+# Dummy login route for testing
+@faculty_bp.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        # Login logic goes here
+        session['user_role'] = 'faculty'  # Mock login
+        return redirect(url_for('faculty_home'))
+    return render_template('login.html')
