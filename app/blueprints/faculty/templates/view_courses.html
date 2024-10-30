@@ -76,35 +76,25 @@
 <body>
     <!-- Navigation bar -->
     <div class="navbar">
-        E-Textbook and Assessment Platform - Active Course Options
+        E-Textbook and Assessment Platform - Course Evaluation Options
     </div>
 
     <!-- Centered content -->
     <div class="container">
-        <h2>Enter Course ID</h2>
-        <!-- Course ID form submission triggers options display -->
-        <form onsubmit="event.preventDefault(); showOptions();">
-            <label for="course_id">Course ID:</label>
-            <input type="text" id="course_id" name="course_id" required><br><br>
-            <button type="submit">Submit Course ID</button>
-        </form>
+        <h2>View Courses</h2>
+        <ul class="menu">
+            {% for course in courses %}
+            <li>{{ course.name }}</li>
+            {% endfor %}
+        </ul>
 
-        <!-- Options displayed only after valid Course ID entry -->
-        <div id="options">
-            <h3>Select an Option</h3>
-            <form method="POST">
-                <input type="hidden" name="course_id" id="hidden_course_id">
-                <ul class="menu">
-                    <li><button type="submit" name="option" value="1">1. View Worklist</button></li>
-                    <li><button type="submit" name="option" value="2">2. Approve Enrollment</button></li>
-                    <li><button type="submit" name="option" value="3">3. View Students</button></li>
-                    <li><button type="submit" name="option" value="4">4. Add New Chapter</button></li>
-                    <li><button type="submit" name="option" value="5">5. Modify Chapters</button></li>
-                    <li><button type="submit" name="option" value="6">6. Add TA</button></li>
-                    <li><button type="submit" name="option" value="7">7. Go Back</button></li>
-                </ul>
-            </form>
-        </div>
+        <h3>Select an Option</h3>
+        <form method="POST">
+            <input type="hidden" name="course_id" id="hidden_course_id">
+            <ul class="menu">
+                <li><button type="submit" name="option" value="1">Go Back</button></li>
+            </ul>
+        </form>
     </div>
 </body>
 

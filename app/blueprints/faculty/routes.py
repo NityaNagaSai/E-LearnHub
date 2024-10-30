@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, redirect, session, url_for, request, flash
 from . import faculty_bp
 
-@faculty_bp.route('/home')
+@faculty_bp.route('/home', methods=['GET', 'POST'])
 def faculty_home():
     return render_template('faculty_landing.html')
 
@@ -36,20 +36,53 @@ def go_to_active_course():
             return redirect(url_for('faculty_home'))
         else:
             flash("Invalid option selected.", "error")
-            return redirect(url_for('go_to_active_course'))
+            return redirect(url_for('faculty.go_to_active_course'))
+        
     return render_template('active_course.html')  # Replace with your template
 
 # Route for 'Go to Evaluation Course'
-@faculty_bp.route('/faculty/evaluation_course')
+@faculty_bp.route('/evaluation_course')
 def go_to_evaluation_course():
-    # Logic to retrieve evaluation courses
+    if request.method == 'POST':
+        course_id = request.form.get('course_id')
+        option = request.form.get('option')
+        
+        # Save the selected course_id in session for later use
+        session['course_id'] = course_id
+        
+        if not course_id:
+            flash("Please enter a valid Course ID", "error")
+            return redirect(url_for('go_to_evaluation_course'))
+
+        if option == '1':
+            return redirect(url_for('add_chapter', course_id=course_id))
+        elif option == '2':
+            return redirect(url_for('modify_chapters', course_id=course_id))
+        elif option == '3':
+            return redirect('faculty/home')
+        else:
+            flash("Invalid option selected.", "error")
+            return redirect(url_for('go_to_active_course'))
     return render_template('evaluation_course.html')  # Replace with your template
 
 # Route for 'View Courses'
-@faculty_bp.route('/faculty/view_courses')
+@faculty_bp.route('/view_courses')
 def view_courses():
-    # Logic to retrieve all courses for this faculty
-    return render_template('view_courses.html')  # Replace with your template
+   assigned_courses = [{"couseID" : "CSC 540", "name": "CSC 540 DBMS"},
+                       {"couseID" : "CSC 591 A", "name":"CSC 591 ML with Graphs"} , 
+                       {"couseID" : "CSC 591 B", "name":"CSC 591 Programmer Centered Design and Research"}]
+
+   if request.method == 'POST':
+   #Query Courses from DB and send it
+   # assigned_courses = Course.query.filter_by(faculty_id=faculty_id).all()
+    option = request.form.get('option')
+    
+    if option == '1':
+        return redirect(url_for('faculty.faculty_home'))
+    else:
+        flash("Invalid option selected.", "error")
+        return redirect(url_for('go_to_active_course'))
+   return render_template('view_courses.html', courses=assigned_courses)  # Replace with your template
 
 # Route for 'Change Password'
 @faculty_bp.route('/faculty/change_password', methods=['GET', 'POST'])
