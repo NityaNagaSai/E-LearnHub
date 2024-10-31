@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
+    <title>TA</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -27,8 +26,7 @@
             height: 80vh;
             text-align: center;
             flex-direction: column;
-            margin-top: 60px;
-            /* Adjust for the fixed navbar */
+            margin-top: 60px; /* Adjust for the fixed navbar */
         }
 
         /* Styling for the menu list */
@@ -52,27 +50,19 @@
         }
     </style>
 </head>
-
 <body>
     <!-- Navigation bar -->
     <div class="navbar">
-        E-Textbook and Assessment Platform
+        E-Textbook and Assessment Platform - View Courses
     </div>
 
     <!-- Centered content -->
     <div class="container">
-        <h2>Please Select an Option</h2>
-        <form method="POST" action="{{ url_for('main.choose_role') }}">
-            <ol>
-                <li><button name="choice" value="1">Admin Login</button><br></li>
-                <li><button name="choice" value="2">Faculty Login</button><br></li>
-                <li><button name="choice" value="3">TA Login</button><br></li>
-                <li><button name="choice" value="4">Student Login</button><br></li>
-                <li><button name="choice" value="5">Exit</button><br></li>
-            </ol>
-           
-        </form>
+        <h2>Course List</h2>
+        <ol>
+            <li><a href="{{ url_for('ta.ta_landing') }}">Go Back</a></li>
+        </ol>
+       
     </div>
 </body>
-
 </html>
