@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Faculty Home</title>
+    <title>Active Course Options</title>
     <style>
         .navbar {
             background-color: black;
@@ -37,32 +37,47 @@
             margin: 10px 0;
         }
 
-        a {
+        a,
+        button {
             text-decoration: none;
             font-size: 18px;
             color: #007bff;
+            background: none;
+            border: none;
+            cursor: pointer;
         }
 
-        a:hover {
+        a:hover,
+        button:hover {
             color: #0056b3;
+        }
+
+        #options {
+            display: none;
         }
     </style>
 </head>
 
 <body>
     <div class="navbar">
-        E-Textbook and Assessment Platform - Faculty Dashboard
+        E-Textbook and Assessment Platform - Student Waitlist for {%courseID%}
     </div>
 
     <div class="container">
-        <h2>Please Select an Option</h2>
-        <ul>
-            <li><a href="/faculty/active_course">1. Go to Active Course</a></li>
-            <li><a href="/faculty/evaluation_course">2. Go to Evaluation Course</a></li>
-            <li><a href="/faculty/view_courses">3. View Courses</a></li>
-            <li><a href="/faculty/change_password">4. Change Password</a></li>
-            <li><a href="/logout">5. Logout</a></li>
+        <h2>View Waitlist</h2>
+        <ul class="menu">
+            {% for student in waitlist %}
+            <li>{{ student.name }} {{ student.studentID }}</li>
+            {% endfor %}
         </ul>
+
+        <h3>Select an Option</h3>
+        <form method="POST">
+            <input type="hidden" name="course_id" id="hidden_course_id">
+            <ul class="menu">
+                <li><button type="submit" name="option" value="1">Go Back</button></li>
+            </ul>
+        </form>
     </div>
 </body>
 
