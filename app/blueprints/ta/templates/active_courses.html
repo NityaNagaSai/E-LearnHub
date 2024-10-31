@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
+    <title>TA</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -59,16 +59,27 @@
     <!-- Centered content -->
     <div class="container">
         <h2>Please Select an Option</h2>
-        <form method="POST" action="{{ url_for('main.choose_role') }}">
+        <form id="active_course_menu" action="{{ url_for('ta.active_course_menu') }}" method="POST">
+            <label for="course_id">Enter Course ID:</label>
+            <input type="text" id="course_id" name="course_id" required><br><br>
+    
+            <h2>Choose an option:</h2>
             <ol>
-                <li><button name="choice" value="1">Admin Login</button><br></li>
-                <li><button name="choice" value="2">Faculty Login</button><br></li>
-                <li><button name="choice" value="3">TA Login</button><br></li>
-                <li><button name="choice" value="4">Student Login</button><br></li>
-                <li><button name="choice" value="5">Exit</button><br></li>
+                <li><a href="#" onclick="submitForm('view_students')">View Students</a></li>
+                <li><a href="#" onclick="submitForm('add_chapter')">Add New Chapter</a></li>
+                <li><a href="#" onclick="submitForm('modify_chapters')">Modify Chapters</a></li>
+                <li><a href="#" onclick="submitForm('go_back')">Back</a></li>
             </ol>
-           
+            <input type="hidden" id="action" name="action">
+    
         </form>
+        <script>
+            // Function to set the action and submit the form
+            function submitForm(action) {
+                document.getElementById('action').value = action;
+                document.getElementById('active_course_menu').submit();
+            }
+        </script>
     </div>
 </body>
 </html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Landing Page</title>
+    <title>TA</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -59,12 +59,12 @@
     <!-- Centered content -->
     <div class="container">
         <h2>Please Select an Option</h2>
-        <form method="POST">
-            <button name="choice" value="1">1. Go to Active course</button><br>
-            <button name="choice" value="2">2. View Courses</button><br>
-            <button name="choice" value="3">3. Change Password</button><br>
-            <button name="choice" value="4">4. Logout</button><br>
-        </form>
+        <ol>
+            <li><a href="{{ url_for('ta.active_course') }}">Go to Active Course</a></li>
+            <li><a href="{{ url_for('ta.view_courses') }}">View Courses</a></li>
+            <li><a href="{{ url_for('ta.change_password') }}">Change Password</a></li>
+            <li><a href="#">Logout</a></li>
+        </ol>
     </div>
 </body>
 </html>
