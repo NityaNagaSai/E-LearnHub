@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, request, flash, Blueprint
+from flask import render_template, redirect, url_for, request, flash, Blueprint, session
 
 main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
@@ -17,8 +17,33 @@ def choose_role():
     elif choice == "4":
         return redirect(url_for('login.login', role="student"))
     elif choice == "5":
-        # End the program
-        return
+        shutdown_server()
     else:
         flash("Invalid choice. Please select a valid option.", "error")
         return redirect(url_for('index'))
+
+@main_bp.route('/login', methods=['GET', 'POST'])
+def login():
+    role = request.args.get('role') 
+    
+    if request.method == 'POST':
+        user_id = request.form.get("user_id")
+        password = request.form.get("password")
+        
+        if role == 'admin':
+            # add validation code
+            return redirect(url_for(f'{role}.{role}_home'))
+        elif role == 'faculty':
+            # add validation code
+            return redirect(url_for(f'{role}.{role}_home'))
+        elif role == 'ta':
+            # add validation code
+            return redirect(url_for(f'{role}.{role}_home'))
+        elif role == 'student':
+            # add validation code
+            return redirect(url_for(f'{role}.{role}_home'))
+
+    return render_template('login.html', role=role)
+
+def shutdown_server():
+    pass
