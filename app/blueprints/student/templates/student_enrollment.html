@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Course Enrollment</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+  </head>
+  <body>
+    <div class="container mt-5">
+      <h2>Student Course Enrollment</h2>
+      <form method="POST" action="{{ url_for('student.enroll') }}">
+        <div class="form-group">
+          <label for="first_name">First Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="first_name"
+            name="first_name"
+          />
+        </div>
+        <div class="form-group">
+          <label for="last_name">Last Name</label>
+          <input
+            type="text"
+            class="form-control"
+            id="last_name"
+            name="last_name"
+          />
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="text" class="form-control" id="email" name="email" />
+        </div>
+        <div class="form-group">
+          <label for="email">Course Token</label>
+          <input
+            type="text"
+            class="form-control"
+            id="course_token"
+            name="course_token"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Enroll</button>
+        <a href="{{ url_for('student.login') }}" class="btn btn-secondary"
+          >Go Back</a
+        >
+      </form>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="alert alert-danger mt-3">{{ messages[0] }}</div>
+      {% endif %} {% endwith %}
+    </div>
+  </body>
+</html>

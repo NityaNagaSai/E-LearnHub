@@ -1,0 +1,20 @@
+[
+    {
+        "student_id": "ErPe1024",
+        "full_name": "Eric Perrig",
+        "password": "qwdmq",
+        "email": "ez356@example.mail"
+    },
+    {
+        "student_id": "AlAr1024",
+        "full_name": "Alice Artho",
+        "password": "omdsws",
+        "email": "aa23@edu.mail"
+    },
+    {
+        "student_id": "BoTe1024",
+        "full_name": "Bob Temple",
+        "password": "sak+=",
+        "email": "bt163@template.mail"
+    }
+]

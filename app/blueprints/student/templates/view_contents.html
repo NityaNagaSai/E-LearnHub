@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sections</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <script>
+      // Function to toggle visibility of chapters, sections, and blocks
+      function toggleVisibility(id) {
+        const element = document.getElementById(id);
+        element.style.display =
+          element.style.display === "none" ? "block" : "none";
+      }
+    </script>
+    <style>
+      .content-textbook,
+      .chapter,
+      .section,
+      .block {
+        margin: 10px 0;
+      }
+      .chapter {
+        margin-left: 20px;
+      }
+      .section {
+        margin-left: 40px;
+      }
+      .block {
+        margin-left: 60px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Table of Contents</h1>
+      <div class="content-textbook">
+        {% for textbook in textbooks %}
+        <div class="textbook">
+          <h2 onclick="toggleVisibility('textbook-{{ textbook.id }}')">
+            {{ textbook.title }}
+          </h2>
+          <div id="textbook-{{ textbook.id }}" style="display: none">
+            {% for chapter in textbook.chapters %}
+            <div class="chapter">
+              <h3 onclick="toggleVisibility('chapter-{{ chapter.id }}')">
+                Chapter {{ chapter.id }}: {{ chapter.title }}
+              </h3>
+              <div id="chapter-{{ chapter.id }}" style="display: none">
+                {% for section in chapter.sections %}
+                <div class="section">
+                  <h4 onclick="toggleVisibility('section-{{ section.id }}')">
+                    Section {{ section.id }}: {{ section.title }}
+                  </h4>
+                  <div id="section-{{ section.id }}" style="display: none">
+                    {% for block in section.blocks %}
+                    <p class="block">Block {{ block.id }}: {{ block.title }}</p>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Footer navigation options -->
+      <h3>Options</h3>
+      <ul>
+        <li><a href="{{ url_for('student.landing') }}">Go Back to Menu</a></li>
+      </ul>
+    </div>
+  </body>
+</html>

@@ -15,7 +15,7 @@ def choose_role():
     elif choice == "3":
         return redirect(url_for('login.login', role="ta"))
     elif choice == "4":
-        return redirect(url_for('login.login', role="student"))
+        return redirect(url_for('student.login', role="student"))
     elif choice == "5":
         # End the program
         return
