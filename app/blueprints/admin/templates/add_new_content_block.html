@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Section</title>
+    <title>Add New Content Block</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -46,6 +46,7 @@
         /* Styling for buttons */
         .buttons {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-top: 15px;
         }
@@ -54,15 +55,16 @@
             padding: 10px;
             font-size: 16px;
             cursor: pointer;
+            width: 100%;
         }
 
-        .add-content {
+        .add-option {
             background-color: #007bff;
             color: white;
             border: none;
         }
 
-        .add-content:hover {
+        .add-option:hover {
             background-color: #0056b3;
         }
 
@@ -75,6 +77,7 @@
             font-size: 16px;
             text-align: center;
             display: inline-block;
+            width: 100%;
         }
 
         .go-back:hover, .landing-page:hover {
@@ -89,23 +92,20 @@
     </div>
 
     <div class="container">
-        <h2>Add New Section</h2>
-        <p>For Chapter ID: {{ chapter_id }}</p>
+        <h2>Add New Content Block</h2>
 
-        <form method="POST" action="{{ url_for('admin.save_section') }}">
-            <label for="section_number">Section Number:</label>
-            <input type="text" id="section_number" name="section_number" required>
+        <form method="POST" action="{{ url_for('admin.save_content_block') }}">
+            <label for="content_block_id">Content Block ID:</label>
+            <input type="text" id="content_block_id" name="content_block_id" required>
 
-            <label for="section_title">Section Title:</label>
-            <input type="text" id="section_title" name="section_title" required>
-
-            <!-- Buttons for Add New Content Block, Go Back, and Landing Page -->
+            <!-- Buttons for Add Text, Add Picture, Add Activity, Go Back, and Landing Page -->
             <div class="buttons">
-                <!-- Submit button for adding the section and moving to the Add New Content Block page -->
-                <button type="submit" name="action" value="add_content_block" class="add-content">Add New Content Block</button>
+                <button type="submit" name="action" value="add_text" class="add-option">Add Text</button>
+                <button type="submit" name="action" value="add_picture" class="add-option">Add Picture</button>
+                <button type="submit" name="action" value="add_activity" class="add-option">Add Activity</button>
 
                 <!-- Link for Go Back -->
-                <a href="{{ url_for('admin.new_chapter') }}" class="go-back">Go Back</a>
+                <a href="{{ url_for('admin.add_new_section') }}" class="go-back">Go Back</a>
 
                 <!-- Link for Landing Page -->
                 <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
