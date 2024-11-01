@@ -1,5 +1,15 @@
 from flask import render_template, request, redirect, url_for, flash, session
+from flask import Blueprint, render_template
+
+
 from app.blueprints.login import login_bp
+
+
+admin_bp = Blueprint('admin', __name__, template_folder='templates')
+
+@admin_bp.route('/admin_landing')
+def admin_landing():
+    return render_template('admin_landing.html')
 
 @login_bp.route('/login', methods=['GET', 'POST'])
 def login():

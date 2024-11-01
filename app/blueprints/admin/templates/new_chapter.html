@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Chapter</title>
+    <style>
+        /* Styling for the navigation bar */
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Center the content on the page */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+            flex-direction: column;
+            margin-top: 60px; /* Adjust for the fixed navbar */
+        }
+
+        /* Styling for the form */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 300px;
+        }
+
+        label, input {
+            width: 100%;
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        /* Styling for buttons */
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .add-section {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+
+        .add-section:hover {
+            background-color: #0056b3;
+        }
+
+        .go-back, .landing-page {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            text-decoration: none;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .go-back:hover, .landing-page:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        Admin Dashboard
+    </div>
+
+    <!-- Centered content -->
+    <div class="container">
+        <h2>Add New Chapter for "{{ etextbook_title }}"</h2>
+        <p>E-textbook ID: {{ etextbook_id }}</p>
+
+        <form method="POST" action="{{ url_for('admin.save_chapter') }}">
+            <label for="chapter_id">Unique Chapter ID:</label>
+            <input type="text" id="chapter_id" name="chapter_id" required>
+
+            <label for="chapter_title">Chapter Title:</label>
+            <input type="text" id="chapter_title" name="chapter_title" required>
+
+            <!-- Buttons for Add New Section, Go Back, and Landing Page -->
+            <div class="buttons">
+                <!-- Submit button for adding the section and moving to the next page -->
+                <button type="submit" name="action" value="add_section" class="add-section">Add New Section</button>
+
+                <!-- Link for Go Back -->
+                <a href="{{ url_for('admin.create_etextbook') }}" class="go-back">Go Back</a>
+
+                <!-- Link for Landing Page -->
+                <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
