@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Picture</title>
+</head>
+<body>
+    <h2>Add Picture</h2>
+    <form method="POST" action="{{ url_for('admin.save_picture') }}">
+        <label for="picture">Picture URL:</label>
+        <input type="text" id="picture" name="picture" required>
+        <button type="submit" name="action" value="add">Add</button>
+    </form>
+    <a href="{{ url_for('admin.add_new_content_block') }}">Go Back</a>
+    <a href="{{ url_for('admin.admin_landing') }}">Landing Page</a>
+</body>
+</html>
