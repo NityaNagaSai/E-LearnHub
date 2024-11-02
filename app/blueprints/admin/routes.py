@@ -41,6 +41,8 @@ def add_etextbook():
     title = request.form.get('title')
     etextbook_id = request.form.get('etextbook_id')
     etextbook_list = fetch_etextbooks(etextbook_id)
+    session['etextbook_title'] = title
+    session['etextbook_id'] = etextbook_id
     if etextbook_list:
         # display a message showing textbook with same id exists and ask them to change the textbook id
          flash('Textbook with Id exists. Please enter a new one', 'error')
@@ -63,15 +65,6 @@ def new_chapter():
     etextbook_id = session.get('etextbook_id')
     return render_template('new_chapter.html', etextbook_title=etextbook_title, etextbook_id=etextbook_id)
 
-
-@admin_bp.route('/add_etextbook', methods=['POST'])
-def add_etextbook():
-    title = request.form.get('title')
-    etextbook_id = request.form.get('etextbook_id')
-    session['etextbook_title'] = title
-    session['etextbook_id'] = etextbook_id
-
-    return redirect(url_for('admin.new_chapter'))
 
 @admin_bp.route('/save_chapter', methods=['POST'])
 def save_chapter():
