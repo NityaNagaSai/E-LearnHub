@@ -5,9 +5,9 @@ main_bp = Blueprint('main', __name__)
 def index():
     return render_template('index.html')
 
-@main_bp.route('/choose_role', methods=['POST'])
+@main_bp.route('/choose_role', methods=['GET'])
 def choose_role():
-    choice = request.form.get("choice")
+    choice = request.args.get("choice")
     if choice == "1":
         return redirect(url_for('login.login', role="admin"))
     elif choice == "2":
@@ -17,8 +17,9 @@ def choose_role():
     elif choice == "4":
         return redirect(url_for('student.login', role="student"))
     elif choice == "5":
-        # End the program
-        return
+        # Handle exit or end the session as needed
+        flash("Exiting the platform.", "info")
+        return redirect(url_for('index'))  # Redirect to home or exit page
     else:
         flash("Invalid choice. Please select a valid option.", "error")
         return redirect(url_for('index'))
