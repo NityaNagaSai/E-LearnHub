@@ -1,0 +1,21 @@
+from app.config import get_db_connection
+from app.models import User
+
+def validate_user(user_id, password, role):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = "SELECT * FROM User WHERE user_id = %s AND user_password = %s AND user_role = %s"
+        cursor.execute(query, (user_id, password, role))
+        user_data = cursor.fetchall()
+            
+        if user_data:
+            if len(user_data) == 1:
+                return True
+            else:
+                return False
+        return None
+    finally:
+        cursor.close()
+        conn.close()
