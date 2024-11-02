@@ -4,7 +4,7 @@ from app.blueprints.ta import ta_bp
 from app.blueprints.faculty import faculty_bp
 from app.blueprints.admin import admin_bp
 from app.blueprints.student import student_bp
-from app.db.crud import db_bp
+from app.db.crud import db_bp, create_tables, populate_tables
 
 
 def create_app():
@@ -16,6 +16,8 @@ def create_app():
     app.register_blueprint(admin_bp, url_prefix="/admin")
     app.register_blueprint(student_bp, url_prefix="/student")
     app.register_blueprint(db_bp, url_prefix="/db")
-
+    with app.app_context():
+        create_tables()
+        populate_tables()
     return app
 

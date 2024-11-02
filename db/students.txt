@@ -1,0 +1,10 @@
+ErPe1024,Eric,Perrig,qwdmq,ez356@example.mail,Student
+AlAr1024,Alice,Artho,omdsws,aa23@edu.mail,Student
+BoTe1024,Bob,Temple,sak+=,bt163@template.mail,Student
+LiGa1024,Lily,Gaddy,cnaos,li123@example.edu,Student
+ArMo1024,Aria,Morrow,jwocals,am213@example.edu,Student
+KeRh1014,Kellan,Rhodes,camome,kr21@example.edu,Student
+SiHa1024,Sienna,Hayes,asdqm,sh13@example.edu,Student
+FiWi1024,Finn,Wilder,f13mas,fw23@example.edu,Student
+LeMe1024,Leona,Mercer,ca32,lm56@example.edu,Student
+KeOg1024,Kemafor,Ogan,Ko2024!rpc,kogan@ncsu.edu,Faculty
