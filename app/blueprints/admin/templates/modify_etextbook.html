@@ -5,75 +5,112 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Modify E-textbook</title>
     <style>
-        /* Styling for the form layout */
-        .container {
-            display: flex;
-            flex-direction: column;
-            width: 50%;
-            margin: 0 auto;
-            font-family: Arial, sans-serif;
+        /* Styling for the navigation bar */
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
             text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
         }
 
-        h2 {
+        /* Center the content on the page */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
             text-align: center;
+            flex-direction: column;
+            margin-top: 60px; /* Adjust for the fixed navbar */
+        }
+
+        /* Styling for the form */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
         }
 
         label, input {
-            margin: 10px 0;
             width: 100%;
+            margin: 5px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        input {
             padding: 8px;
             font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
 
-        button {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            border: none;
-            margin-top: 10px;
-        }
-
-        .menu-links {
+        /* Styling for buttons */
+        .buttons {
             display: flex;
             flex-direction: column;
             gap: 10px;
+            width: 300px; /* Matches the width of the form */
         }
 
-        .link {
-            text-decoration: none;
+        .button-link {
+            background-color: black;
             color: white;
-            background-color: #007bff;
             padding: 10px;
             font-size: 16px;
-            text-align: center;
             border-radius: 4px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            width: 100%;
         }
 
-        .link:hover {
-            background-color: #0056b3;
+        .button-link:hover {
+            background-color: #333333;
+        }
+
+        .go-back, .landing-page {
+            background-color: #6c757d;
+        }
+
+        .go-back:hover, .landing-page:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <h2>Modify E-textbook</h2>
-    <form method="POST" action="{{ url_for('admin.modify_etextbook') }}">
-        <label for="etextbook_id">Unique E-textbook ID:</label>
-        <input type="text" id="etextbook_id" name="etextbook_id" required>
-        <button type="submit">Submit</button>
-    </form>
-
-    <!-- Menu Links -->
-    <div class="menu-links">
-        <a href="{{ url_for('admin.add_new_chapter') }}" class="link">Add New Chapter</a>
-        <a href="{{ url_for('admin.modify_chapter') }}" class="link">Modify Chapter</a>
-        <a href="{{ url_for('admin.admin_landing') }}" class="link">Go Back</a>
-        <a href="{{ url_for('admin.admin_landing') }}" class="link">Landing Page</a>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        Admin Dashboard
     </div>
-</div>
+
+    <div class="container">
+        <h2>Modify E-textbook</h2>
+        <form>
+            <label for="etextbook_id">Unique E-textbook ID:</label>
+            <input type="text" id="etextbook_id" name="etextbook_id" required>
+        </form>
+
+        <div class="buttons">
+            <a href="{{ url_for('admin.add_new_chapter') }}" class="button-link">Add New Chapter</a>
+            <a href="{{ url_for('admin.modify_chapter') }}" class="button-link">Modify Chapter</a>
+            <a href="{{ url_for('admin.admin_landing') }}" class="button-link go-back">Go Back</a>
+            <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>
+        </div>
+    </div>
 
 </body>
 </html>

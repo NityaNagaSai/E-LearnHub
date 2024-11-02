@@ -5,24 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Question</title>
     <style>
-        /* Styling for the form layout */
+        /* Styling for the navigation bar */
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Center the content on the page */
         .container {
             display: flex;
             flex-direction: column;
-            width: 50%;
+            align-items: center;
+            width: 90%;
+            max-width: 500px;
             margin: 0 auto;
+            padding-top: 80px; /* Space for the navbar */
             font-family: Arial, sans-serif;
         }
 
         h2 {
             text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 10px;
         }
 
-        label, input, select, textarea {
-            margin: 10px 0;
+        p {
+            font-size: 0.9em;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        label {
+            margin: 5px 0;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
             width: 100%;
             padding: 8px;
-            font-size: 16px;
+            font-size: 0.9em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
         }
 
         .option-group {
@@ -30,29 +68,38 @@
             flex-direction: column;
             border: 1px solid #ccc;
             padding: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 10px;
             border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-group h3 {
+            font-size: 1em;
+            margin-bottom: 8px;
         }
 
         button {
             width: 100%;
             padding: 10px;
-            font-size: 16px;
+            font-size: 1em;
             cursor: pointer;
             border: none;
-            background-color: #007bff;
+            border-radius: 5px;
+            background-color: #1e1f20;
             color: white;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         button:hover {
-            background-color: #0056b3;
+            background-color: #171718;
         }
 
         .link-buttons {
             display: flex;
-            justify-content: space-between;
+            gap: 10px;
             margin-top: 15px;
+            width: 100%;
         }
 
         .link-buttons a {
@@ -60,9 +107,9 @@
             color: white;
             background-color: #6c757d;
             padding: 10px;
-            font-size: 16px;
+            font-size: 1em;
             text-align: center;
-            border-radius: 4px;
+            border-radius: 5px;
             width: 48%;
         }
 
@@ -73,15 +120,22 @@
 </head>
 <body>
 
+<!-- Navigation bar -->
+<div class="navbar">
+    Admin Dashboard
+</div>
+
 <div class="container">
     <h2>Add Question</h2>
+    <p>For Activity ID: "{{ activity_id }}"</p>
+
     <form method="POST" action="{{ url_for('admin.save_question') }}">
         <!-- Question ID and Text -->
         <label for="question_id">Question ID:</label>
         <input type="text" id="question_id" name="question_id" required>
 
         <label for="question_text">Question Text:</label>
-        <textarea id="question_text" name="question_text" required></textarea>
+        <textarea id="question_text" name="question_text" rows="3" required></textarea>
 
         <!-- Option 1 -->
         <div class="option-group">
@@ -90,7 +144,7 @@
             <input type="text" id="option1_text" name="option1_text" required>
 
             <label for="option1_explanation">Explanation:</label>
-            <textarea id="option1_explanation" name="option1_explanation"></textarea>
+            <textarea id="option1_explanation" name="option1_explanation" rows="2"></textarea>
 
             <label for="option1_label">Label:</label>
             <select id="option1_label" name="option1_label">
@@ -106,7 +160,7 @@
             <input type="text" id="option2_text" name="option2_text" required>
 
             <label for="option2_explanation">Explanation:</label>
-            <textarea id="option2_explanation" name="option2_explanation"></textarea>
+            <textarea id="option2_explanation" name="option2_explanation" rows="2"></textarea>
 
             <label for="option2_label">Label:</label>
             <select id="option2_label" name="option2_label">
@@ -122,7 +176,7 @@
             <input type="text" id="option3_text" name="option3_text">
 
             <label for="option3_explanation">Explanation:</label>
-            <textarea id="option3_explanation" name="option3_explanation"></textarea>
+            <textarea id="option3_explanation" name="option3_explanation" rows="2"></textarea>
 
             <label for="option3_label">Label:</label>
             <select id="option3_label" name="option3_label">
@@ -138,7 +192,7 @@
             <input type="text" id="option4_text" name="option4_text">
 
             <label for="option4_explanation">Explanation:</label>
-            <textarea id="option4_explanation" name="option4_explanation"></textarea>
+            <textarea id="option4_explanation" name="option4_explanation" rows="2"></textarea>
 
             <label for="option4_label">Label:</label>
             <select id="option4_label" name="option4_label">

@@ -57,13 +57,13 @@
         }
 
         .add-content {
-            background-color: #007bff;
+            background-color: black;
             color: white;
             border: none;
         }
 
         .add-content:hover {
-            background-color: #0056b3;
+            background-color: #333333;
         }
 
         .go-back, .landing-page {
@@ -90,7 +90,7 @@
 
     <div class="container">
         <h2>Add New Section</h2>
-        <p>For Chapter ID: {{ chapter_id }}</p>
+        <p>For Chapter ID: {{ chapter_id }} - Title: {{ chapter_title }}</p>
 
         <form method="POST" action="{{ url_for('admin.save_section') }}">
             <label for="section_number">Section Number:</label>

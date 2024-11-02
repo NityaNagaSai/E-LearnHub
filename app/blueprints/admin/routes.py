@@ -20,32 +20,27 @@ def create_etextbook():
 def new_chapter():
     etextbook_title = session.get('etextbook_title')
     etextbook_id = session.get('etextbook_id')
-
-    # Render the Add New Chapter page with the e-textbook data
     return render_template('new_chapter.html', etextbook_title=etextbook_title, etextbook_id=etextbook_id)
 
 @admin_bp.route('/add_etextbook', methods=['POST'])
 def add_etextbook():
-    # Get form data
     title = request.form.get('title')
     etextbook_id = request.form.get('etextbook_id')
-
-    # Store data in the session (or save to database as needed)
     session['etextbook_title'] = title
     session['etextbook_id'] = etextbook_id
 
-    # Redirect to the Add New Chapter page
     return redirect(url_for('admin.new_chapter'))
 
 @admin_bp.route('/save_chapter', methods=['POST'])
 def save_chapter():
-    # Retrieve previous e-textbook data from session
     etextbook_title = session.get('etextbook_title')
     etextbook_id = session.get('etextbook_id')
 
-    # Retrieve chapter data from form
     chapter_id = request.form.get('chapter_id')
     chapter_title = request.form.get('chapter_title')
+
+    session['chapter_id'] = chapter_id
+    session['chapter_title'] = chapter_title
 
     # Save the chapter data (you can implement database saving here)
     # For example:
@@ -53,47 +48,36 @@ def save_chapter():
 
     # Flash message to confirm the chapter was saved
     flash("Chapter saved successfully!", "success")
+    return redirect(url_for('admin.add_new_section', chapter_id=chapter_id, chapter_title=chapter_title))
 
-    # Redirect to the Add New Section page
-    return redirect(url_for('admin.add_new_section'))
 
 @admin_bp.route('/add_new_section')
 def add_new_section():
-    # This route should render the page for adding a new section.
-    # Add any data retrieval needed for the Add New Section page.
-    return render_template('add_new_section.html')
-
+    chapter_id = session.get('chapter_id')
+    chapter_title = session.get('chapter_title')
+    return render_template('add_new_section.html', chapter_id=chapter_id, chapter_title=chapter_title)
 
 @admin_bp.route('/save_section', methods=['POST'])
 def save_section():
-    # Retrieve section data from form
     section_number = request.form.get('section_number')
     section_title = request.form.get('section_title')
-
-    # Retrieve the current chapter ID from the session
-    chapter_id = session.get('chapter_id')
-
-    # Save the section data here (e.g., to a database)
-    # db.save_section(chapter_id, section_number, section_title)
-
+    session['section_number'] = section_number
+    session['section_title'] = section_title
     flash("Section saved successfully!", "success")
-
-    # Redirect to the Add New Content Block page
     return redirect(url_for('admin.add_new_content_block'))
 
 @admin_bp.route('/add_new_content_block')
 def add_new_content_block():
-    # Render the page for adding a new content block
-    return render_template('add_new_content_block.html')
+    section_number = session.get('section_number')
+    section_title = session.get('section_title')
+    return render_template('add_new_content_block.html',section_number=section_number, section_title=section_title)
 
 @admin_bp.route('/save_content_block', methods=['POST'])
 def save_content_block():
     content_block_id = request.form.get('content_block_id')
+    session['content_block_id'] = content_block_id  # Store content_block_id in session
+
     action = request.form.get('action')
-
-    # Save content block data (implement database saving if needed)
-
-    # Redirect based on the selected action
     if action == 'add_text':
         return redirect(url_for('admin.add_text'))
     elif action == 'add_picture':
@@ -106,16 +90,18 @@ def save_content_block():
 
 @admin_bp.route('/add_text')
 def add_text():
-    return render_template('add_text.html')
+    content_block_id = session.get('content_block_id')
+    return render_template('add_text.html', content_block_id=content_block_id)
 
 @admin_bp.route('/add_picture')
 def add_picture():
-    return render_template('add_picture.html')
+    content_block_id = session.get('content_block_id')
+    return render_template('add_picture.html', content_block_id=content_block_id)
 
 @admin_bp.route('/add_activity')
 def add_activity():
-    return render_template('add_activity.html')
-
+    content_block_id = session.get('content_block_id')
+    return render_template('add_activity.html', content_block_id=content_block_id)
 
 @admin_bp.route('/save_text', methods=['POST'])
 def save_text():
@@ -137,10 +123,10 @@ def save_activity():
     session['activity_id'] = activity_id  # Store activity ID in session for adding questions
     return redirect(url_for('admin.add_question'))
 
-
 @admin_bp.route('/add_question')
 def add_question():
-    return render_template('add_question.html')
+    activity_id = session.get('activity_id') 
+    return render_template('add_question.html', activity_id=activity_id)
 
 @admin_bp.route('/save_question', methods=['POST'])
 def save_question():
@@ -173,6 +159,8 @@ def save_question():
     # Flash a success message and redirect to Add Activity page
     flash("Question added successfully!", "success")
     return redirect(url_for('admin.add_activity'))
+
+
 
 
 @admin_bp.route('/modify_etextbook', methods=['GET', 'POST'])

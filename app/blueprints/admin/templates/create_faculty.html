@@ -33,13 +33,18 @@
         form {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
-            width: 300px;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         label, input {
             width: 100%;
-            margin: 5px 0;
+            margin: 10px 0;
             font-size: 16px;
         }
 
@@ -48,31 +53,37 @@
             display: flex;
             gap: 10px;
             margin-top: 15px;
+            width: 100%;
         }
 
-        button {
+        button, .go-back-link {
             padding: 10px;
             font-size: 16px;
             cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+            text-align: center;
         }
 
         .add-user {
-            background-color: #007bff;
+            background-color: black;
             color: white;
             border: none;
         }
 
         .add-user:hover {
-            background-color: #0056b3;
+            background-color: #333333;
         }
 
-        .go-back {
-            background-color: #6c757d;
+        .go-back-link {
+            display: inline-block;
             color: white;
+            background-color: #6c757d;
+            text-decoration: none;
             border: none;
         }
 
-        .go-back:hover {
+        .go-back-link:hover {
             background-color: #5a6268;
         }
     </style>
@@ -102,7 +113,7 @@
             <!-- Buttons for Add User and Go Back -->
             <div class="buttons">
                 <button type="submit" class="add-user">Add User</button>
-                <button type="button" class="go-back" onclick="window.location.href='/admin/admin_landing'">Go Back</button>
+                <a href="{{ url_for('admin.admin_landing') }}" class="go-back-link">Go Back</a>
             </div>
         </form>
     </div>
