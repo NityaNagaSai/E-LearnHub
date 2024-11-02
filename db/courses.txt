@@ -1,0 +1,5 @@
+"NCSUOganCSC440F24", "CSC440 Database Systems", "KeOg1024", 101, "Active", "08/15/2024", "12/15/2024", "XYJKLM", 60
+"NCSUOganCSC540F24", "CSC540 Database Systems", "KeOg1024", 101, "Active", "08/17/2024", "12/15/2024", "STUKZT", 50
+"NCSUSaraCSC326F24", "CSC326 Software Engineering", "SaMi1024", 102, "Active", "08/23/2024", "10/23/2024", "LRUFND", 100
+"NCSUJegiCSC522F24", "CSC522 Fundamentals of Machine Learning", "JoDo1024", 103, "Evaluation", "08/25/2025", "12/18/2025", NULL, NULL
+"NCSUSaraCSC326F25", "CSC326 Software Engineering", "SaMi1024", 102, "Evaluation", "08/27/2025", "12/19/2025", NULL, NULL

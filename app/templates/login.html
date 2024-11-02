@@ -83,7 +83,7 @@
     <!-- Centered content -->
     <div class="container">
         <h2>{{ role.capitalize() }} Login</h2>
-        <form method="POST" action="{{ url_for('login.login') }}">
+        <form method="POST" action="{{ url_for('main.login') }}">
             <label for="user_id">User ID</label>
             <input type="text" id="user_id" name="user_id" required>
 

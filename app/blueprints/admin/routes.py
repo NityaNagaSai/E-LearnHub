@@ -1,26 +1,68 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify,session
-
+from flask import Blueprint, render_template, redirect, url_for, request, flash, jsonify, session
 from . import admin_bp
 import mysql.connector
 from mysql.connector import errorcode
+from app.blueprints.admin.service import create_new_faculty_account, add_etextbook_to_db, fetch_etextbooks
+
 
 @admin_bp.route('/home')
 def admin_landing():
     return render_template('admin_landing.html')
 
-@admin_bp.route('/createfaculty')
+@admin_bp.route('/create_faculty', methods=["GET", "POST"])
 def create_faculty():
-    return render_template('create_faculty.html')
+    if request.method == "GET":
+        return render_template('create_faculty.html')
+    elif request.method == "POST":
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        password = request.form['password']
+        action = request.form['action']
+        
+        if action == 'create_faculty_user':
+            status = create_new_faculty_account(first_name, last_name, email, password)
+            if status:
+                flash('New Faculty account created successfully!', 'success')
+            else:
+                flash('An error occured in creating the account', 'error')
+            return redirect(url_for('admin.admin_landing')) 
+
+        elif action == 'go_back':
+            return render_template('admin_landing.html') 
 
 @admin_bp.route('/createetextbook')
 def create_etextbook():
     return render_template('create_etextbook.html')
+
+@admin_bp.route('/add_etextbook', methods=['POST'])
+def add_etextbook():
+    # Get form data
+    title = request.form.get('title')
+    etextbook_id = request.form.get('etextbook_id')
+    etextbook_list = fetch_etextbooks(etextbook_id)
+    if etextbook_list:
+        # display a message showing textbook with same id exists and ask them to change the textbook id
+         flash('Textbook with Id exists. Please enter a new one', 'error')
+    else:
+        status = add_etextbook_to_db(etextbook_id, title)
+        if status:
+            # write code to display message
+            # Redirect to the Add New Chapter page
+             # Store data in the session (or save to database as needed)
+            session['etextbook_title'] = title
+            session['etextbook_id'] = etextbook_id
+            return redirect(url_for('admin.new_chapter'))
+        else:
+            return redirect(url_for('admin.admin_landing')) 
+    
 
 @admin_bp.route('/createetextbook/newchapter')
 def new_chapter():
     etextbook_title = session.get('etextbook_title')
     etextbook_id = session.get('etextbook_id')
     return render_template('new_chapter.html', etextbook_title=etextbook_title, etextbook_id=etextbook_id)
+
 
 @admin_bp.route('/add_etextbook', methods=['POST'])
 def add_etextbook():
@@ -264,3 +306,5 @@ def save_evaluation_course():
 
     flash("Evaluation course created successfully!", "success")
     return redirect(url_for('admin.admin_landing'))
+
+  

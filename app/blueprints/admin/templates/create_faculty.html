@@ -1,111 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Faculty Account</title>
-    <style>
-        /* Styling for the navigation bar */
-        .navbar {
-            background-color: black;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
-
-        /* Center the content on the page */
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 80vh;
-            text-align: center;
-            flex-direction: column;
-            margin-top: 60px; /* Adjust for the fixed navbar */
-        }
-
-        /* Styling for the form */
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 100%;
-            max-width: 400px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        label, input {
-            width: 100%;
-            margin: 10px 0;
-            font-size: 16px;
-        }
-
-        /* Styling for buttons */
-        .buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            width: 100%;
-        }
-
-        button, .go-back-link {
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 4px;
-            text-align: center;
-        }
-
-        .add-user {
-            background-color: black;
-            color: white;
-            border: none;
-        }
-
-        .add-user:hover {
-            background-color: #333333;
-        }
-
-        .go-back-link {
-            display: inline-block;
-            color: white;
-            background-color: #6c757d;
-            text-decoration: none;
-            border: none;
-        }
-
-        .go-back-link:hover {
-            background-color: #5a6268;
-        }
-    </style>
-</head>
-<body>
-    <!-- Navigation bar -->
-    <div class="navbar">
-        Admin Dashboard
-    </div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Create Faculty Account</title>
+        <style>
+            /* Styling for the navigation bar */
+            .navbar {
+                background-color: black;
+                color: white;
+                padding: 15px;
+                text-align: center;
+                font-size: 24px;
+                width: 100%;
+                position: fixed;
+                top: 0;
+                left: 0;
+            }
+    
+            /* Center the content on the page */
+            .container {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 80vh;
+                text-align: center;
+                flex-direction: column;
+                margin-top: 60px; /* Adjust for the fixed navbar */
+            }
+    
+            /* Styling for the form */
+            form {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+                width: 300px;
+            }
+    
+            label, input {
+                width: 100%;
+                margin: 5px 0;
+                font-size: 16px;
+            }
+    
+            /* Styling for buttons */
+            .buttons {
+                display: flex;
+                gap: 10px;
+                margin-top: 15px;
+            }
+    
+            button {
+                padding: 10px;
+                font-size: 16px;
+                cursor: pointer;
+            }
+    
+            .add-user {
+                background-color: #007bff;
+                color: white;
+                border: none;
+            }
+    
+            .add-user:hover {
+                background-color: #0056b3;
+            }
+    
+            .go-back {
+                background-color: #6c757d;
+                color: white;
+                border: none;
+            }
+    
+            .go-back:hover {
+                background-color: #5a6268;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Navigation bar -->
+        <div class="navbar">
+            Admin Dashboard
+        </div>
 
     <!-- Centered content -->
     <div class="container">
-        <h2>Create a Faculty Account</h2>
-        <form method="POST" action="/admin/add_faculty">
-            <label for="first_name">First Name:</label>
-            <input type="text" id="first_name" name="first_name" required>
 
-            <label for="last_name">Last Name:</label>
-            <input type="text" id="last_name" name="last_name" required>
+        <h2>Create Faculty Account</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        <form id="new_faculty_account" action="{{ url_for('admin.create_faculty') }}" method="POST">
+            <label for="first_name">Enter First Name:</label>
+            <input type="text" id="first_name" name="first_name" required><br><br>
 
-            <label for="email">E-mail:</label>
-            <input type="email" id="email" name="email" required>
+            <label for="last_name">Enter Last Name:</label>
+            <input type="text" id="last_name" name="last_name" required><br><br>
+
+            <label for="email">Enter Email:</label>
+            <input type="text" id="email" name="email" required><br><br>
 
             <label for="password">Password:</label>
             <input type="password" id="password" name="password" required>
@@ -113,9 +112,16 @@
             <!-- Buttons for Add User and Go Back -->
             <div class="buttons">
                 <button type="submit" class="add-user">Add User</button>
-                <a href="{{ url_for('admin.admin_landing') }}" class="go-back-link">Go Back</a>
+                <button type="button" class="go-back" onclick="window.location.href='/admin/admin_landing'">Go Back</button>
             </div>
         </form>
+        <script>
+            // Function to set the action and submit the form
+            function submitForm(action) {
+                document.getElementById('action').value = action;
+                document.getElementById('new_faculty_account').submit();
+            }
+        </script>
     </div>
 </body>
 </html>
