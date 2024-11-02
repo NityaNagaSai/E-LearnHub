@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Question</title>
+    <style>
+        /* Styling for the form layout */
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label, input, select, textarea {
+            margin: 10px 0;
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .link-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .link-buttons a {
+            text-decoration: none;
+            color: white;
+            background-color: #6c757d;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 4px;
+            width: 48%;
+        }
+
+        .link-buttons a:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Add Question</h2>
+    <form method="POST" action="{{ url_for('admin.save_question') }}">
+        <!-- Question ID and Text -->
+        <label for="question_id">Question ID:</label>
+        <input type="text" id="question_id" name="question_id" required>
+
+        <label for="question_text">Question Text:</label>
+        <textarea id="question_text" name="question_text" required></textarea>
+
+        <!-- Option 1 -->
+        <div class="option-group">
+            <h3>Option 1</h3>
+            <label for="option1_text">Text:</label>
+            <input type="text" id="option1_text" name="option1_text" required>
+
+            <label for="option1_explanation">Explanation:</label>
+            <textarea id="option1_explanation" name="option1_explanation"></textarea>
+
+            <label for="option1_label">Label:</label>
+            <select id="option1_label" name="option1_label">
+                <option value="Correct">Correct</option>
+                <option value="Incorrect">Incorrect</option>
+            </select>
+        </div>
+
+        <!-- Option 2 -->
+        <div class="option-group">
+            <h3>Option 2</h3>
+            <label for="option2_text">Text:</label>
+            <input type="text" id="option2_text" name="option2_text" required>
+
+            <label for="option2_explanation">Explanation:</label>
+            <textarea id="option2_explanation" name="option2_explanation"></textarea>
+
+            <label for="option2_label">Label:</label>
+            <select id="option2_label" name="option2_label">
+                <option value="Correct">Correct</option>
+                <option value="Incorrect">Incorrect</option>
+            </select>
+        </div>
+
+        <!-- Option 3 -->
+        <div class="option-group">
+            <h3>Option 3</h3>
+            <label for="option3_text">Text:</label>
+            <input type="text" id="option3_text" name="option3_text">
+
+            <label for="option3_explanation">Explanation:</label>
+            <textarea id="option3_explanation" name="option3_explanation"></textarea>
+
+            <label for="option3_label">Label:</label>
+            <select id="option3_label" name="option3_label">
+                <option value="Correct">Correct</option>
+                <option value="Incorrect">Incorrect</option>
+            </select>
+        </div>
+
+        <!-- Option 4 -->
+        <div class="option-group">
+            <h3>Option 4</h3>
+            <label for="option4_text">Text:</label>
+            <input type="text" id="option4_text" name="option4_text">
+
+            <label for="option4_explanation">Explanation:</label>
+            <textarea id="option4_explanation" name="option4_explanation"></textarea>
+
+            <label for="option4_label">Label:</label>
+            <select id="option4_label" name="option4_label">
+                <option value="Correct">Correct</option>
+                <option value="Incorrect">Incorrect</option>
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit">Save Question</button>
+    </form>
+
+    <!-- Navigation Links -->
+    <div class="link-buttons">
+        <a href="{{ url_for('admin.add_activity') }}">Go Back</a>
+        <a href="{{ url_for('admin.admin_landing') }}">Landing Page</a>
+    </div>
+</div>
+
+</body>
+</html>

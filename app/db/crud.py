@@ -31,20 +31,6 @@ def create_tables():
         cursor.close()
         conn.close()
 
-
-def insert_etextbook_data(textbook_id, title):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    query = '''
-        INSERT INTO ETextbook (textbook_id, title)
-        VALUES (%s, %s)
-    '''
-    cursor.execute(query, (textbook_id, title))
-
-    conn.commit()
-    cursor.close()
-    conn.close()
-
 def insert_users():
     try:
         # Open the file and connect to the database

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Evaluation Course</title>
+    <style>
+        /* Styling for the navigation bar */
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Center the content on the page */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+            flex-direction: column;
+            margin-top: 60px; /* Adjust for the fixed navbar */
+        }
+
+        /* Styling for the form */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 300px;
+        }
+
+        label, input {
+            width: 100%;
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        /* Styling for buttons */
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .save-button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+
+        .save-button:hover {
+            background-color: #0056b3;
+        }
+
+        .cancel-button {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+        }
+
+        .cancel-button:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        Admin Dashboard
+    </div>
+
+    <div class="container">
+        <h2>Create New Evaluation Course</h2>
+        <form method="POST" action="{{ url_for('admin.save_evaluation_course') }}">
+            <label for="course_id">Unique Course ID:</label>
+            <input type="text" id="course_id" name="course_id" required>
+
+            <label for="course_name">Course Name:</label>
+            <input type="text" id="course_name" name="course_name" required>
+
+            <label for="etextbook_id">Unique ID of the E-textbook:</label>
+            <input type="text" id="etextbook_id" name="etextbook_id" required>
+
+            <label for="faculty_id">Faculty Member ID:</label>
+            <input type="text" id="faculty_id" name="faculty_id" required>
+
+            <label for="start_date">Course Start Date:</label>
+            <input type="date" id="start_date" name="start_date" required>
+
+            <label for="end_date">Course End Date:</label>
+            <input type="date" id="end_date" name="end_date" required>
+
+            <div class="buttons">
+                <button type="submit" class="save-button">Save</button>
+                <a href="{{ url_for('admin.admin_landing') }}" class="cancel-button">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify E-textbook</title>
+    <style>
+        /* Styling for the form layout */
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 50%;
+            margin: 0 auto;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        label, input {
+            margin: 10px 0;
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            margin-top: 10px;
+        }
+
+        .menu-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .link {
+            text-decoration: none;
+            color: white;
+            background-color: #007bff;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .link:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Modify E-textbook</h2>
+    <form method="POST" action="{{ url_for('admin.modify_etextbook') }}">
+        <label for="etextbook_id">Unique E-textbook ID:</label>
+        <input type="text" id="etextbook_id" name="etextbook_id" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Menu Links -->
+    <div class="menu-links">
+        <a href="{{ url_for('admin.add_new_chapter') }}" class="link">Add New Chapter</a>
+        <a href="{{ url_for('admin.modify_chapter') }}" class="link">Modify Chapter</a>
+        <a href="{{ url_for('admin.admin_landing') }}" class="link">Go Back</a>
+        <a href="{{ url_for('admin.admin_landing') }}" class="link">Landing Page</a>
+    </div>
+</div>
+
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>Admin Landing Page</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -53,19 +53,19 @@
 <body>
     <!-- Navigation bar -->
     <div class="navbar">
-        E-Textbook and Assessment Platform - Home
+        Admin Dashboard
     </div>
 
     <!-- Centered content -->
     <div class="container">
         <h2>Please Select an Option</h2>
         <ol>
-            <li><a href="{{ url_for('admin.create_faculty_account') }}">Create a Faculty Account</a></li>
+            <li><a href="{{ url_for('admin.create_faculty') }}">Create a Faculty Account</a></li>
             <li><a href="{{ url_for('admin.create_etextbook') }}">Create E-textbook</a></li>
             <li><a href="{{ url_for('admin.modify_etextbook') }}">Modify E-textbooks</a></li>
             <li><a href="{{ url_for('admin.create_active_course') }}">Create New Active Course</a></li>
             <li><a href="{{ url_for('admin.create_evaluation_course') }}">Create New Evaluation Course</a></li>
-            <li><a href="#">Logout</a></li>
+            <li><a href="">Logout</a></li>
         </ol>
     </div>
 </body>

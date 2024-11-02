@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ role.capitalize() }} Login</title>
+    <title>Create E-textbook</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -33,76 +33,77 @@
         form {
             display: flex;
             flex-direction: column;
-            align-items: center;
+            align-items: flex-start;
             width: 300px;
         }
 
-        label, input, button {
+        label, input {
             width: 100%;
-            margin: 10px 0;
+            margin: 5px 0;
             font-size: 16px;
         }
 
-        .btn-primary {
+        /* Styling for buttons */
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .add-chapter {
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px;
         }
 
-        .btn-primary:hover {
+        .add-chapter:hover {
             background-color: #0056b3;
         }
 
-        .btn-secondary {
+        .go-back {
             background-color: #6c757d;
             color: white;
             border: none;
-            padding: 10px;
-            text-decoration: none;
-            display: inline-block;
-            text-align: center;
         }
 
-        .btn-secondary:hover {
+        .go-back:hover {
             background-color: #5a6268;
-        }
-
-        .alert {
-            color: red;
-            font-size: 14px;
         }
     </style>
 </head>
 <body>
     <!-- Navigation bar -->
     <div class="navbar">
-        {{ role.capitalize() }} Login
+        Admin Dashboard
     </div>
 
-    <!-- Centered content -->
     <div class="container">
-        <h2>{{ role.capitalize() }} Login</h2>
-        <form method="POST" action="{{ url_for('main.login') }}">
-            <label for="user_id">User ID</label>
-            <input type="text" id="user_id" name="user_id" required>
+        <h2>Create E-textbook</h2>
+        <!-- Single form for creating E-textbook and proceeding to add chapter -->
+        <form method="POST" action="{{ url_for('admin.add_etextbook') }}">
+            <label for="title">Title of the E-textbook:</label>
+            <input type="text" id="title" name="title" required>
 
-            <label for="password">Password</label>
-            <input type="password" id="password" name="password" required>
+            <label for="etextbook_id">Unique E-textbook ID:</label>
+            <input type="text" id="etextbook_id" name="etextbook_id" required>
 
-            <input type="hidden" name="role" value="{{ role }}">
+            <!-- Buttons for Add New Chapter and Go Back -->
+            <div class="buttons">
+                <!-- Submit button for adding the chapter and moving to the next page -->
+                <button type="submit" name="action" value="add_chapter" class="add-chapter">Add New Chapter</button>
 
-            <button type="submit" class="btn-primary">Login</button>
-            <a href="{{ url_for('main.index') }}" class="btn-secondary">Go Back</a>
+                <!-- Link for Go Back -->
+                <a href="{{ url_for('admin.admin_landing') }}" class="go-back">Go Back</a>
+            </div>
         </form>
-
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                <div class="alert mt-3">
-                    {{ messages[0] }}
-                </div>
-            {% endif %}
-        {% endwith %}
     </div>
 </body>
 </html>
+
+
