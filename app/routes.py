@@ -16,7 +16,7 @@ def choose_role():
     elif choice == "3":
         return redirect(url_for('main.login', role="ta"))
     elif choice == "4":
-        return redirect(url_for('main.login', role="student"))
+        return redirect(url_for('student.login'))
     elif choice == "5":
         # Handle exit or end the session as needed
         flash("Exiting the platform.", "info")

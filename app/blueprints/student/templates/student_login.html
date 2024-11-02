@@ -50,18 +50,25 @@
       }
     </style>
   </head>
+
   <body>
     <!-- Navigation bar -->
-    <div class="navbar">E-Textbook and Assessment Platform</div>
+    <div class="navbar">Student Log In</div>
 
     <!-- Centered content -->
     <div class="container">
-      <h2>Student LogIn</h2>
-      <form method="POST" action="{{ url_for('student.choose_option') }}">
-        <button name="choice" value="1">1. Enroll in a course</button><br />
-        <button name="choice" value="2">2. Sign In</button><br />
-        <button name="choice" value="3">3. Go Back</button><br />
-      </form>
+      <h2>Please Select an Option</h2>
+      <ul>
+        <li>
+          <a href="{{ url_for('student.enroll') }}">Enroll in a Course</a>
+        </li>
+        <li>
+          <a href="{{ url_for('student.signin') }}">Sign In</a>
+        </li>
+        <li>
+          <a href="{{ url_for('main.index') }}">Go Back</a>
+        </li>
+      </ul>
     </div>
   </body>
 </html>
