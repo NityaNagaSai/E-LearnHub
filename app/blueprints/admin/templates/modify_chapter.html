@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Chapter</title>
+</head>
+<body>
+    <h2>Modify Chapter</h2>
+    <form method="POST" action="{{ url_for('admin.modify_chapter') }}">
+        <label for="chapter_id">Unique Chapter ID:</label>
+        <input type="text" id="chapter_id" name="chapter_id" required>
+        <button type="submit">Submit</button>
+    </form>
+    <ul>
+        <li><a href="{{ url_for('admin.add_new_section') }}">Add New Section</a></li>
+        <li><a href="{{ url_for('admin.modify_section') }}">Modify Section</a></li>
+        <li><a href="{{ url_for('admin.modify_etextbook') }}">Go Back</a></li>
+        <li><a href="{{ url_for('admin.admin_landing') }}">Landing Page</a></li>
+    </ul>
+</body>
+</html>

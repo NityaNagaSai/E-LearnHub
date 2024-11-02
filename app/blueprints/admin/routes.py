@@ -173,3 +173,106 @@ def save_question():
     # Flash a success message and redirect to Add Activity page
     flash("Question added successfully!", "success")
     return redirect(url_for('admin.add_activity'))
+
+
+@admin_bp.route('/modify_etextbook', methods=['GET', 'POST'])
+def modify_etextbook():
+    if request.method == 'POST':
+        # Retrieve the E-textbook ID from the form
+        etextbook_id = request.form.get('etextbook_id')
+        
+        # Store the E-textbook ID in the session
+        session['etextbook_id'] = etextbook_id
+
+        flash("E-textbook selected for modification.", "info")
+        return redirect(url_for('admin.modify_etextbook'))
+
+    return render_template('modify_etextbook.html')
+
+
+@admin_bp.route('/add_new_chapter', methods=['GET', 'POST'])
+def add_new_chapter():
+    if request.method == 'POST':
+        # Assuming we get a chapter name and other data from a form
+        chapter_name = request.form.get('chapter_name')
+        
+        # Save the chapter details associated with the E-textbook ID
+        etextbook_id = session.get('etextbook_id')
+        # Logic to add the chapter to the specified E-textbook in the database
+
+        flash(f"New chapter '{chapter_name}' added to E-textbook ID {etextbook_id}.", "success")
+        return redirect(url_for('admin.modify_etextbook'))
+
+    return render_template('new_chapter.html')
+
+@admin_bp.route('/modify_chapter', methods=['GET', 'POST'])
+def modify_chapter():
+    if request.method == 'POST':
+        # Assuming we get modified data from a form
+        modified_data = request.form.get('modified_data')
+        
+        # Retrieve the E-textbook ID and update the relevant chapter
+        etextbook_id = session.get('etextbook_id')
+        # Logic to modify the chapter in the specified E-textbook in the database
+
+        flash(f"Chapter modified for E-textbook ID {etextbook_id}.", "success")
+        return redirect(url_for('admin.modify_etextbook'))
+
+    return render_template('modify_chapter.html')
+
+@admin_bp.route('/modify_section', methods=['GET', 'POST'])
+def modify_section():
+    if request.method == 'POST':
+        section_number = request.form.get('section_number')
+        session['section_number'] = section_number
+        return redirect(url_for('admin.modify_content_block'))
+    return render_template('modify_section.html')
+
+@admin_bp.route('/modify_content_block', methods=['GET', 'POST'])
+def modify_content_block():
+    if request.method == 'POST':
+        content_block_id = request.form.get('content_block_id')
+        session['content_block_id'] = content_block_id
+        flash(f"Content Block {content_block_id} modified.", "info")
+        return redirect(url_for('admin.modify_section'))
+    return render_template('modify_content_block.html')
+
+@admin_bp.route('/create_active_course')
+def create_active_course():
+    return render_template('create_active_course.html')
+
+@admin_bp.route('/save_active_course', methods=['POST'])
+def save_active_course():
+    # Retrieve form data
+    course_id = request.form.get('course_id')
+    course_name = request.form.get('course_name')
+    etextbook_id = request.form.get('etextbook_id')
+    faculty_id = request.form.get('faculty_id')
+    start_date = request.form.get('start_date')
+    end_date = request.form.get('end_date')
+    token = request.form.get('token')
+    capacity = request.form.get('capacity')
+
+    # Save data logic here (e.g., save to the database)
+
+    flash("Active course created successfully!", "success")
+    return redirect(url_for('admin.admin_landing'))
+
+@admin_bp.route('/create_evaluation_course')
+def create_evaluation_course():
+    return render_template('create_evaluation_course.html')
+
+@admin_bp.route('/save_evaluation_course', methods=['POST'])
+def save_evaluation_course():
+    # Retrieve form data
+    course_id = request.form.get('course_id')
+    course_name = request.form.get('course_name')
+    etextbook_id = request.form.get('etextbook_id')
+    faculty_id = request.form.get('faculty_id')
+    start_date = request.form.get('start_date')
+    end_date = request.form.get('end_date')
+
+    # Save data logic here (e.g., save to the database)
+
+    flash("Evaluation course created successfully!", "success")
+    return redirect(url_for('admin.admin_landing'))

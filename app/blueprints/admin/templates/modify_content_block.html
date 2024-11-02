@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Content Block</title>
+</head>
+<body>
+    <h2>Modify Content Block</h2>
+    <form method="POST" action="{{ url_for('admin.modify_content_block') }}">
+        <label for="content_block_id">Content Block ID:</label>
+        <input type="text" id="content_block_id" name="content_block_id" required>
+        <button type="submit">Submit</button>
+    </form>
+    <ul>
+        <li><a href="{{ url_for('admin.add_text') }}">Add Text</a></li>
+        <li><a href="{{ url_for('admin.add_picture') }}">Add Picture</a></li>
+        <li><a href="{{ url_for('admin.add_activity') }}">Add Activity</a></li>
+        <li><a href="{{ url_for('admin.modify_section') }}">Go Back</a></li>
+        <li><a href="{{ url_for('admin.admin_landing') }}">Landing Page</a></li>
+    </ul>
+</body>
+</html>
