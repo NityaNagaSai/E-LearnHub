@@ -1,55 +1,113 @@
-CREATE TABLE ETextbook (
+CREATE TABLE ETEXTBOOK (
     textbook_id INT PRIMARY KEY,
     title VARCHAR(255) NOT NULL
 );
 
 
 CREATE TABLE Chapter (
-    chapter_id INT PRIMARY KEY,
+    chapter_id VARCHAR(25) PRIMARY KEY,
     textbook_id INT NOT NULL,
-    chapter_number VARCHAR(6) NOT NULL,  
+    is_hidden VARCHAR(3) NOT NULL ENUM('yes', 'no'),
+    created_by VARCHAR(255),
     title VARCHAR(255) NOT NULL,
-    FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id) ON    DELETE CASCADE,
-    UNIQUE(textbook_id, chapter_number),  
+    FOREIGN KEY (created_by) REFERENCES User(user_id) ON DELETE SET NULL,
+    FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id) ON DELETE CASCADE,
+    PRIMARY KEY (textbook_id, chapter_number),  
     UNIQUE(textbook_id, title) 
 );
 
 
 CREATE TABLE Section (
-    section_id INT PRIMARY KEY,
-    chapter_id INT NOT NULL,
-    section_number INT NOT NULL,  
+    textbook_id INT PRIMARY KEY
+    section_id VARCHAR(25) NOT NULL,
+    chapter_id VARCHAR(25) NOT NULL,
+    section_number INT,  
     title VARCHAR(255) NOT NULL,
+    is_hidden VARCHAR(3) NOT NULL ENUM('yes', 'no'),
+    created_by VARCHAR(255),
     FOREIGN KEY (chapter_id) REFERENCES Chapter(chapter_id) ON DELETE CASCADE,
-    UNIQUE(chapter_id, section_number)  
+    FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES User(user_id) ON DELETE SET NULL,
+    PRIMARY KEY (textbook_id, chapter_id, section_id)
 );
 
 
 CREATE TABLE ContentBlock (
-    content_block_id INT PRIMARY KEY AUTO_INCREMENT,
-    section_id INT NOT NULL,
+    content_block_id VARCHAR(25) PRIMARY KEY,
+    textbook_id INT NOT NULL,
+    section_id VARCHAR(25) PRIMARY KEY,
+    chapter_id VARCHAR(25) NOT NULL,
     content_type ENUM('text', 'image') NOT NULL,
     content TEXT NOT NULL,  
     sequence_number INT NOT NULL,
+    is_hidden VARCHAR(3) NOT NULL ENUM('yes', 'no'),
+    created_by VARCHAR(255)
+    FOREIGN KEY (chapter_id) REFERENCES Chapter(chapter_id) ON DELETE CASCADE,
+    FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id) ON DELETE CASCADE,
     FOREIGN KEY (section_id) REFERENCES Section(section_id) ON DELETE CASCADE,
-    UNIQUE(section_id, content_block_id)  
+    FOREIGN KEY (created_by) REFERENCES User(user_id) ON DELETE SET NULL,
+    PRIMARY KEY (textbook_id, chapter_id, section_id, content_block_id)
 );
 
+
 CREATE TABLE Activities (
-    activity_id INT PRIMARY KEY AUTO_INCREMENT,
-    content_block_id INT NOT NULL UNIQUE,  
+    activity_id VARCHAR(25) PRIMARY KEY,
+    content_block_id VARCHAR(25) NOT NULL,
+    textbook_id INT NOT NULL,
+    section_id VARCHAR(25) NOT NULL,
+    chapter_id VARCHAR(25) NOT NULL,
+    is_hidden VARCHAR(3) NOT NULL ENUM('yes', 'no'),
+    created_by VARCHAR(255)
+    FOREIGN KEY (chapter_id) REFERENCES Chapter(chapter_id) ON DELETE CASCADE,
+    FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id) ON DELETE CASCADE,
+    FOREIGN KEY (section_id) REFERENCES Section(section_id) ON DELETE CASCADE,
+    FOREIGN KEY (content_block_id) REFERENCES ContentBlock(content_block_id) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES User(user_id) ON DELETE SET NULL,
+    PRIMARY KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id)
+);
+
+CREATE TABLE QUESTION (
+    question_id VARCHAR(25) PRIMARY KEY,
+    activity_id VARCHAR(25) NOT NULL,
+    content_block_id VARCHAR(25) NOT NULL,
+    textbook_id INT NOT NULL,
+    section_id VARCHAR(25) NOT NULL,
+    chapter_id VARCHAR(25) NOT NULL,
     question TEXT NOT NULL,
     correct_answer VARCHAR(255) NOT NULL,
-    incorrect_answer1 VARCHAR(255) NOT NULL,
-    incorrect_answer2 VARCHAR(255) NOT NULL,
-    incorrect_answer3 VARCHAR(255) NOT NULL,
-    explanation_correct VARCHAR(255) NOT NULL,
-    explanation_incorrect1 VARCHAR(255) NOT NULL,
-    explanation_incorrect2 VARCHAR(255) NOT NULL,
-    explanation_incorrect3 VARCHAR(255) NOT NULL,
-    FOREIGN KEY (content_block_id) REFERENCES ContentBlock(content_block_id),
-    UNIQUE(content_block_id, activity_id)  
-);
+    option1 VARCHAR(255) NOT NULL,
+    option2 VARCHAR(255) NOT NULL,
+    option3 VARCHAR(255) NOT NULL,
+    option4 VARCHAR(255) NOT NULL,
+    explanation_op1 VARCHAR(255) NOT NULL,
+    explanation_op2 VARCHAR(255) NOT NULL,
+    explanation_op3 VARCHAR(255) NOT NULL,
+    explanation_op4 VARCHAR(255) NOT NULL,
+    FOREIGN KEY (chapter_id) REFERENCES Chapter(chapter_id) ON DELETE CASCADE,
+    FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id) ON DELETE CASCADE,
+    FOREIGN KEY (section_id) REFERENCES Section(section_id) ON DELETE CASCADE,
+    FOREIGN KEY (content_block_id) REFERENCES ContentBlock(content_block_id) ON DELETE CASCADE,
+    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id) ON DELETE CASCADE,
+    PRIMARY KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id, question_id)
+)
+
+CREATE TABLE STUDENT_ACTIVITY_POINT(
+    question_id VARCHAR(25) NOT NULL,
+    answer_activity_id VARCHAR(25) PRIMARY KEY,
+    activity_id VARCHAR(25) NOT NULL,
+    content_block_id VARCHAR(25) NOT NULL,
+    textbook_id INT NOT NULL,
+    section_id VARCHAR(25) NOT NULL,
+    chapter_id VARCHAR(25) NOT NULL,
+    question_points INT,
+    timestamp DATETIME,
+    FOREIGN KEY (chapter_id) REFERENCES Chapter(chapter_id) ON DELETE CASCADE,
+    FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id) ON DELETE CASCADE,
+    FOREIGN KEY (section_id) REFERENCES Section(section_id) ON DELETE CASCADE,
+    FOREIGN KEY (content_block_id) REFERENCES ContentBlock(content_block_id) ON DELETE CASCADE,
+    FOREIGN KEY (activity_id) REFERENCES Activities(activity_id) ON DELETE CASCADE,
+    PRIMARY KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id)
+)
 
 CREATE TABLE User (
     user_id VARCHAR(10) PRIMARY KEY,  
@@ -69,18 +127,18 @@ CREATE TABLE Course (
     start_date DATE,
     end_date DATE,
     capacity INT,
+    token VARCHAR(255),
     FOREIGN KEY (faculty_user_id) REFERENCES User(user_id),
     FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id)
 );
 
 CREATE TABLE Enrollment (
-    enrollment_id INT PRIMARY KEY AUTO_INCREMENT,
     course_id VARCHAR(50) NOT NULL,
     student_user_id VARCHAR(10) NOT NULL,
     status ENUM('Pending', ‘Enrolled’) DEFAULT 'Pending',  
-    FOREIGN KEY (course_id) REFERENCES Course(course_id),
-    FOREIGN KEY (student_user_id) REFERENCES User(user_id),
-    UNIQUE(course_id, student_user_id)  
+    FOREIGN KEY (course_id) REFERENCES Course(course_id) ON DELETE CASCADE,
+    FOREIGN KEY (student_user_id) REFERENCES User(user_id) ON DELETE CASCADE,
+    PRIMARY KEY(course_id, student_user_id) 
 );
 
 CREATE TABLE TeachingAssistantAssignment (
@@ -109,3 +167,4 @@ CREATE TABLE StudentActivity (
     FOREIGN KEY (student_user_id) REFERENCES User(user_id),
     FOREIGN KEY (activity_id) REFERENCES Activities(activity_id)
 );
+

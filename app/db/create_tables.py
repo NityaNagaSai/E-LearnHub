@@ -11,7 +11,7 @@ def create_tables():
 
     try:
         # Read the SQL commands from the file
-        with open('/Users/jahnavi/Documents/Fall 2024/DBMS Project/E-LearnHub/db/create_tables.sql', 'r') as file:
+        with open('../E-LearnHub/db/create_tables.sql', 'r') as file:
             sql_commands = file.read().split(';')  # Split commands by semicolon
 
         # Execute each command
