@@ -1,10 +1,10 @@
 CREATE TABLE User (
-    user_id VARCHAR(10) PRIMARY KEY,  
+    user_id VARCHAR(10) PRIMARY KEY,
     first_name VARCHAR(50) NOT NULL,
     last_name VARCHAR(50) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
-    user_password VARCHAR(100) NOT NULL,
-    user_role ENUM('Admin', 'Faculty', 'Student', 'TA') NOT NULL  
+    password VARCHAR(100) NOT NULL,
+    role ENUM('Admin', 'Faculty', 'Student', 'TA') NOT NULL
 );
 
 CREATE TABLE ETextBook (
@@ -12,32 +12,30 @@ CREATE TABLE ETextBook (
     title VARCHAR(255) NOT NULL
 );
 
--- CREATE TABLE Chapter (
---     chapter_id VARCHAR(25) PRIMARY KEY,
---     textbook_id INT NOT NULL,
---     is_hidden VARCHAR(3) NOT NULL ENUM('yes', 'no'),
---     created_by VARCHAR(255),
---     title VARCHAR(255) NOT NULL,
---     FOREIGN KEY (created_by) REFERENCES User(user_id) ON DELETE SET NULL,
---     FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id) ON DELETE CASCADE,
---     PRIMARY KEY (textbook_id, chapter_number),  
---     UNIQUE(textbook_id, title) 
--- );
+CREATE TABLE Chapter (
+    chapter_id VARCHAR(25) PRIMARY KEY,
+    textbook_id INT NOT NULL,
+    is_hidden ENUM('yes', 'no') NOT NULL,
+    created_by VARCHAR(255),
+    title VARCHAR(255) NOT NULL,
+    FOREIGN KEY (created_by) REFERENCES User(user_id) ON DELETE SET NULL,
+    FOREIGN KEY (textbook_id) REFERENCES ETextBook(textbook_id) ON DELETE CASCADE,
+    UNIQUE(textbook_id, title)
+);
 
-
--- CREATE TABLE Section (
---     textbook_id INT PRIMARY KEY
---     section_id VARCHAR(25) NOT NULL,
---     chapter_id VARCHAR(25) NOT NULL,
---     section_number INT,  
---     title VARCHAR(255) NOT NULL,
---     is_hidden VARCHAR(3) NOT NULL ENUM('yes', 'no'),
---     created_by VARCHAR(255),
---     FOREIGN KEY (chapter_id) REFERENCES Chapter(chapter_id) ON DELETE CASCADE,
---     FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id) ON DELETE CASCADE,
---     FOREIGN KEY (created_by) REFERENCES User(user_id) ON DELETE SET NULL,
---     PRIMARY KEY (textbook_id, chapter_id, section_id)
--- );
+CREATE TABLE Section (
+    section_id VARCHAR(25) PRIMARY KEY,
+    textbook_id INT NOT NULL,
+    chapter_id VARCHAR(25) NOT NULL,
+    section_number INT,
+    title VARCHAR(255) NOT NULL,
+    is_hidden ENUM('yes', 'no') NOT NULL,
+    created_by VARCHAR(255),
+    FOREIGN KEY (chapter_id) REFERENCES Chapter(chapter_id) ON DELETE CASCADE,
+    FOREIGN KEY (textbook_id) REFERENCES ETextBook(textbook_id) ON DELETE CASCADE,
+    FOREIGN KEY (created_by) REFERENCES User(user_id) ON DELETE SET NULL,
+    PRIMARY KEY (textbook_id, chapter_id, section_id)
+);
 
 
 -- CREATE TABLE ContentBlock (
@@ -116,8 +114,6 @@ CREATE TABLE ETextBook (
 --     FOREIGN KEY (activity_id) REFERENCES Activities(activity_id) ON DELETE CASCADE,
 --     PRIMARY KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id)
 -- )
-
-
 
 -- CREATE TABLE Course (
 --     course_id VARCHAR(50) PRIMARY KEY,

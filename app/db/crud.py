@@ -16,11 +16,13 @@ def create_tables():
         with open('../E-LearnHub/db/create_tables.sql', 'r') as file:
             sql_commands = file.read().split(';')  # Split commands by semicolon
 
+            print(sql_commands)
+
         # Execute each command
         for command in sql_commands:
-            command = command.strip()  # Remove any leading/trailing whitespace
-            if command:  # Check if the command is not empty
-                cursor.execute(command)
+                command = command.strip()  # Remove any leading/trailing whitespace
+                if command:  # Check if the command is not empty
+                    cursor.execute(command)
 
         conn.commit()  # Commit the transaction
         print("Tables created successfully")

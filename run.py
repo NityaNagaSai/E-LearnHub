@@ -3,7 +3,7 @@ from app.db.crud import create_tables, insert_users
 
 app = create_app()
 
-@app.before_first_request
+app.before_request
 def initialize_database():
     with app.app_context():
         create_tables()

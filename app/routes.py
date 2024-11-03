@@ -37,6 +37,7 @@ def login():
 
         if role == 'admin':
             status = validate_user(user_id, password, role)
+            session['user_id'] = user_id
             if status:
                 return redirect(url_for(f'{role}.{role}_landing'))
         elif role == 'faculty':
