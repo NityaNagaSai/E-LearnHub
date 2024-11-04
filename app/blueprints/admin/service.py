@@ -49,12 +49,64 @@ def fetch_etextbooks(etextbook_id):
 
     try:
         query = "SELECT * FROM ETextbook WHERE textbook_id = %s"
-        cursor.execute(query, (etextbook_id))
+        cursor.execute(query, (etextbook_id,))
         extextbook_data = cursor.fetchall()
         return extextbook_data
     except Error as e:
         print(f"Error: {e}")
         return None
+    finally:
+        cursor.close()
+        conn.close()
+
+def add_chapter_to_db(chap_id, textbook_id, is_hidden, created_by, chap_title):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = '''INSERT INTO chapter(chapter_id, textbook_id, is_hidden, created_by, title) 
+                   VALUES(%s, %s, %s, %s, %s)'''
+        cursor.execute(query, (chap_id, textbook_id, is_hidden, created_by, chap_title))
+        conn.commit()
+        return True
+    except Error as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def fetch_chapters(etextbook_id, chapter_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = "SELECT * FROM chapter WHERE textbook_id = %s and chapter_id = %s"
+        cursor.execute(query, (etextbook_id, chapter_id,))
+        chap_data = cursor.fetchall()
+        return chap_data
+    except Error as e:
+        print(f"Error: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
+
+def add_section_to_db(section_id, chap_id, textbook_id, is_hidden, created_by, chap_title):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = '''INSERT INTO chapter(section_id, chapter_id, textbook_id, is_hidden, created_by, title) 
+                   VALUES(%s, %s, %s, %s, %s, %s)'''
+        cursor.execute(query, (section_id, chap_id, textbook_id, is_hidden, created_by, chap_title))
+        conn.commit()
+        return True
+    except Error as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        return False
     finally:
         cursor.close()
         conn.close()

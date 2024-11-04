@@ -68,22 +68,30 @@ def new_chapter():
 
 @admin_bp.route('/save_chapter', methods=['POST'])
 def save_chapter():
-    etextbook_title = session.get('etextbook_title')
     etextbook_id = session.get('etextbook_id')
-
+    # Retrieve chapter data from form
     chapter_id = request.form.get('chapter_id')
     chapter_title = request.form.get('chapter_title')
+    hide_chap_id= "no"
+    admin_id = session.get('user_id')
+    etextbook_list = fetch_etextbooks(etextbook_id)
+    
+    if etextbook_list:
+        status = add_chapter_to_db(chapter_id, etextbook_id, hide_chap_id, admin_id, chapter_title)
+        if status:
+            session['chap_id'] = chapter_id
+            session['chap_title'] = chapter_title
+            # Flash message to confirm the chapter was saved
+            flash("Chapter saved successfully!", "success")
+            return redirect(url_for('admin.add_new_section'))   
+        else:
+            flash("Chapter was not saved!", "fail")
+            return redirect(url_for('admin.admin_landing'))
+    else:
+        flash('Textbook with Id does not exist. Please enter a new one', 'error') 
 
-    session['chapter_id'] = chapter_id
-    session['chapter_title'] = chapter_title
-
-    # Save the chapter data (you can implement database saving here)
-    # For example:
-    # db.save_chapter(etextbook_id, chapter_id, chapter_title)
-
-    # Flash message to confirm the chapter was saved
-    flash("Chapter saved successfully!", "success")
-    return redirect(url_for('admin.add_new_section', chapter_id=chapter_id, chapter_title=chapter_title))
+    # Redirect to the Add New Section page
+    return redirect(url_for('admin.admin_landing'))
 
 
 @admin_bp.route('/add_new_section')
@@ -96,8 +104,27 @@ def add_new_section():
 def save_section():
     section_number = request.form.get('section_number')
     section_title = request.form.get('section_title')
-    session['section_number'] = section_number
-    session['section_title'] = section_title
+
+    etextbook_id = session.get('etextbook_id')
+    # Retrieve chapter data from form
+    chapter_id = session.get('chapter_id')
+    hide_section_id= "no"
+    admin_id = session.get('user_id')
+    chapter_list = fetch_chapters(etextbook_id, chapter_id)
+    if chapter_list:
+        status = add_section_to_db(section_id, chapter_id, etextbook_id, hide_section_id, admin_id, section_title)
+        if status:
+            session['section_id'] = section_id
+            session['section_title'] = section_title
+            # Flash message to confirm the chapter was saved
+            flash("Chapter saved successfully!", "success")
+            return redirect(url_for('admin.add_new_content_block'))  
+        else:
+            flash("Chapter was not saved!", "fail")
+            return redirect(url_for('admin.admin_landing'))
+    else:
+        flash('Textbook with Id does not exist. Please enter a new one', 'error')
+
     flash("Section saved successfully!", "success")
     return redirect(url_for('admin.add_new_content_block'))
 
