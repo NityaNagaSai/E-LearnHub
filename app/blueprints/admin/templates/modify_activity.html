@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modify Content Block</title>
+    <title>Modify Activity</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -39,7 +39,6 @@
             background-color: #f9f9f9;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            margin-bottom: 20px;
         }
 
         label, input {
@@ -49,7 +48,7 @@
             text-align: left;
         }
 
-        input {
+        input[type="text"] {
             padding: 8px;
             font-size: 16px;
             border: 1px solid #ddd;
@@ -57,27 +56,34 @@
             box-sizing: border-box;
         }
 
-        /* Styling for links as buttons */
+        /* Styling for buttons */
         .buttons {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            width: 300px; /* Matches the width of the form */
-        }
-
-        .button-link {
-            background-color: black;
-            color: white;
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 4px;
-            text-align: center;
-            text-decoration: none;
-            display: block;
+            margin-top: 15px;
             width: 100%;
         }
 
-        .button-link:hover {
+        button, .go-back, .landing-page {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        .modify-button {
+            background-color: black;
+            border: none;
+        }
+
+        .modify-button:hover {
             background-color: #333333;
         }
 
@@ -91,27 +97,29 @@
     </style>
 </head>
 <body>
-
     <!-- Navigation bar -->
     <div class="navbar">
         Admin Dashboard
     </div>
 
     <div class="container">
-        <h2>Modify Content Block</h2>
-        <form>
-            <label for="content_block_id">Content Block ID:</label>
-            <input type="text" id="content_block_id" name="content_block_id" required>
+        <h2>Modify Activity</h2>
+
+        <form method="POST" action="{{ url_for('admin.save_modified_activity') }}">
+            <label for="activity_id">Activity ID:</label>
+            <input type="text" id="activity_id" name="activity_id" value="{{ existing_activity_id }}" required>
+
+            <!-- Buttons for Modify, Go Back, and Landing Page -->
+            <div class="buttons">
+                <button type="submit" name="action" value="modify" class="modify-button">Modify Activity</button>
+
+                <!-- Link for Go Back styled as a button -->
+                <a href="{{ url_for('admin.modify_content_block') }}" class="go-back">Go Back</a>
+
+                <!-- Link for Landing Page styled as a button -->
+                <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
+            </div>
         </form>
-
-        <div class="buttons">
-            <a href="{{ url_for('admin.modify_text') }}" class="button-link">Modify Text</a>
-            <a href="{{ url_for('admin.modify_picture') }}" class="button-link">Modify Picture</a>
-            <a href="{{ url_for('admin.modify_activity') }}" class="button-link">Modify Activity</a>
-            <a href="{{ url_for('admin.modify_section') }}" class="button-link go-back">Go Back</a>
-            <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>
-        </div>
     </div>
-
 </body>
 </html>

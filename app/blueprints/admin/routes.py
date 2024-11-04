@@ -192,6 +192,34 @@ def save_text():
     flash("Section saved successfully!", "success")
     return redirect(url_for('admin.admin_landing'))
 
+
+@admin_bp.route('/save_modified_text', methods=['POST'])
+def save_modified_text():
+    # Retrieve the modified text and other necessary IDs from the form/session
+    modified_text = request.form.get('text')
+    content_block_id = session.get('content_block_id')
+    section_id = session.get('section_id')
+    etextbook_id = session.get('etextbook_id')
+    chapter_id = session.get('chap_id')
+    admin_id = session.get('user_id')
+    is_hidden = "no"
+    section_list = fetch_sections(etextbook_id, chapter_id, section_id)
+    if section_list:
+        status = update_content_in_db(content_block_id, section_id, chapter_id, etextbook_id, is_hidden, admin_id, 'text', modified_text)
+        
+        if status:
+            flash("Content block modified successfully!", "success")
+            return redirect(url_for('admin.modify_content_block'))
+        else:
+            flash("Failed to modify content block!", "error")
+            return redirect(url_for('admin.admin_landing'))
+    else:
+        flash("Textbook with the given ID does not exist. Please enter a valid one.", "error")
+    
+    return redirect(url_for('admin.admin_landing'))
+
+
+
 @admin_bp.route('/save_picture', methods=['POST'])
 def save_picture():
     picture_url = "sample1.png"
@@ -219,11 +247,50 @@ def save_picture():
     flash("Section saved successfully!", "success")
     return redirect(url_for('admin.admin_landing'))
 
+
+@admin_bp.route('/save_modified_picture', methods=['POST'])
+def save_modified_picture():
+    # Assuming the new picture will be saved as "sample2.png"
+    picture_url = "sample2.png"
+    
+    # Set up session and other necessary variables
+    section_id = session.get('section_id')
+    content_block_id = session.get('content_block_id')
+    etextbook_id = session.get('etextbook_id')
+    chapter_id = session.get('chap_id')
+    admin_id = session.get('user_id')
+    is_hidden = "no"
+    
+    # Check if the section exists in the database
+    section_list = fetch_sections(etextbook_id, chapter_id, section_id)
+    if section_list:
+        # Update the picture URL in the existing content block
+        status = update_content_in_db(content_block_id, section_id, chapter_id, etextbook_id, is_hidden, admin_id, 'image', picture_url)
+        
+        if status:
+            flash("Picture modified successfully!", "success")
+            return redirect(url_for('admin.modify_content_block'))
+        else:
+            flash("Failed to modify picture.", "error")
+            return redirect(url_for('admin.admin_landing'))
+    else:
+        flash('Textbook with the given ID does not exist. Please enter a new one.', 'error')
+    
+    return redirect(url_for('admin.admin_landing'))
+
+
 @admin_bp.route('/save_activity', methods=['POST'])
 def save_activity():
     activity_id = request.form.get('activity_id')
     session['activity_id'] = activity_id  # Store activity ID in session for adding questions
     return redirect(url_for('admin.add_question'))
+
+@admin_bp.route('/save_modified_activity', methods=['POST'])
+def save_modified_activity():
+    activity_id = request.form.get('activity_id')
+    session['activity_id'] = activity_id  # Store activity ID in session for adding questions
+    return redirect(url_for('admin.modify_question'))
+
 
 @admin_bp.route('/add_question')
 def add_question():
@@ -263,6 +330,20 @@ def save_question():
     return redirect(url_for('admin.add_activity'))
 
 
+@admin_bp.route('/modify_question')
+def modify_question():
+    activity_id = session.get('activity_id')
+    question_id = session.get('question_id')
+    return render_template(
+        'modify_question.html')
+
+@admin_bp.route('/save_modified_question', methods=['POST'])
+def save_modified_question():
+    flash("Question modified successfully!", "success")
+    return redirect(url_for('admin.modify_activity'))
+
+
+
 
 
 @admin_bp.route('/modify_etextbook', methods=['GET', 'POST'])
@@ -298,13 +379,8 @@ def add_new_chapter():
 @admin_bp.route('/modify_chapter', methods=['GET', 'POST'])
 def modify_chapter():
     if request.method == 'POST':
-        # Assuming we get modified data from a form
         modified_data = request.form.get('modified_data')
-        
-        # Retrieve the E-textbook ID and update the relevant chapter
         etextbook_id = session.get('etextbook_id')
-        # Logic to modify the chapter in the specified E-textbook in the database
-
         flash(f"Chapter modified for E-textbook ID {etextbook_id}.", "success")
         return redirect(url_for('admin.modify_etextbook'))
 
@@ -326,6 +402,36 @@ def modify_content_block():
         flash(f"Content Block {content_block_id} modified.", "info")
         return redirect(url_for('admin.modify_section'))
     return render_template('modify_content_block.html')
+
+@admin_bp.route('/modify_text', methods=['GET', 'POST'])
+def modify_text():
+    content_block_id = session.get('content_block_id')    
+    if request.method == 'POST':
+        modified_text = request.form.get('text')
+        status = update_content_in_db(content_block_id, modified_text)   
+        if status:
+            flash("Content modified successfully!", "success")
+            return redirect(url_for('admin.modify_content_block'))
+        else:
+            flash("Failed to modify content.", "error")
+    
+    return render_template('modify_text.html',content_block_id=content_block_id)
+
+@admin_bp.route('/modify_picture', methods=['GET', 'POST'])
+def modify_picture():
+    content_block_id = session.get('content_block_id')
+    if request.method == 'POST':
+        modified_picture_url = request.form.get('picture_url')
+    return render_template('modify_picture.html')
+
+@admin_bp.route('/modify_activity', methods=['GET', 'POST'])
+def modify_activity():
+    content_block_id = session.get('content_block_id')
+    if request.method == 'POST':
+        modified_activity = request.form.get('activity')
+    return render_template('modify_activity.html')
+
+
 
 @admin_bp.route('/create_active_course')
 def create_active_course():

@@ -28,7 +28,6 @@ CREATE TABLE Section (
     section_id VARCHAR(25) NOT NULL,
     textbook_id INT NOT NULL,
     chapter_id VARCHAR(25) NOT NULL,
-    section_number INT,
     title VARCHAR(255) NOT NULL,
     is_hidden ENUM('yes', 'no') NOT NULL,
     created_by VARCHAR(255),

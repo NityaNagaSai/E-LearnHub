@@ -147,3 +147,22 @@ def add_content_to_db(cb_id, section_id, chap_id, textbook_id, is_hidden, create
     finally:
         cursor.close()
         conn.close()
+
+def update_content_in_db(cb_id, section_id, chap_id, textbook_id, is_hidden, modified_by, content_type, modified_content):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = '''UPDATE ContentBlock 
+                   SET content = %s, is_hidden = %s, modified_by = %s, content_type = %s 
+                   WHERE content_block_id = %s AND textbook_id = %s AND section_id = %s AND chapter_id = %s'''
+        cursor.execute(query, (modified_content, is_hidden, modified_by, content_type, cb_id, textbook_id, section_id, chap_id))
+        conn.commit()
+        return True
+    except Error as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
