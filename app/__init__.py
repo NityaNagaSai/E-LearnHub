@@ -17,7 +17,8 @@ def create_app():
     app.register_blueprint(student_bp, url_prefix="/student")
     app.register_blueprint(db_bp, url_prefix="/db")
     with app.app_context():
-        create_tables()
-        populate_tables()
+        pass
+        #create_tables()
+        # populate_tables()
     return app
 

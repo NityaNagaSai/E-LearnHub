@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, request, flash,
 from . import admin_bp
 import mysql.connector
 from mysql.connector import errorcode
-from app.blueprints.admin.service import create_new_faculty_account, add_etextbook_to_db, fetch_etextbooks
+from app.blueprints.admin.service import *
 
 
 @admin_bp.route('/home')
@@ -57,7 +57,8 @@ def add_etextbook():
             return redirect(url_for('admin.new_chapter'))
         else:
             return redirect(url_for('admin.admin_landing')) 
-    
+        
+    return redirect(url_for('admin.admin_landing'))    
 
 @admin_bp.route('/createetextbook/newchapter')
 def new_chapter():
@@ -96,20 +97,20 @@ def save_chapter():
 
 @admin_bp.route('/add_new_section')
 def add_new_section():
-    chapter_id = session.get('chapter_id')
-    chapter_title = session.get('chapter_title')
+    chapter_id = session.get('chap_id')
+    chapter_title = session.get('chap_title')
     return render_template('add_new_section.html', chapter_id=chapter_id, chapter_title=chapter_title)
 
 @admin_bp.route('/save_section', methods=['POST'])
 def save_section():
-    section_number = request.form.get('section_number')
+    section_id = request.form.get('section_number')
     section_title = request.form.get('section_title')
 
     etextbook_id = session.get('etextbook_id')
-    # Retrieve chapter data from form
-    chapter_id = session.get('chapter_id')
-    hide_section_id= "no"
+    chapter_id = session.get('chap_id')
     admin_id = session.get('user_id')
+
+    hide_section_id= "no"
     chapter_list = fetch_chapters(etextbook_id, chapter_id)
     if chapter_list:
         status = add_section_to_db(section_id, chapter_id, etextbook_id, hide_section_id, admin_id, section_title)
@@ -126,7 +127,7 @@ def save_section():
         flash('Textbook with Id does not exist. Please enter a new one', 'error')
 
     flash("Section saved successfully!", "success")
-    return redirect(url_for('admin.add_new_content_block'))
+    return redirect(url_for('admin.admin_landing'))
 
 @admin_bp.route('/add_new_content_block')
 def add_new_content_block():
@@ -170,14 +171,53 @@ def save_text():
     text = request.form.get('text')
     # Save the text content block (you would save it in the database)
     flash("Text added successfully!", "success")
-    return redirect(url_for('admin.add_new_content_block'))
+    section_id = session.get('section_id')
+    content_block_id = session.get('content_block_id')
+    etextbook_id = session.get('etextbook_id')
+    chapter_id = session.get('chap_id')
+    admin_id = session.get('user_id')
+    is_hidden= "no"
+    section_list = fetch_sections(etextbook_id, chapter_id, section_id)
+    if section_list:
+        status = add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, is_hidden, admin_id, 'text', text)
+        if status:
+            flash("Chapter saved successfully!", "success")
+            return redirect(url_for('admin.add_new_content_block'))  
+        else:
+            flash("Chapter was not saved!", "fail")
+            return redirect(url_for('admin.admin_landing'))
+    else:
+        flash('Textbook with Id does not exist. Please enter a new one', 'error')
+
+    flash("Section saved successfully!", "success")
+    return redirect(url_for('admin.admin_landing'))
 
 @admin_bp.route('/save_picture', methods=['POST'])
 def save_picture():
-    picture_url = request.form.get('picture')
+    picture_url = "sample1.png"
+    #request.form.get('picture')
     # Save the picture content block
-    flash("Picture added successfully!", "success")
-    return redirect(url_for('admin.add_new_content_block'))
+    flash("Text added successfully!", "success")
+    section_id = session.get('section_id')
+    content_block_id = session.get('content_block_id')
+    etextbook_id = session.get('etextbook_id')
+    chapter_id = session.get('chap_id')
+    admin_id = session.get('user_id')
+    is_hidden= "no"
+    section_list = fetch_sections(etextbook_id, chapter_id, section_id)
+    if section_list:
+        status = add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, is_hidden, admin_id, 'image', picture_url)
+        if status:
+            flash("Chapter saved successfully!", "success")
+            return redirect(url_for('admin.add_new_content_block'))  
+        else:
+            flash("Chapter was not saved!", "fail")
+            return redirect(url_for('admin.admin_landing'))
+    else:
+        flash('Textbook with Id does not exist. Please enter a new one', 'error')
+
+    flash("Section saved successfully!", "success")
+    return redirect(url_for('admin.admin_landing'))
 
 @admin_bp.route('/save_activity', methods=['POST'])
 def save_activity():
