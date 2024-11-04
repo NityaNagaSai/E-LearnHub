@@ -64,7 +64,7 @@ def add_chapter_to_db(chap_id, textbook_id, is_hidden, created_by, chap_title):
     cursor = conn.cursor()
 
     try:
-        query = '''INSERT INTO chapter(chapter_id, textbook_id, is_hidden, created_by, title) 
+        query = '''INSERT INTO Chapter(chapter_id, textbook_id, is_hidden, created_by, title) 
                    VALUES(%s, %s, %s, %s, %s)'''
         cursor.execute(query, (chap_id, textbook_id, is_hidden, created_by, chap_title))
         conn.commit()
@@ -82,7 +82,7 @@ def fetch_chapters(etextbook_id, chapter_id):
     cursor = conn.cursor()
 
     try:
-        query = "SELECT * FROM chapter WHERE textbook_id = %s and chapter_id = %s"
+        query = "SELECT * FROM Chapter WHERE textbook_id = %s and chapter_id = %s"
         cursor.execute(query, (etextbook_id, chapter_id,))
         chap_data = cursor.fetchall()
         print(etextbook_id+ " " + chapter_id)
@@ -118,7 +118,7 @@ def fetch_sections(etextbook_id, chapter_id, section_id):
     cursor = conn.cursor()
 
     try:
-        query = "SELECT * FROM section WHERE textbook_id = %s and chapter_id = %s and section_id = %s"
+        query = "SELECT * FROM Section WHERE textbook_id = %s and chapter_id = %s and section_id = %s"
         cursor.execute(query, (etextbook_id, chapter_id, section_id))
         chap_data = cursor.fetchall()
         return chap_data

@@ -18,18 +18,18 @@ def create_faculty():
         last_name = request.form['last_name']
         email = request.form['email']
         password = request.form['password']
-        action = request.form['action']
+        # action = request.form['action']
         
-        if action == 'create_faculty_user':
-            status = create_new_faculty_account(first_name, last_name, email, password)
-            if status:
-                flash('New Faculty account created successfully!', 'success')
-            else:
-                flash('An error occured in creating the account', 'error')
-            return redirect(url_for('admin.admin_landing')) 
+        # if action == 'create_faculty_user':
+        status = create_new_faculty_account(first_name, last_name, email, password)
+        if status:
+            flash('New Faculty account created successfully!', 'success')
+        else:
+            flash('An error occured in creating the account', 'error')
+        return redirect(url_for('admin.admin_landing')) 
 
-        elif action == 'go_back':
-            return render_template('admin_landing.html') 
+        # elif action == 'go_back':
+        #     return render_template('admin_landing.html') 
 
 @admin_bp.route('/createetextbook')
 def create_etextbook():
