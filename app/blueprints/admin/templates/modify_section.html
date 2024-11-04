@@ -99,17 +99,25 @@
 
     <div class="container">
         <h2>Modify Section</h2>
-        <form>
-            <label for="section_number">Unique Section Number:</label>
+        <form  method="POST" action="{{ url_for('admin.modify_section') }}">
+            <label for="section_number">Unique E-textbook ID:</label>
+            <input type="text" id="etextbook_id" name="etextbook_id" required value = "{{etextbook_id}}">
+
+            <label for="section_number">Chapter ID:</label>
+            <input type="text" id="chapter_id" name="chapter_id" required value ="{{chapter_id}}">
+
+            <label for="section_number">Section Number:</label>
             <input type="text" id="section_number" name="section_number" required>
+
+            <div class="buttons">
+                <button type="submit"  name="action" value="add_new_content_block" class="button-link">Add New Content Block</button>
+                <button type="submit"  name="action" value="modify_content_block" class="button-link">Modify Content Block</button>
+                <a href="{{ url_for('admin.modify_chapter') }}" class="button-link go-back">Go Back</a>
+                <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>
+            </div>
+    
         </form>
 
-        <div class="buttons">
-            <a href="{{ url_for('admin.add_new_content_block') }}" class="button-link">Add New Content Block</a>
-            <a href="{{ url_for('admin.modify_content_block') }}" class="button-link">Modify Content Block</a>
-            <a href="{{ url_for('admin.modify_chapter') }}" class="button-link go-back">Go Back</a>
-            <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>
-        </div>
     </div>
 
 </body>

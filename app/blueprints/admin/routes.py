@@ -18,18 +18,18 @@ def create_faculty():
         last_name = request.form['last_name']
         email = request.form['email']
         password = request.form['password']
-        # action = request.form['action']
+        action = request.form['action']
         
-        # if action == 'create_faculty_user':
-        status = create_new_faculty_account(first_name, last_name, email, password)
-        if status:
-            flash('New Faculty account created successfully!', 'success')
-        else:
-            flash('An error occured in creating the account', 'error')
-        return redirect(url_for('admin.admin_landing')) 
+        if action == 'create_faculty_user':
+            status = create_new_faculty_account(first_name, last_name, email, password)
+            if status:
+                flash('New Faculty account created successfully!', 'success')
+            else:
+                flash('An error occured in creating the account', 'error')
+            return redirect(url_for('admin.admin_landing')) 
 
-        # elif action == 'go_back':
-        #     return render_template('admin_landing.html') 
+        elif action == 'go_back':
+            return render_template('admin_landing.html') 
 
 @admin_bp.route('/createetextbook')
 def create_etextbook():
@@ -351,10 +351,20 @@ def modify_etextbook():
     if request.method == 'POST':
         # Retrieve the E-textbook ID from the form
         etextbook_id = request.form.get('etextbook_id')
-        
         # Store the E-textbook ID in the session
         session['etextbook_id'] = etextbook_id
+        etextbook_list = fetch_etextbooks(etextbook_id)
+        if etextbook_list:
+            title = etextbook_list[0][1]
+            action = request.form.get('action')
+            if action == "add_chapter":
+                return render_template('new_chapter.html', etextbook_title=title, etextbook_id=etextbook_id)
+            elif action == "modify_chapter":
+                return redirect(url_for('admin.modify_chapter'))
+        else:
+            flash('Textbook with Id does not exists. Please enter a new one', 'error')
 
+        print(etextbook_list)
         flash("E-textbook selected for modification.", "info")
         return redirect(url_for('admin.modify_etextbook'))
 
@@ -379,20 +389,48 @@ def add_new_chapter():
 @admin_bp.route('/modify_chapter', methods=['GET', 'POST'])
 def modify_chapter():
     if request.method == 'POST':
-        modified_data = request.form.get('modified_data')
+        # Assuming we get modified data from a form
+        # modified_data = request.form.get('modified_data')
+        # Retrieve the E-textbook ID and update the relevant chapter
         etextbook_id = session.get('etextbook_id')
-        flash(f"Chapter modified for E-textbook ID {etextbook_id}.", "success")
+        chapter_id = request.form.get('chapter_id')
+        session['chapter_id'] = chapter_id
+        action = request.form.get('action')
+        # Logic to modify the chapter in the specified E-textbook in the database
+        chapter_list = fetch_chapters(etextbook_id, chapter_id)
+        if chapter_list:
+            if action == "add_new_section":
+                return redirect(url_for('admin.add_new_section'))
+            elif action == "modify_section":
+                return redirect(url_for('admin.modify_section'))
+        else:
+            flash("No chapter exists with the current chapter id. Please try again.", "error")
+
+        # flash(f"Chapter modified for E-textbook ID {etextbook_id}.", "success")
         return redirect(url_for('admin.modify_etextbook'))
 
     return render_template('modify_chapter.html')
 
 @admin_bp.route('/modify_section', methods=['GET', 'POST'])
 def modify_section():
+    # if request.method == "GET":
+    etextbook_id = session.get('etextbook_id')
+    chapter_id = session.get('chapter_id')
     if request.method == 'POST':
+        print("Inside modify section method")
         section_number = request.form.get('section_number')
         session['section_number'] = section_number
-        return redirect(url_for('admin.modify_content_block'))
-    return render_template('modify_section.html')
+        action = request.form.get("action")
+        sections_list = fetch_sections(etextbook_id, chapter_id, section_number)
+        if sections_list:
+            if action == "add_new_content_block":
+                return redirect(url_for("admin.add_new_content_block"))
+            elif action == "modify_content_block":
+                return redirect(url_for("admin.modify_content_block"))
+        else:
+            flash(f"Section number {section_number} does not exist. Please try again", "error")
+        # return redirect(url_for('admin.modify_content_block'))
+    return render_template('modify_section.html', etextbook_id = etextbook_id, chapter_id=chapter_id)
 
 @admin_bp.route('/modify_content_block', methods=['GET', 'POST'])
 def modify_content_block():

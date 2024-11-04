@@ -59,6 +59,26 @@ def fetch_etextbooks(etextbook_id):
         cursor.close()
         conn.close()
 
+# def update_etextbook(etextbook_id, title):
+#     conn = get_db_connection()
+#     cursor = conn.cursor()
+
+#     try:
+#         query = '''UPDATE ETextbook
+#                    SET title = %s
+#                    WHERE textbook_id = %s;
+#                 '''
+#         cursor.execute(query, (title, etextbook_id))
+#         conn.commit()
+#         return True
+#     except Error as e:
+#         conn.rollback()
+#         print(f"Error: {e}")
+#         return False
+#     finally:
+#         cursor.close()
+#         conn.close()
+
 def add_chapter_to_db(chap_id, textbook_id, is_hidden, created_by, chap_title):
     conn = get_db_connection()
     cursor = conn.cursor()
@@ -111,7 +131,6 @@ def add_section_to_db(section_id, chap_id, textbook_id, is_hidden, created_by, s
     finally:
         cursor.close()
         conn.close()
-
 
 def fetch_sections(etextbook_id, chapter_id, section_id):
     conn = get_db_connection()
