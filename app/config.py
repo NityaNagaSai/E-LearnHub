@@ -5,10 +5,10 @@ def get_db_connection():
     try:
         conn = mysql.connector.connect(
             user ='root',
-            password = 'mysql1234',
+            password = '1234',
             host = '127.0.0.1',
             port = '3306',
-            database = 'ELearnHub',
+            database = 'elearnhub',
         )
 
         return conn
