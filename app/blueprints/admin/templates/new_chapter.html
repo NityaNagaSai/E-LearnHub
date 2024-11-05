@@ -109,8 +109,12 @@
                 <button type="submit" name="action" value="add_section" class="add-section">Add New Section</button>
 
                 <!-- Link for Go Back -->
-                <a href="{{ url_for('admin.create_etextbook') }}" class="go-back">Go Back</a>
-
+                {% if call_type == 'modify' %}
+                    <a href="{{ url_for('admin.modify_etextbook') }}" class="go-back">Go Back</a>
+                {% elif call_type == 'new' %}
+                    <a href="{{ url_for('admin.create_etextbook') }}" class="go-back">Go Back</a>
+                {% endif %}
+    
                 <!-- Link for Landing Page -->
                 <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
             </div>

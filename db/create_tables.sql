@@ -40,9 +40,10 @@ CREATE TABLE IF NOT EXISTS ContentBlock (
     textbook_id INT NOT NULL,
     chapter_id VARCHAR(25) NOT NULL,
     section_id VARCHAR(25) NOT NULL,
-    content_block_id VARCHAR(25),
+    chapter_id VARCHAR(25) NOT NULL,
     content_type ENUM('text', 'image', 'activity') NOT NULL,
     content TEXT NOT NULL,
+    -- sequence_number INT NOT NULL,
     is_hidden ENUM('yes', 'no') NOT NULL,
     created_by VARCHAR(255),
     PRIMARY KEY (textbook_id, chapter_id, section_id, content_block_id),
@@ -50,40 +51,51 @@ CREATE TABLE IF NOT EXISTS ContentBlock (
     FOREIGN KEY (created_by) REFERENCES User(user_id) ON DELETE SET NULL
 );
 
-CREATE TABLE IF NOT EXISTS Activities (
+CREATE TABLE IF NOT EXISTS Activity (
     textbook_id INT NOT NULL,
     chapter_id VARCHAR(25) NOT NULL,
     section_id VARCHAR(25) NOT NULL,
     content_block_id VARCHAR(25) NOT NULL,
     activity_id VARCHAR(25) NOT NULL,
     is_hidden ENUM('yes', 'no') NOT NULL,
-    created_by VARCHAR(255) NOT NULL,
+    created_by VARCHAR(255),
     PRIMARY KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id),
-    FOREIGN KEY (created_by, textbook_id, chapter_id, section_id, content_block_id) 
-    REFERENCES ContentBlock(created_by, textbook_id, chapter_id, section_id, content_block_id) ON DELETE CASCADE
+    FOREIGN KEY (textbook_id, chapter_id, section_id, content_block_id) REFERENCES ContentBlock(textbook_id, chapter_id, section_id, content_block_id) ON DELETE CASCADE
 );
 
-
 CREATE TABLE IF NOT EXISTS Question (
-    textbook_id INT NOT NULL,
-    chapter_id VARCHAR(25) NOT NULL,
-    section_id VARCHAR(25) NOT NULL,
-    content_block_id VARCHAR(25) NOT NULL,
+    question_id VARCHAR(25),
     activity_id VARCHAR(25) NOT NULL,
-    question_id VARCHAR(25) NOT NULL,
+    content_block_id VARCHAR(25) NOT NULL,
+    textbook_id INT NOT NULL,
+    section_id VARCHAR(25) NOT NULL,
+    chapter_id VARCHAR(25) NOT NULL,
     question TEXT NOT NULL,
-    option1 VARCHAR(255) NOT NULL,
-    explanation_op1 VARCHAR(255) NOT NULL,
-    option2 VARCHAR(255) NOT NULL,
-    explanation_op2 VARCHAR(255) NOT NULL,
-    option3 VARCHAR(255) NOT NULL,
-    explanation_op3 VARCHAR(255) NOT NULL,
-    option4 VARCHAR(255) NOT NULL,
-    explanation_op4 VARCHAR(255) NOT NULL,
     correct_answer VARCHAR(255) NOT NULL,
+    option1 VARCHAR(255) NOT NULL,
+    option2 VARCHAR(255) NOT NULL,
+    option3 VARCHAR(255) NOT NULL,
+    option4 VARCHAR(255) NOT NULL,
+    explanation_op1 VARCHAR(255) NOT NULL,
+    explanation_op2 VARCHAR(255) NOT NULL,
+    explanation_op3 VARCHAR(255) NOT NULL,
+    explanation_op4 VARCHAR(255) NOT NULL,
     PRIMARY KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id, question_id),
-    FOREIGN KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id) 
-    REFERENCES Activities(textbook_id, chapter_id, section_id, content_block_id, activity_id) ON DELETE CASCADE
+    FOREIGN KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id) REFERENCES Activity(textbook_id, chapter_id, section_id, content_block_id, activity_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Course (
+    course_id VARCHAR(50) PRIMARY KEY,
+    course_title VARCHAR(255) NOT NULL,
+    course_type ENUM('Active', 'Evaluation') NOT NULL,
+    faculty_user_id VARCHAR(10) NOT NULL,
+    textbook_id INT NOT NULL,
+    course_start_date DATE,
+    course_end_date DATE,
+    capacity INT,
+    token VARCHAR(255),
+    FOREIGN KEY (faculty_user_id) REFERENCES User(user_id),
+    FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id)
 );
 
 CREATE TABLE IF NOT EXISTS StudentActivityPoint (

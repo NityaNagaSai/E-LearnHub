@@ -105,7 +105,12 @@
                 <button type="submit" name="action" value="add_content_block" class="add-content">Add New Content Block</button>
 
                 <!-- Link for Go Back -->
-                <a href="{{ url_for('admin.new_chapter') }}" class="go-back">Go Back</a>
+                {% if call_type == 'modify' %}
+                    <a href="{{ url_for('admin.modify_chapter') }}" class="go-back">Go Back</a>
+                {% elif call_type == 'new' %}
+                    <a href="{{ url_for('admin.new_chapter') }}" class="go-back">Go Back</a>
+                {% endif %}
+                <!-- <a href="{{ url_for('admin.new_chapter') }}" class="go-back">Go Back</a> -->
 
                 <!-- Link for Landing Page -->
                 <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
