@@ -1,17 +1,17 @@
 import pymysql
 
 # Define connection parameters
-HOST = '127.0.0.1'
-USER = 'mgaddam'
-PASSWORD = '200538368'
-DATABASE = 'mgaddam'
-PORT = 63987
-
 # HOST = '127.0.0.1'
-# USER = 'root'
-# PASSWORD = '1234'
-# DATABASE = 'elearnhub'
-# PORT = 3306
+# USER = 'mgaddam'
+# PASSWORD = '200538368'
+# DATABASE = 'mgaddam'
+# PORT = 63987
+
+HOST = '127.0.0.1'
+USER = 'root'
+PASSWORD = 'Nitya@123'
+DATABASE = 'dbms'
+PORT = 3306
 
 # Establish a connection
 def get_db_connection():

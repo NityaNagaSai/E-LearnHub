@@ -37,16 +37,15 @@ CREATE TABLE IF NOT EXISTS Section (
 );
 
 CREATE TABLE IF NOT EXISTS ContentBlock (
+    content_block_id VARCHAR(25) NOT NULL,
     textbook_id INT NOT NULL,
     chapter_id VARCHAR(25) NOT NULL,
     section_id VARCHAR(25) NOT NULL,
-    chapter_id VARCHAR(25) NOT NULL,
     content_type ENUM('text', 'image', 'activity') NOT NULL,
     content TEXT NOT NULL,
-    -- sequence_number INT NOT NULL,
     is_hidden ENUM('yes', 'no') NOT NULL,
     created_by VARCHAR(255),
-    PRIMARY KEY (textbook_id, chapter_id, section_id, content_block_id),
+    PRIMARY KEY (content_block_id, textbook_id, chapter_id, section_id),
     FOREIGN KEY (textbook_id, chapter_id, section_id) REFERENCES Section(textbook_id, chapter_id, section_id) ON DELETE CASCADE,
     FOREIGN KEY (created_by) REFERENCES User(user_id) ON DELETE SET NULL
 );
@@ -88,40 +87,6 @@ CREATE TABLE IF NOT EXISTS Course (
     course_id VARCHAR(50) PRIMARY KEY,
     course_title VARCHAR(255) NOT NULL,
     course_type ENUM('Active', 'Evaluation') NOT NULL,
-    faculty_user_id VARCHAR(10) NOT NULL,
-    textbook_id INT NOT NULL,
-    course_start_date DATE,
-    course_end_date DATE,
-    capacity INT,
-    token VARCHAR(255),
-    FOREIGN KEY (faculty_user_id) REFERENCES User(user_id),
-    FOREIGN KEY (textbook_id) REFERENCES ETextbook(textbook_id)
-);
-
-CREATE TABLE IF NOT EXISTS StudentActivityPoint (
-    student_id VARCHAR(255) NOT NULL,  -- Matches User(user_id) type
-    textbook_id INT NOT NULL,
-    chapter_id VARCHAR(25) NOT NULL,
-    section_id VARCHAR(25) NOT NULL,
-    content_block_id VARCHAR(25) NOT NULL,
-    activity_id VARCHAR(25) NOT NULL,
-    question_id VARCHAR(25) NOT NULL,
-    question_points INT,
-    timestamp DATETIME NOT NULL,
-    PRIMARY KEY (student_id, textbook_id, chapter_id, section_id, content_block_id, activity_id, question_id),
-    
-    -- Foreign key referencing the composite key in Question table
-    FOREIGN KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id, question_id) 
-        REFERENCES Question(textbook_id, chapter_id, section_id, content_block_id, activity_id, question_id) ON DELETE CASCADE,
-    -- Foreign key referencing User table
-    FOREIGN KEY (student_id) REFERENCES User(user_id) ON DELETE CASCADE
-);
-
-
-CREATE TABLE IF NOT EXISTS Course (
-    course_id VARCHAR(50) PRIMARY KEY,
-    course_title VARCHAR(255) NOT NULL,
-    course_type ENUM('Active', 'Evaluation') NOT NULL,
     faculty_user_id VARCHAR(255) NOT NULL,
     ta_user_id VARCHAR(255),
     textbook_id INT NOT NULL,
@@ -132,6 +97,22 @@ CREATE TABLE IF NOT EXISTS Course (
     FOREIGN KEY (faculty_user_id) REFERENCES User(user_id) ON DELETE CASCADE,
     FOREIGN KEY (ta_user_id) REFERENCES User(user_id) ON DELETE SET NULL,
     FOREIGN KEY (textbook_id) REFERENCES ETextBook(textbook_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS StudentActivityPoint (
+    student_id VARCHAR(255) NOT NULL,
+    textbook_id INT NOT NULL,
+    chapter_id VARCHAR(25) NOT NULL,
+    section_id VARCHAR(25) NOT NULL,
+    content_block_id VARCHAR(25) NOT NULL,
+    activity_id VARCHAR(25) NOT NULL,
+    question_id VARCHAR(25) NOT NULL,
+    question_points INT,
+    timestamp DATETIME NOT NULL,
+    PRIMARY KEY (student_id, textbook_id, chapter_id, section_id, content_block_id, activity_id, question_id),
+    FOREIGN KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id, question_id) 
+        REFERENCES Question(textbook_id, chapter_id, section_id, content_block_id, activity_id, question_id) ON DELETE CASCADE,
+    FOREIGN KEY (student_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Enrollment (
@@ -145,9 +126,9 @@ CREATE TABLE IF NOT EXISTS Enrollment (
 
 CREATE TABLE IF NOT EXISTS StudentParticipation (
     student_id VARCHAR(255) NOT NULL,
-    course_id VARCHAR(25) NOT NULL,
-    participation_points INT NOT NULL,  
-    finished_activites INT NOT NULL,
+    course_id VARCHAR(50) NOT NULL,
+    participation_points INT NOT NULL,
+    finished_activities INT NOT NULL,
     PRIMARY KEY (student_id, course_id),
     FOREIGN KEY (student_id) REFERENCES User(user_id) ON DELETE CASCADE,
     FOREIGN KEY (course_id) REFERENCES Course(course_id) ON DELETE CASCADE

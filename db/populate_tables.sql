@@ -71,7 +71,7 @@ LINES TERMINATED BY '\n'
 
 -- inserting into activities
 LOAD DATA LOCAL INFILE 'db/activity.txt'
-INTO TABLE Activities
+INTO TABLE Activity
 FIELDS TERMINATED BY ',' 
 LINES TERMINATED BY '\n'
 (textbook_id,chapter_id,section_id,content_block_id,activity_id,is_hidden,created_by);
