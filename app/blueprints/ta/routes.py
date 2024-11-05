@@ -43,21 +43,37 @@ def change_password():
 
 @ta_bp.route('/updatepassword', methods=['POST'])
 def update_password():
+    user_id = session.get('user_id')  # Retrieve user_id from session
+    if not user_id:
+        flash("You must be logged in to change your password.", "error")
+        return redirect(url_for('main.login'))
+
     existing_password = request.form['curr_password']
     new_password = request.form['new_password']
     confirm_new_password = request.form['confirm_new_password']
     action = request.form['action']
+
     if action == "update":
         if new_password != confirm_new_password:
-        # flash("New password and confirmation do not match.", "error")
-            return redirect(url_for('ta.update_password'))
+            flash("New password and confirmation do not match.", "error")
+            return redirect(url_for('ta.change_password'))
+
+        # Verify the current password
+        if not validate_current_password(user_id, existing_password):
+            flash("Existing password is incorrect.", "error")
+            return redirect(url_for('ta.change_password'))
+
+        # Update the password in the database
+        if update_user_password(user_id, new_password):
+            flash("Password updated successfully.", "success")
+            return redirect(url_for('ta.ta_landing'))
         else:
-            # write logic to update the password in the database
-            # flash("Password updated successfully.", "success")
-            return render_template('ta_landing.html')  # Replace with the actual previous page
+            flash("Failed to update password.", "error")
+            return redirect(url_for('ta.change_password'))
 
     elif action == "go_back":
-        return render_template('ta_landing.html')
+        return redirect(url_for('ta.ta_landing'))
+
 
 # View Students
 @ta_bp.route('/viewstudents/<course_id>', methods=['GET','POST'])
