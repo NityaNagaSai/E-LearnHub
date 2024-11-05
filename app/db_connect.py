@@ -5,7 +5,7 @@ HOST = '127.0.0.1'
 USER = 'mgaddam'
 PASSWORD = '200538368'
 DATABASE = 'mgaddam'
-PORT = 57664
+PORT = 55858
 
 # Establish a connection
 def get_db_connection():

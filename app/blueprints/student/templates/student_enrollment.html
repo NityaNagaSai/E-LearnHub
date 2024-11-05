@@ -58,9 +58,15 @@
           >Go Back</a
         >
       </form>
-      {% with messages = get_flashed_messages() %} {% if messages %}
-      <div class="alert alert-danger mt-3">{{ messages[0] }}</div>
-      {% endif %} {% endwith %}
+      {% with messages = get_flashed_messages(with_categories=True) %} {% if
+      messages %} {% for category, message in messages %}
+      <div
+        class="alert mt-3 {% if category == 'success' %}alert-success{% else %}alert-danger{% endif %}"
+        role="alert"
+      >
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
     </div>
   </body>
 </html>

@@ -1,0 +1,5 @@
+101,chap01,introduction to Database,no,KeOg1024
+101,chap02,The Relational Model,no,KeOg1024
+102,chap01,introduction to Software Engineering,no,SaMi1024
+102,chap02,introduction to Software Development Life Cycle (SDLC),no,SaMi1024
+103,chap01,Introduction to Machine Learning,no,JoDo1024

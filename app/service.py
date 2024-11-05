@@ -4,6 +4,7 @@ from app.models import User
 
 def validate_user(user_id, password, role):
     conn = get_db_connection()
+    print("Inside validate user",conn)
     cursor = conn.cursor()
     try:
         query = "SELECT * FROM User WHERE user_id = %s AND user_password = %s AND user_role = %s"
