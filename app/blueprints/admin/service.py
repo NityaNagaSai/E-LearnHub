@@ -1,4 +1,5 @@
-from app.config import get_db_connection
+# from app.config import get_db_connection
+from app.db_connect import get_db_connection
 from app.models import User
 from datetime import datetime, timedelta
 from mysql.connector import Error
@@ -12,7 +13,7 @@ def create_new_faculty_account(first_name, last_name, email, password):
     cursor = conn.cursor()
 
     try:
-        query = '''INSERT INTO User(user_id, first_name, last_name, email, user_password, user_role) 
+        query = '''INSERT INTO User(user_id, first_name, last_name, email, password, role) 
                    VALUES(%s, %s, %s, %s, %s, %s)'''
         cursor.execute(query, (user_id, first_name, last_name, email, password, 'Faculty'))
         conn.commit()
@@ -30,7 +31,7 @@ def add_etextbook_to_db(etextbook_id, title):
     cursor = conn.cursor()
 
     try:
-        query = '''INSERT INTO ETextbook(textbook_id, title) 
+        query = '''INSERT INTO ETextBook(textbook_id, title) 
                    VALUES(%s, %s)'''
         cursor.execute(query, (etextbook_id, title))
         conn.commit()
@@ -48,7 +49,7 @@ def fetch_etextbooks(etextbook_id):
     cursor = conn.cursor()
 
     try:
-        query = "SELECT * FROM ETextbook WHERE textbook_id = %s"
+        query = "SELECT * FROM ETextBook WHERE textbook_id = %s"
         cursor.execute(query, (etextbook_id,))
         extextbook_data = cursor.fetchall()
         return extextbook_data
@@ -119,9 +120,9 @@ def add_section_to_db(section_id, chap_id, textbook_id, is_hidden, created_by, s
     cursor = conn.cursor()
 
     try:
-        query = '''INSERT INTO Section(section_id, textbook_id, chapter_id, section_number, title, is_hidden, created_by) 
-                   VALUES(%s, %s, %s, %s, %s, %s, %s)'''
-        cursor.execute(query, (section_id, textbook_id, chap_id, 101, sec_title, is_hidden, created_by ))
+        query = '''INSERT INTO Section(section_id, textbook_id, chapter_id, title, is_hidden, created_by) 
+                   VALUES(%s, %s, %s, %s, %s, %s)'''
+        cursor.execute(query, (section_id, textbook_id, chap_id, sec_title, is_hidden, created_by))
         conn.commit()
         return True
     except Error as e:
@@ -154,9 +155,9 @@ def add_content_to_db(cb_id, section_id, chap_id, textbook_id, is_hidden, create
 
     try:
         query = '''INSERT INTO ContentBlock(content_block_id, textbook_id, section_id, chapter_id, content_type, 
-                                       content, sequence_number, is_hidden, created_by) 
-                   VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
-        cursor.execute(query, (cb_id, textbook_id, section_id, chap_id, content_type, content, 101, is_hidden, created_by))
+                                       content, is_hidden, created_by) 
+                   VALUES(%s, %s, %s, %s, %s, %s, %s, %s)'''
+        cursor.execute(query, (cb_id, textbook_id, section_id, chap_id, content_type, content, is_hidden, created_by))
         conn.commit()
         return True
     except Error as e:
@@ -173,7 +174,7 @@ def update_content_in_db(cb_id, section_id, chap_id, textbook_id, is_hidden, mod
 
     try:
         query = '''UPDATE ContentBlock 
-                   SET content = %s, is_hidden = %s, modified_by = %s, content_type = %s 
+                   SET content = %s, is_hidden = %s, created_by = %s, content_type = %s 
                    WHERE content_block_id = %s AND textbook_id = %s AND section_id = %s AND chapter_id = %s'''
         cursor.execute(query, (modified_content, is_hidden, modified_by, content_type, cb_id, textbook_id, section_id, chap_id))
         conn.commit()

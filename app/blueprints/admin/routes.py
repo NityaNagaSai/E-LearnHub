@@ -26,8 +26,8 @@ def create_faculty():
                 flash('New Faculty account created successfully!', 'success')
             else:
                 flash('An error occured in creating the account', 'error')
-            return redirect(url_for('admin.admin_landing')) 
-
+            return redirect(url_for('admin.admin_landing'))
+        
         elif action == 'go_back':
             return render_template('admin_landing.html') 
 

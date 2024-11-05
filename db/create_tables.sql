@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS User (
     role ENUM('Admin', 'Faculty', 'Student', 'TA') NOT NULL
 );
 
-CREATE TABLE ETextbook (
+CREATE TABLE IF NOT EXISTS ETextBook (
     textbook_id INT PRIMARY KEY,
     title VARCHAR(255) NOT NULL
 );
@@ -24,10 +24,10 @@ CREATE TABLE IF NOT EXISTS Chapter (
     UNIQUE(textbook_id, title)
 );
 
-CREATE TABLE Section (
-    section_id VARCHAR(25) NOT NULL,
+CREATE TABLE IF NOT EXISTS Section (
     textbook_id INT NOT NULL,
     chapter_id VARCHAR(25) NOT NULL,
+    section_id VARCHAR(25) NOT NULL,
     title VARCHAR(255) NOT NULL,
     is_hidden ENUM('yes', 'no') NOT NULL,
     created_by VARCHAR(255),

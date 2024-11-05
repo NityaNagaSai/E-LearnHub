@@ -1,5 +1,5 @@
-from app.config import get_db_connection
-# from app.db_connect import get_db_connection
+# from app.config import get_db_connection
+from app.db_connect import get_db_connection
 from app.models import User
 
 def validate_user(user_id, password, role):
@@ -7,7 +7,7 @@ def validate_user(user_id, password, role):
     print("Inside validate user",conn)
     cursor = conn.cursor()
     try:
-        query = "SELECT * FROM User WHERE user_id = %s AND user_password = %s AND user_role = %s"
+        query = "SELECT * FROM User WHERE user_id = %s AND password = %s AND role = %s"
         cursor.execute(query, (user_id, password, role))
         user_data = cursor.fetchall()
         if user_data:
