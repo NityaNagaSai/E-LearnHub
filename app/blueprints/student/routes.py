@@ -26,7 +26,7 @@ def enroll():
 # Student Landing Page
 @student_bp.route('/landing_page', methods=['GET', 'POST'])
 def landing():
-    student_name = session.get('student_name', 'Student')
+    student_name = session.get('user_id', 'Student')
     choice = request.form.get("choice")
     if choice == "1":
         return redirect(url_for('student.display_sections'))
@@ -109,18 +109,13 @@ def activity(textbook_id, chapter_id, section_id, content_block_id, activity_id)
 
 # Submit Sutdent Activity
 def get_explanation(answer, explanation_op1, explanation_op2, explanation_op3, explanation_op4):
-    print(answer)
     if answer == '1':
-        print(explanation_op1)
         return explanation_op1
     elif answer == '2':
-        print(explanation_op2)
         return explanation_op2
     elif answer == '3':
-        print(explanation_op3)
         return explanation_op3
     elif answer == '4':
-        print(explanation_op4)
         return explanation_op4
     return ""
 
@@ -151,8 +146,6 @@ def submit_question(textbook_id, chapter_id, section_id, content_block_id, activ
              explanation_op4, correct_answer) = question_data
         # Determine if the submitted answer is correct
         if submitted_answer.strip() == correct_answer.strip():
-            print(submitted_answer)
-            print(correct_answer)
             flash("Correct! You've earned 3 points.", 'success')
             explanation = get_explanation(submitted_answer, explanation_op1, explanation_op2, explanation_op3, explanation_op4)
             points = 3
@@ -185,7 +178,7 @@ def participation_points():
     # Ensure the user is logged in
     if 'user_id' not in session:
         flash("Please log in to access this page.", "warning")
-        return redirect(url_for('login'))
+        return redirect(url_for('student.login'))
     student_id = session['user_id']
     print(student_id)
     # Get the student's enrolled course ID

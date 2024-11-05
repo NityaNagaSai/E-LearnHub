@@ -5,8 +5,8 @@ HOST = '127.0.0.1'
 USER = 'mgaddam'
 PASSWORD = '200538368'
 DATABASE = 'mgaddam'
-PORT = 55858
-# # Define connection parameters
+PORT = 63987
+
 # HOST = '127.0.0.1'
 # USER = 'root'
 # PASSWORD = '1234'

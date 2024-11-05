@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS Question (
 
 CREATE TABLE IF NOT EXISTS StudentActivityPoint (
     student_id VARCHAR(255) NOT NULL,  -- Matches User(user_id) type
-     textbook_id INT NOT NULL,
+    textbook_id INT NOT NULL,
     chapter_id VARCHAR(25) NOT NULL,
     section_id VARCHAR(25) NOT NULL,
     content_block_id VARCHAR(25) NOT NULL,
@@ -111,12 +111,14 @@ CREATE TABLE IF NOT EXISTS Course (
     course_title VARCHAR(255) NOT NULL,
     course_type ENUM('Active', 'Evaluation') NOT NULL,
     faculty_user_id VARCHAR(255) NOT NULL,
+    ta_user_id VARCHAR(255),
     textbook_id INT NOT NULL,
     start_date DATE,
     end_date DATE,
     capacity INT,
     token VARCHAR(255),
     FOREIGN KEY (faculty_user_id) REFERENCES User(user_id) ON DELETE CASCADE,
+    FOREIGN KEY (ta_user_id) REFERENCES User(user_id) ON DELETE SET NULL,
     FOREIGN KEY (textbook_id) REFERENCES ETextBook(textbook_id) ON DELETE CASCADE
 );
 

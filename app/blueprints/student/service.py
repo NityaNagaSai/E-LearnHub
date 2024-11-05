@@ -1,6 +1,5 @@
 from app.db_connect import get_db_connection
 from app.models import User
-
 # Student Enrollment
 def enroll_student(first_name, last_name, email, password, course_id):
     conn = get_db_connection()
@@ -38,7 +37,7 @@ def enroll_student(first_name, last_name, email, password, course_id):
                 SELECT e.status 
                 FROM Enrollment e 
                 JOIN User u ON u.user_id = e.student_user_id
-                WHERE u.user_role = 'Student' AND
+                WHERE u.role = 'Student' AND
                 e.course_id = %s AND u.first_name = %s AND
                 u.last_name = %s AND u.email = %s
                 """,

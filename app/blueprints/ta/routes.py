@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from . import ta_bp
+from app.blueprints.ta.service import *
 
 # TA Landing
 @ta_bp.route('/home')
@@ -18,18 +19,22 @@ def active_course_menu():
     
     # Redirect to the appropriate template based on the selected option
     if action == 'view_students':
-        return render_template('view_students.html', course_id=course_id)
+        return redirect(url_for('ta.view_students', course_id = course_id))
     elif action == 'add_chapter':
-        return render_template('add_chapter.html', course_id=course_id)
+        return render_template('add_chapter.html', course_id = course_id)
     elif action == 'modify_chapters':
-        return render_template('modify_chapters.html', course_id=course_id)
+        return render_template('modify_chapters.html', course_id = course_id)
     elif action == 'go_back':
         return render_template('ta_landing.html')  # Redirect to the user’s landing page
     
 # View Courses
 @ta_bp.route('/viewcourses')
 def view_courses():
-    return render_template('view_courses.html')
+    user_id = session.get('user_id')
+    courses = fetch_courses(user_id)
+    if courses == None:
+        flash("No Assigned courses!")
+    return render_template('view_courses.html', courses = courses)
 
 # Change Password
 @ta_bp.route('/changepassword')
@@ -45,17 +50,29 @@ def update_password():
     if action == "update":
         if new_password != confirm_new_password:
         # flash("New password and confirmation do not match.", "error")
-            return redirect(url_for('update_password'))
-
-    if new_password == confirm_new_password:
-        # write logic to update the password in the database
-        # flash("Password updated successfully.", "success")
-        return render_template('ta_landing.html')  # Replace with the actual previous page
+            return redirect(url_for('ta.update_password'))
+        else:
+            # write logic to update the password in the database
+            # flash("Password updated successfully.", "success")
+            return render_template('ta_landing.html')  # Replace with the actual previous page
 
     elif action == "go_back":
         return render_template('ta_landing.html')
 
 # View Students
+@ta_bp.route('/viewstudents/<course_id>', methods=['GET','POST'])
+def view_students(course_id):
+    if course_id:
+        students = fetch_students(course_id)
+        if students:
+            return render_template('view_students.html', students=students, course_id = course_id)
+        else:
+            flash("No students Enrolled in this course or it's not an Active Course")
+            return render_template('view_students.html', students=students , course_id = course_id)
+    else:
+        flash("Please enter the Course ID!")
+        return render_template('view_students.html')
+
 
 # Add New Chapter
 

@@ -28,14 +28,14 @@ LINES TERMINATED BY '\n'
 (textbook_id, title);
 
 -- inserting Courses
-INSERT IGNORE INTO Course ( course_id,course_title,course_type,faculty_user_id,textbook_id,start_date,end_date,capacity,token)
-VALUES ("NCSUOganCSC440F24", "CSC440 Database Systems", "Active", "KeOg1024", 101, "2024-08-15", "2024-12-15", 60, "XYJKLM");
-INSERT IGNORE INTO Course ( course_id,course_title,course_type,faculty_user_id,textbook_id,start_date,end_date,capacity,token)
-VALUES ("NCSUOganCSC540F24", "CSC540 Database Systems", "Active", "KeOg1024", 101, "2024-08-17", "2024-12-15",50, "STUKZT");
-INSERT IGNORE INTO Course ( course_id,course_title,course_type,faculty_user_id,textbook_id,start_date,end_date,capacity,token)
-VALUES ("NCSUSaraCSC326F24", "CSC326 Software Engineering", "Active","SaMi1024", 102, "2024-08-23", "2024-10-23", 100,  "LRUFND");
-INSERT IGNORE INTO Course ( course_id,course_title,course_type,faculty_user_id,textbook_id,start_date,end_date,capacity,token)
-VALUES ("NCSUJegiCSC522F24", "CSC522 Fundamentals of Machine Learning", "Evaluation", "JoDo1024", 103, "2025-08-25", "2025-12-18", NULL, NULL);
+INSERT IGNORE INTO Course ( course_id,course_title,course_type,faculty_user_id,ta_user_id,textbook_id,start_date,end_date,capacity,token)
+VALUES ("NCSUOganCSC440F24", "CSC440 Database Systems", "Active", "KeOg1024", "JaWi1024", 101, "2024-08-15", "2024-12-15", 60, "XYJKLM");
+INSERT IGNORE INTO Course ( course_id,course_title,course_type,faculty_user_id,ta_user_id,textbook_id,start_date,end_date,capacity,token)
+VALUES ("NCSUOganCSC540F24", "CSC540 Database Systems", "Active", "KeOg1024", "LiAl0924", 101, "2024-08-17", "2024-12-15",50, "STUKZT");
+INSERT IGNORE INTO Course ( course_id,course_title,course_type,faculty_user_id,ta_user_id,textbook_id,start_date,end_date,capacity,token)
+VALUES ("NCSUSaraCSC326F24", "CSC326 Software Engineering", "Active","SaMi1024", "DaJo1024", 102, "2024-08-23", "2024-10-23", 100,  "LRUFND");
+INSERT IGNORE INTO Course ( course_id,course_title,course_type,faculty_user_id,ta_user_id,textbook_id,start_date,end_date,capacity,token)
+VALUES ("NCSUJegiCSC522F24", "CSC522 Fundamentals of Machine Learning", "Evaluation", "JoDo1024", NULL, 103, "2025-08-25", "2025-12-18", NULL, NULL);
 
 -- inserting Enrollments
 LOAD DATA LOCAL INFILE 'db/enrollments.txt'
