@@ -99,17 +99,19 @@
 
     <div class="container">
         <h2>Modify E-textbook</h2>
-        <form>
+        <form method="POST" action="{{ url_for('admin.modify_etextbook') }}">
             <label for="etextbook_id">Unique E-textbook ID:</label>
             <input type="text" id="etextbook_id" name="etextbook_id" required>
-        </form>
 
-        <div class="buttons">
-            <a href="{{ url_for('admin.add_new_chapter') }}" class="button-link">Add New Chapter</a>
-            <a href="{{ url_for('admin.modify_chapter') }}" class="button-link">Modify Chapter</a>
-            <a href="{{ url_for('admin.admin_landing') }}" class="button-link go-back">Go Back</a>
-            <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>
-        </div>
+            <div class="buttons">
+                <button type="submit"  name="action" value="add_chapter" class="button-link">Add New Chapter</button>
+                <button type="submit" name="action" value="modify_chapter" class="button-link">Modify Chapter</button>
+
+                <a href="{{ url_for('admin.admin_landing') }}" class="button-link go-back">Go Back</a>
+                <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>
+    
+            </div>
+        </form>
     </div>
 
 </body>

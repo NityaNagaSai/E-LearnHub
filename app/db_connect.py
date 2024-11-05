@@ -6,6 +6,12 @@ USER = 'mgaddam'
 PASSWORD = '200538368'
 DATABASE = 'mgaddam'
 PORT = 55858
+# # Define connection parameters
+# HOST = '127.0.0.1'
+# USER = 'root'
+# PASSWORD = '1234'
+# DATABASE = 'elearnhub'
+# PORT = 3306
 
 # Establish a connection
 def get_db_connection():

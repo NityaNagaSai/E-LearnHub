@@ -37,6 +37,7 @@ def login():
 
         if role == 'admin':
             status = validate_user(user_id, password, role)
+            session['user_id'] = user_id
             if status:
                 return redirect(url_for(f'{role}.{role}_landing'))
         elif role == 'faculty':
@@ -48,5 +49,5 @@ def login():
         elif role == 'student':
             # add validation code
             return redirect(url_for(f'{role}.{role}_landing'))
-
+        flash("Login Incorrect. Please try again.")
     return render_template('login.html', role=role)

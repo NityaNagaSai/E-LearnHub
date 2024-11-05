@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
-# from app.config import get_db_connection
-from app.db_connect import get_db_connection
+from app.config import get_db_connection
+#from app.db_connect import get_db_connection
 import mysql.connector
 
 db_bp = Blueprint('db', __name__)
@@ -37,8 +37,9 @@ def create_tables():
 
 def insert_users():
     try:
+        print("inside insert_users method")
         # Open the file and connect to the database
-        with open('../E-LearnHub/db/users.txt', 'r') as file:
+        with open('../E-LearnHub/db/admin.txt', 'r') as file:
             conn = get_db_connection()
             if conn is None:
                 return jsonify({"error": "Failed to connect to database."}), 500
@@ -52,6 +53,7 @@ def insert_users():
             # Read and insert each line
             for line in file:
                 data = line.strip().replace('"', '').split(', ')
+                print(data)
                 if len(data) == 6:  # Ensure line has exactly six fields
                     user_id, firstname, lastname, email, password, role = data
                     cursor.execute(query, (user_id, firstname, lastname, email, password, role))
