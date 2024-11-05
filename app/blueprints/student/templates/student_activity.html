@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activity Questions</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='styles.css') }}"
+    />
+    <script>
+      function toggleVisibility(id) {
+        const element = document.getElementById(id);
+        if (element) {
+          element.classList.toggle("hidden");
+        }
+      }
+
+      // Function to show the next question
+      function showNextQuestion(currentId, nextId) {
+        const currentElement = document.getElementById(currentId);
+        const nextElement = document.getElementById(nextId);
+        if (currentElement) {
+          currentElement.classList.add("hidden");
+        }
+        if (nextElement) {
+          nextElement.classList.remove("hidden");
+        }
+      }
+
+      // Function to show the previous question
+      function showPreviousQuestion(currentId, previousId) {
+        const currentElement = document.getElementById(currentId);
+        const previousElement = document.getElementById(previousId);
+        if (currentElement) {
+          currentElement.classList.add("hidden");
+        }
+        if (previousElement) {
+          previousElement.classList.remove("hidden");
+        }
+      }
+    </script>
+    <style>
+      /* General Styles */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        color: #333;
+        margin: 0;
+        padding: 20px;
+      }
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+      }
+
+      h1 {
+        font-size: 1.8em;
+        color: #4a90e2;
+        text-align: center;
+        margin-bottom: 1em;
+      }
+
+      h2 {
+        font-size: 1.5em;
+        color: #333;
+        border-bottom: 2px solid #e0e0e0;
+        padding-bottom: 10px;
+        text-align: center;
+      }
+
+      .flash-message {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+      }
+      .flash-message.success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .flash-message.warning {
+        background-color: #fff3cd;
+        color: #856404;
+      }
+      .flash-message.danger {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+      .flash-message.info {
+        background-color: #cce5ff;
+        color: #004085;
+      }
+
+      .question-block {
+        padding: 15px;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+        margin-bottom: 20px;
+        transition: all 0.3s;
+      }
+
+      .question-block:hover {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+
+      .question-text {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #4a90e2;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+      }
+
+      .options {
+        margin-top: 10px;
+      }
+
+      .options label {
+        display: block;
+        font-size: 1em;
+        margin: 5px 0;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .navigation-buttons {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 15px;
+      }
+
+      .navigation-button {
+        padding: 8px 16px;
+        background-color: #4a90e2;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+        text-align: center;
+        transition: background-color 0.3s;
+        text-decoration: none;
+      }
+
+      .navigation-button:hover {
+        background-color: #357abd;
+      }
+
+      .submit-button {
+        display: inline-block;
+        margin-top: 15px;
+        padding: 8px 16px;
+        background-color: #28a745;
+        color: #fff;
+        border-radius: 4px;
+        cursor: pointer;
+        border: none;
+        transition: background-color 0.3s;
+      }
+
+      .submit-button:hover {
+        background-color: #218838;
+      }
+
+      .options a {
+        text-decoration: none;
+        color: #4a90e2;
+        transition: color 0.3s;
+      }
+
+      .options a:hover {
+        color: #357abd;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>
+        Activity for Textbook {{ textbook_id }}, Chapter {{ chapter_id }},
+        Section {{ section_id }}
+      </h1>
+
+      <!-- Display flash messages at the top of the page -->
+      {% with messages = get_flashed_messages(with_categories=True) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="flash-message {{ category }}">{{ message }}</div>
+      {% endfor %} {% endif %} {% endwith %}
+
+      <h2>Questions</h2>
+
+      {% if questions %} {% for question in questions %}
+      <div
+        id="question-block-{{ question.question_id }}"
+        class="question-block {% if not loop.first %}hidden{% endif %}"
+      >
+        <p
+          class="question-text"
+          onclick="toggleVisibility('question-{{ question.question_id }}')"
+        >
+          <span
+            >Question {{ question.question_id }}: {{ question.question }}</span
+          >
+          <span>&#x25BC;</span>
+          <!-- Down arrow icon -->
+        </p>
+
+        <div id="question-{{ question.question_id }}" class="options hidden">
+          <form
+            method="post"
+            action="{{ url_for('student.submit_question', textbook_id=textbook_id, chapter_id=chapter_id, section_id=section_id, content_block_id=content_block_id, activity_id=activity_id, question_id=question.question_id) }}"
+          >
+            <label>
+              <input type="radio" name="answer" value="1" />
+              {{ question.option1 }}
+            </label>
+            <label>
+              <input type="radio" name="answer" value="2" />
+              {{ question.option2 }}
+            </label>
+            <label>
+              <input type="radio" name="answer" value="3" />
+              {{ question.option3 }}
+            </label>
+            <label>
+              <input type="radio" name="answer" value="4" />
+              {{ question.option4 }}
+            </label>
+            <button type="submit" class="submit-button">Submit Answer</button>
+          </form>
+        </div>
+
+        <div class="navigation-buttons">
+          {% if not loop.first %}
+          <a
+            class="navigation-button"
+            onclick="showPreviousQuestion('question-block-{{ question.question_id }}', 'question-block-{{ questions[loop.index0 - 1].question_id }}')"
+            >Back</a
+          >
+          {% endif %} {% if not loop.last %}
+          <a
+            class="navigation-button"
+            onclick="showNextQuestion('question-block-{{ question.question_id }}', 'question-block-{{ questions[loop.index].question_id }}')"
+            >Next</a
+          >
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %} {% else %}
+      <p>No questions available for this activity.</p>
+      {% endif %}
+
+      <div class="options">
+        <a href="{{ url_for('student.display_sections') }}"
+          >Back to Course Contents</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

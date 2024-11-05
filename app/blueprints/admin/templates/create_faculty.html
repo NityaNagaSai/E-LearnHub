@@ -1,139 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Faculty Account</title>
     <style>
-        /* Styling for the navigation bar */
-        .navbar {
-            background-color: black;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
+      /* Styling for the navigation bar */
+      .navbar {
+        background-color: black;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 24px;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
 
-        /* Center the content on the page */
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 80vh;
-            text-align: center;
-            flex-direction: column;
-            margin-top: 60px; /* Adjust for the fixed navbar */
-        }
+      /* Center the content on the page */
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        text-align: center;
+        flex-direction: column;
+        margin-top: 60px; /* Adjust for the fixed navbar */
+      }
 
-        /* Styling for the form */
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 300px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+      /* Styling for the form */
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 300px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
 
-        label, input {
-            width: 100%;
-            margin: 5px 0;
-            font-size: 16px;
-            text-align: left;
-        }
+      label,
+      input {
+        width: 100%;
+        margin: 5px 0;
+        font-size: 16px;
+        text-align: left;
+      }
 
-        input {
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+      input {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
 
-        /* Styling for buttons */
-        .buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            width: 100%;
-        }
+      /* Styling for buttons */
+      .buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        width: 100%;
+      }
 
-        .add-user, .go-back {
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 4px;
-            text-align: center;
-            color: white;
-            text-decoration: none;
-            display: inline-block;
-            box-sizing: border-box;
-            border: none;
-        }
+      .add-user,
+      .go-back {
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        width: 100%;
+        border-radius: 4px;
+        text-align: center;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        box-sizing: border-box;
+        border: none;
+      }
 
-        .add-user {
-            background-color: black;
-        }
+      .add-user {
+        background-color: black;
+      }
 
-        .add-user:hover {
-            background-color: #333333;
-        }
+      .add-user:hover {
+        background-color: #333333;
+      }
 
-        .go-back {
-            background-color: #6c757d;
-        }
+      .go-back {
+        background-color: #6c757d;
+      }
 
-        .go-back:hover {
-            background-color: #5a6268;
-        }
+      .go-back:hover {
+        background-color: #5a6268;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navigation bar -->
-    <div class="navbar">
-        Admin Dashboard
-    </div>
+    <div class="navbar">Admin Dashboard</div>
 
     <!-- Centered content -->
     <div class="container">
-        <h2>Create Faculty Account</h2>
+      <h2>Create Faculty Account</h2>
 
-        {% with messages = get_flashed_messages(with_categories=true) %}
-            {% if messages %}
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+      {% endfor %} {% endif %} {% endwith %}
 
-        <form id="new_faculty_account" action="{{ url_for('admin.create_faculty') }}" method="POST">
-            <label for="first_name">Enter First Name:</label>
-            <input type="text" id="first_name" name="first_name" required>
+      <form method="POST" action="{{ url_for('admin.create_faculty') }}">
+        <label for="first_name">Enter First Name:</label>
+        <input type="text" id="first_name" name="first_name" required />
 
-            <label for="last_name">Enter Last Name:</label>
-            <input type="text" id="last_name" name="last_name" required>
+        <label for="last_name">Enter Last Name:</label>
+        <input type="text" id="last_name" name="last_name" required />
 
-            <label for="email">Enter Email:</label>
-            <input type="email" id="email" name="email" required>
+        <label for="email">Enter Email:</label>
+        <input type="email" id="email" name="email" required />
 
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" required />
 
-            <!-- Buttons for Add User and Go Back -->
-            <div class="buttons">
-                <button type="submit" class="add-user">Add User</button>
-                <a href="{{ url_for('admin.admin_landing') }}" class="go-back">Go Back</a>
-            </div>
-        </form>
+        <!-- Buttons for Add User and Go Back -->
+        <div class="buttons">
+          <button
+            type="submit"
+            name="action"
+            value="create_faculty_user"
+            class="add-user"
+          >
+            Add User
+          </button>
+
+          <a href="{{ url_for('admin.admin_landing') }}" class="go-back"
+            >Go Back</a
+          >
+        </div>
+      </form>
     </div>
-</body>
+  </body>
 </html>

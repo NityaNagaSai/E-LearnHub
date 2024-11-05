@@ -19,6 +19,6 @@ def create_app():
     with app.app_context():
         create_tables()
         insert_users()
-        # populate_tables()
+        populate_tables()
     return app
 

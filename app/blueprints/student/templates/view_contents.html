@@ -3,78 +3,206 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Sections</title>
+    <title>Table of Contents</title>
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='styles.css') }}"
     />
     <script>
-      // Function to toggle visibility of chapters, sections, and blocks
       function toggleVisibility(id) {
         const element = document.getElementById(id);
-        element.style.display =
-          element.style.display === "none" ? "block" : "none";
+        if (element) {
+          element.classList.toggle("hidden");
+        }
       }
     </script>
     <style>
-      .content-textbook,
-      .chapter,
-      .section,
-      .block {
-        margin: 10px 0;
+      /* General Styles */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f9f9f9;
+        color: #333;
+        margin: 0;
+        padding: 20px;
       }
-      .chapter {
-        margin-left: 20px;
+
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
       }
-      .section {
+
+      h1 {
+        font-size: 2em;
+        color: #4a90e2;
+        text-align: center;
+        margin-bottom: 1em;
+      }
+
+      h2,
+      h3,
+      h4 {
+        margin: 0;
+        padding: 0.5em 0;
+        cursor: pointer;
+      }
+
+      h2 {
+        font-size: 1.5em;
+        color: #4a90e2;
+        border-bottom: 2px solid #e2e8f0;
+      }
+
+      h3 {
+        font-size: 1.2em;
+        color: #333;
+        padding-left: 10px;
+        border-left: 4px solid #4a90e2;
+        transition: all 0.3s;
+      }
+
+      h4 {
+        font-size: 1em;
+        color: #666;
+        padding-left: 20px;
+        border-left: 4px solid #a0aec0;
+        transition: all 0.3s;
+      }
+
+      h3:hover,
+      h4:hover,
+      h2:hover {
+        color: #4a90e2;
+      }
+
+      p {
+        margin: 0.5em 0;
+        padding-left: 40px;
+        line-height: 1.6;
+      }
+
+      /* Content Visibility Toggle */
+      .hidden {
+        display: none;
+      }
+
+      /* Content Blocks */
+      .content-block {
         margin-left: 40px;
+        margin-top: 0.5em;
+        padding: 0.5em;
+        background-color: #f7fafc;
+        border-left: 4px solid #cbd5e0;
+        border-radius: 4px;
+        transition: all 0.3s;
       }
-      .block {
-        margin-left: 60px;
+
+      .content-block:hover {
+        background-color: #edf2f7;
+        border-left-color: #a0aec0;
+      }
+
+      /* Activity Links */
+      .content-block a {
+        color: #3182ce;
+        text-decoration: none;
+        font-weight: bold;
+      }
+
+      .content-block a:hover {
+        color: #2b6cb0;
+        text-decoration: underline;
+      }
+
+      /* Options */
+      .options {
+        text-align: center;
+        margin-top: 1.5em;
+      }
+
+      .options a {
+        display: inline-block;
+        padding: 0.5em 1em;
+        background-color: #4a90e2;
+        color: #fff;
+        border-radius: 4px;
+        text-decoration: none;
+        transition: background-color 0.3s;
+      }
+
+      .options a:hover {
+        background-color: #357abd;
+      }
+
+      /* Subtle Animations */
+      h3,
+      h4 {
+        transition: color 0.2s, background-color 0.2s;
       }
     </style>
   </head>
   <body>
     <div class="container">
-      <h1>Table of Contents</h1>
+      <h1>Course Content</h1>
       <div class="content-textbook">
-        {% for textbook in textbooks %}
-        <div class="textbook">
-          <h2 onclick="toggleVisibility('textbook-{{ textbook.id }}')">
-            {{ textbook.title }}
-          </h2>
-          <div id="textbook-{{ textbook.id }}" style="display: none">
-            {% for chapter in textbook.chapters %}
-            <div class="chapter">
-              <h3 onclick="toggleVisibility('chapter-{{ chapter.id }}')">
-                Chapter {{ chapter.id }}: {{ chapter.title }}
-              </h3>
-              <div id="chapter-{{ chapter.id }}" style="display: none">
-                {% for section in chapter.sections %}
-                <div class="section">
-                  <h4 onclick="toggleVisibility('section-{{ section.id }}')">
-                    Section {{ section.id }}: {{ section.title }}
-                  </h4>
-                  <div id="section-{{ section.id }}" style="display: none">
-                    {% for block in section.blocks %}
-                    <p class="block">Block {{ block.id }}: {{ block.title }}</p>
-                    {% endfor %}
-                  </div>
-                </div>
-                {% endfor %}
+        {% for textbook_title, chapters in content_dict.items() %} {# Generate a
+        unique ID for each textbook #} {% set textbook_id = textbook_title |
+        replace(" ", "") | lower %}
+
+        <h2 onclick="toggleVisibility('textbook-{{ textbook_id }}')">
+          {{ textbook_title }}
+        </h2>
+        <div id="textbook-{{ textbook_id }}" class="textbook hidden">
+          {% for chapter_title, sections in chapters.items() %} {% set
+          chapter_id = textbook_id + '-' + chapter_title | replace(" ", "") |
+          lower %}
+          <h3 onclick="toggleVisibility('chapter-{{ chapter_id }}')">
+            Chapter: {{ chapter_title }}
+          </h3>
+          <div id="chapter-{{ chapter_id }}" class="chapter hidden">
+            {% for section_title, content_blocks in sections.items() %} {% set
+            section_id = chapter_id + '-' + section_title | replace(" ", "") |
+            lower %}
+            <h4 onclick="toggleVisibility('section-{{ section_id }}')">
+              Section: {{ section_title }}
+            </h4>
+            <div id="section-{{ section_id }}" class="section hidden">
+              {% for content in content_blocks %}
+              <div class="content-block">
+                {% if content.content_type == 'activity' %}
+                <a
+                  href="{{ url_for('student.activity', textbook_id=content.textbook_id, chapter_id=content.chapter_id, section_id=content.section_id, content_block_id=content.content_block_id, activity_id=content.content_text) }}"
+                >
+                  {{ content.content_text }}
+                </a>
+                {% elif content.content_type == 'image' %}
+                <img
+                  src="{{ content.content_text }}"
+                  alt="Image Content"
+                  style="max-width: 100%; border-radius: 4px"
+                />
+                {% else %}
+                <p>{{ content.content_text }}</p>
+                {% endif %}
               </div>
+              {% endfor %}
             </div>
+            <!-- Close section -->
             {% endfor %}
           </div>
+          <!-- Close chapter -->
+          {% endfor %}
         </div>
+        <!-- Close textbook -->
         {% endfor %}
       </div>
 
-      <!-- Footer navigation options -->
-      <h3>Options</h3>
-      <ul>
-        <li><a href="{{ url_for('student.landing') }}">Go Back to Menu</a></li>
-      </ul>
+      <div class="options">
+        <a href="{{ url_for('student.landing') }}">Go Back to Menu</a>
+      </div>
     </div>
   </body>
 </html>

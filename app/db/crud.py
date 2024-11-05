@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
-from app.config import get_db_connection
-#from app.db_connect import get_db_connection
+# from app.config import get_db_connection
+from app.db_connect import get_db_connection
 import mysql.connector
 
 db_bp = Blueprint('db', __name__)
@@ -46,7 +46,7 @@ def insert_users():
             
             cursor = conn.cursor()
             query = '''
-                INSERT INTO User (user_id, first_name, last_name, email, user_password, user_role)
+                INSERT INTO User (user_id, first_name, last_name, email, password, role)
                 VALUES (%s, %s, %s, %s, %s, %s)
             '''
             

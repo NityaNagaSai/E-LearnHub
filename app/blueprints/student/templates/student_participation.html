@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Your Participation Points</title>
+    <style>
+      .container {
+        max-width: 600px;
+        margin: auto;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+      }
+      h1 {
+        color: #4a90e2;
+        text-align: center;
+      }
+      .points {
+        font-size: 1.2em;
+        margin-top: 20px;
+      }
+      .points p {
+        margin: 10px 0;
+      }
+      .back-link {
+        text-align: center;
+        margin-top: 30px;
+      }
+      .back-link a {
+        color: #4a90e2;
+        text-decoration: none;
+      }
+      .back-link a:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Your Participation Points</h1>
+      <div class="points">
+        <p><strong>Total Points Accumulated:</strong> {{ student_points }}</p>
+        <p>
+          <strong>Total Possible Points:</strong> {{ total_possible_points }}
+        </p>
+        <p><strong>Finished Activities:</strong> {{ finished_activities }}</p>
+      </div>
+      <div class="back-link">
+        <a href="{{ url_for('student.landing') }}">Back to Landing</a>
+      </div>
+    </div>
+  </body>
+</html>
