@@ -602,3 +602,36 @@ def delete_content_block(chapter_id, textbook_id, section_id, content_block_id):
     finally:
         cursor.close()
         conn.close()
+
+def modify_activity_hidden(chapter_id, textbook_id, section_id, content_block_id, activity_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Use the new password directly as plain text
+        query = "UPDATE Activity SET is_hidden = %s WHERE textbook_id = %s AND chapter_id = %s AND section_id = %s AND content_block_id=%s AND activity_id=%s"
+        cursor.execute(query, ('yes', textbook_id, chapter_id, section_id, content_block_id, activity_id))
+        conn.commit()
+        
+        return True
+    except Exception as e:
+        print(f"Error : {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def modify_delete_activity(chapter_id, textbook_id, section_id, content_block_id, activity_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        query = "DELETE FROM Activity WHERE textbook_id = %s AND chapter_id = %s AND section_id = %s AND content_block_id=%s AND activity_id=%s"
+        cursor.execute(query, (textbook_id, chapter_id, section_id, content_block_id, activity_id))
+        
+        conn.commit()
+        return True
+    except Exception as e:
+        print(f"Error : {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()

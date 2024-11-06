@@ -68,7 +68,10 @@ def go_to_evaluation_course():
         if option == '1':
             return redirect(url_for('faculty.add_chapter', course_id=course_id, type='evaluation'))
         elif option == '2':
-            return redirect(url_for('faculty.modify_chapters', course_id=course_id))
+            text_tuple = get_etextbook_id(course_id)
+            etextbook_id, etextbook_title = text_tuple[0], text_tuple[1]
+            session['etextbook_id'] = etextbook_id
+            return redirect(url_for('faculty.modify_chapter_faculty', course_id=course_id))
         elif option == '3':
             return redirect(url_for('faculty.faculty_home'))
         else:
@@ -594,7 +597,54 @@ def modify_content_block_faculty():
                 if delete_content_block(chapter_id, etextbook_id, section_id,content_block_id ):
                     flash("Content is now deleted", "success")
                     return redirect(url_for('faculty.faculty_home'))
+        elif action == "hide_activity":
+             return redirect(url_for('faculty.hide_activity', call_type="modify"))
+        elif action == "delete_activity":
+             return redirect(url_for('faculty.delete_activity', call_type="modify"))
         else:
             flash("Invalid action selected", "error")
             return redirect(url_for('faculty.modify_content_block_faculty'))
     return render_template('faculty_modify_content_block.html')
+
+@faculty_bp.route('/hide_activity')
+def hide_activity():
+    etextbook_id = session.get('etextbook_id')
+    return render_template('hide_activity.html', etextbook_id=etextbook_id)
+
+@faculty_bp.route('/hide_activity_action', methods=['POST'])
+def hide_activity_action():
+    etextbook_id = session.get('etextbook_id')
+    chapter_id = request.form.get('chapter_id')
+    chapter_id = session.get('chap_id')
+    section_id= session.get('section_id')
+    content_block_id = session.get('content_block_id')
+    activity_id = request.form.get('activity_id')
+    status = modify_activity_hidden(chapter_id, etextbook_id, section_id,content_block_id,activity_id )
+    if status:
+        flash("Activity hiddem successfully!", "success")
+        return redirect(url_for('faculty.faculty_home'))   
+    else:
+        flash("Activity Not Hidden", "fail")
+        return redirect(url_for('faculty.modify_content_block_faculty'))
+
+
+@faculty_bp.route('/delete_activity')
+def delete_activity():
+    etextbook_id = session.get('etextbook_id')
+    return render_template('delete_activity.html', etextbook_id=etextbook_id)
+
+@faculty_bp.route('/delete_activity_action', methods=['POST'])
+def delete_activity_action():
+    etextbook_id = session.get('etextbook_id')
+    chapter_id = request.form.get('chapter_id')
+    chapter_id = session.get('chap_id')
+    section_id= session.get('section_id')
+    content_block_id = session.get('content_block_id')
+    activity_id = request.form.get('activity_id')
+    status = modify_delete_activity(chapter_id, etextbook_id, section_id,content_block_id,activity_id)
+    if status:
+        flash("Activity deteted successfully!", "success")
+        return redirect(url_for('faculty.faculty_home'))   
+    else:
+        flash("Activity was not deleted!", "fail")
+        return redirect(url_for('faculty.modify_content_block_faculty'))
