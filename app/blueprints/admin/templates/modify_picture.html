@@ -102,6 +102,11 @@
     <div class="container">
         <h2>Modify Picture</h2>
 
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+
         <form method="POST" action="{{ url_for('admin.save_modified_picture') }}" enctype="multipart/form-data">
             <label for="picture">Upload New Picture:</label>
             <input type="file" id="picture" name="picture" accept="image/*" required>

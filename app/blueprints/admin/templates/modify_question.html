@@ -129,6 +129,11 @@
     <h2>Modify Question</h2>
     <p>For Activity ID: "{{ activity_id }}"</p>
 
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %} {% endif %} {% endwith %}
+
     <form method="POST" action="{{ url_for('admin.save_modified_question') }}">
         <!-- Question ID and Text -->
         <label for="question_id">Question ID:</label>
