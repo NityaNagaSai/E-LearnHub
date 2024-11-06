@@ -493,6 +493,112 @@ def update_user_password(user_id, new_password):
         
         print("Password updated successfully.")
         return True
+    except Exception as e:
+        print(f"Error updating password: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def modify_chapter_hidden(chapter_id, textbook_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Use the new password directly as plain text
+        query = "UPDATE Chapter SET is_hidden = %s WHERE textbook_id = %s AND chapter_id = %s"
+        cursor.execute(query, ('yes', textbook_id, chapter_id))
+        conn.commit()
+        
+        print("Password updated successfully.")
+        return True
+    except Exception as e:
+        print(f"Error : {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def delete_chapter(chapter_id, textbook_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Delete the chapter based on textbook_id and chapter_id
+        query = "DELETE FROM Chapter WHERE textbook_id = %s AND chapter_id = %s"
+        cursor.execute(query, (textbook_id, chapter_id))
+        
+        conn.commit()
+        print("Chapter deleted successfully.")
+        return True
+    except Exception as e:
+        print(f"Error : {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def modify_section_hidden(chapter_id, textbook_id, section_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Use the new password directly as plain text
+        query = "UPDATE Section SET is_hidden = %s WHERE textbook_id = %s AND chapter_id = %s AND section_id = %s"
+        cursor.execute(query, ('yes', textbook_id, chapter_id, section_id))
+        conn.commit()
+        
+        return True
+    except Exception as e:
+        print(f"Error : {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def delete_section(chapter_id, textbook_id, section_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        query = "DELETE FROM Section WHERE textbook_id = %s AND chapter_id = %s AND section_id = %s"
+        cursor.execute(query, (textbook_id, chapter_id, section_id))
+        
+        conn.commit()
+        return True
+    except Exception as e:
+        print(f"Error : {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def modify_content_block_hidden(chapter_id, textbook_id, section_id, content_block_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Use the new password directly as plain text
+        query = "UPDATE ContentBlock SET is_hidden = %s WHERE textbook_id = %s AND chapter_id = %s AND section_id = %s AND content_block_id=%s"
+        cursor.execute(query, ('yes', textbook_id, chapter_id, section_id, content_block_id))
+        conn.commit()
+        
+        return True
+    except Exception as e:
+        print(f"Error : {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def delete_content_block(chapter_id, textbook_id, section_id, content_block_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        query = "DELETE FROM ContentBlock WHERE textbook_id = %s AND chapter_id = %s AND section_id = %s AND content_block_id=%s"
+        cursor.execute(query, (textbook_id, chapter_id, section_id, content_block_id))
+        
+        conn.commit()
+        return True
+    except Exception as e:
+        print(f"Error : {e}")
+        return False
     finally:
         cursor.close()
         conn.close()

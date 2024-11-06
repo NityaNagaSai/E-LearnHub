@@ -18,15 +18,12 @@ def go_to_active_course():
     if request.method == 'POST':
         course_id = request.form.get('course_id')
         option = request.form.get('option')
-        session['course_id'] = course_id  # Save the selected course_id for later use
-        print('Inside go_to_active_method:', course_id)
         course_list = check_course(course_id, 'Active' )
         print(course_list)
         if len(course_list) == 0:
             print("Please enter a valid Course ID", "error")
             return redirect(url_for('faculty.go_to_active_course'))
 
-        # Redirect based on the selected option
         if option == '1':
             waitlisted_students = get_waitlisted_students(course_id)
             session['waitlist'] = waitlisted_students  # Store waitlist in session
@@ -38,12 +35,12 @@ def go_to_active_course():
             session['enrolled'] = students
             return redirect(url_for('faculty.view_students', course_id=course_id))
         elif option == '4':
-            textbook_id = get_etextbook_id(course_id)
-            if len(textbook_id) == 1:
-                session["textbook_id"] = textbook_id[1]
             return redirect(url_for('faculty.add_chapter', course_id=course_id, type='active'))
         elif option == '5':
-            return redirect(url_for('faculty.modify_chapters', course_id=course_id))
+            text_tuple = get_etextbook_id(course_id)
+            etextbook_id, etextbook_title = text_tuple[0], text_tuple[1]
+            session['etextbook_id'] = etextbook_id
+            return redirect(url_for('faculty.modify_chapter_faculty'))
         elif option == '6':
             return redirect(url_for('faculty.create_ta'))
         elif option == '7':
@@ -513,3 +510,91 @@ def update_password_faculty():
 
     elif action == "go_back":
         return redirect(url_for('faculty.faculty_home'))
+    
+@faculty_bp.route('/modify_chapter', methods=['GET','POST'])
+def modify_chapter_faculty():
+    if request.method == 'POST':
+        etextbook_id = session['etextbook_id']
+        chapter_id = request.form.get('chapter_id')
+        session['chap_id'] = chapter_id
+        action = request.form.get('action')
+
+        # Logic to modify the chapter in the specified E-textbook in the database
+        chapter_list = fetch_chapters(etextbook_id, chapter_id)
+        if chapter_list:
+            if action == "add_new_section":
+                return redirect(url_for('faculty.add_new_section'))
+            elif action == "modify_section":
+                return redirect(url_for('faculty.modify_section_faculty'))
+            elif action == "hide_chapter":
+                if modify_chapter_hidden(chapter_id, etextbook_id):
+                    flash("Chapter is now hidden", "success")
+                    return redirect(url_for('faculty.faculty_home'))
+            elif action == "delete":
+                if delete_chapter(chapter_id, etextbook_id):
+                    flash("Chapter is now deleted", "success")
+                    return redirect(url_for('faculty.faculty_home'))
+        else:
+            flash("No chapter exists with the current chapter id. Please try again.", "error")
+
+        return redirect(url_for('faculty.modify_chapter_faculty'))
+
+    return render_template('faculty_modify_chapter.html')
+
+@faculty_bp.route('/modify_section_faculty', methods=['GET', 'POST'])
+def modify_section_faculty():
+    etextbook_id = session.get('etextbook_id')
+    chapter_id = session.get('chap_id')
+    if request.method == 'POST':
+        print("Inside modify section method")
+        section_number = request.form.get('section_number')
+        session['section_id'] = section_number
+        action = request.form.get("action")
+        print(etextbook_id, chapter_id, section_number)
+        sections_list = fetch_sections(etextbook_id, chapter_id, section_number)
+        if sections_list:
+            if action == "add_new_content_block":
+                return redirect(url_for("faculty.faculty_add_new_content_block"))
+            elif action == "modify_content_block":
+                return redirect(url_for("faculty.modify_content_block_faculty"))
+            elif action == "hide":
+                if modify_section_hidden(chapter_id, etextbook_id, section_number):
+                    flash("Section is now hidden", "success")
+                    return redirect(url_for('faculty.faculty_home'))
+            elif action == "delete":
+                if delete_section(chapter_id, etextbook_id, section_number):
+                    flash("Section is now deleted", "success")
+                    return redirect(url_for('faculty.faculty_home'))
+        else:
+            flash(f"Section number {section_number} does not exist. Please try again", "error")
+        # return redirect(url_for('admin.modify_content_block'))
+    return render_template('faculty_modify_section.html', etextbook_id = etextbook_id, chapter_id=chapter_id)
+
+@faculty_bp.route('/modify_content_block_faculty', methods=['GET', 'POST'])
+def modify_content_block_faculty():
+    etextbook_id = session.get('etextbook_id')
+    chapter_id = session.get('chap_id')
+    section_id= session.get('section_id')
+    if request.method == 'POST':
+        content_block_id = request.form.get('content_block_id')
+        session['content_block_id'] = content_block_id  # Store content_block_id in session
+
+        action = request.form.get('action')
+        if action == 'modify_text':
+            return redirect(url_for('faculty.faculty_add_text', call_type="modify"))
+        elif action == 'modify_picture':
+            return redirect(url_for('faculty.faculty_add_picture', call_type="modify"))
+        elif action == 'modify_activity':
+            return redirect(url_for('faculty.faculty_add_activity', call_type="modify"))
+        elif action == "hide":
+                if modify_content_block_hidden(chapter_id, etextbook_id, section_id, content_block_id):
+                    flash("Content is now hidden", "success")
+                    return redirect(url_for('faculty.faculty_home'))
+        elif action == "delete":
+                if delete_content_block(chapter_id, etextbook_id, section_id,content_block_id ):
+                    flash("Content is now deleted", "success")
+                    return redirect(url_for('faculty.faculty_home'))
+        else:
+            flash("Invalid action selected", "error")
+            return redirect(url_for('faculty.modify_content_block_faculty'))
+    return render_template('faculty_modify_content_block.html')
