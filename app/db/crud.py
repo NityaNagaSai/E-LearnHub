@@ -1,6 +1,6 @@
 from flask import Blueprint, jsonify
-# from app.config import get_db_connection
-from app.db_connect import get_db_connection
+from app.config import get_db_connection
+
 import mysql.connector
 
 db_bp = Blueprint('db', __name__)

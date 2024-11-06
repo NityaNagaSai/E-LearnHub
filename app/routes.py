@@ -4,6 +4,7 @@ from app.service import validate_user
 main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
 def index():
+    session.clear()  
     return render_template('index.html')
 
 @main_bp.route('/choose_role', methods=['GET'])

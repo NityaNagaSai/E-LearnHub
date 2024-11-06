@@ -1,4 +1,4 @@
-from app.db_connect import get_db_connection
+from app.config import get_db_connection
 from app.models import User
 import pymysql
 
@@ -98,5 +98,80 @@ def update_user_password(user_id, new_password):
         cursor.close()
         conn.close()
 
+def check_active_course(course_id):
+    """Check if the course with the given course_id is active and exists in the database."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        query = """
+            SELECT course_id, course_title, textbook_id
+            FROM Course
+            WHERE course_id
+            = %s AND course_type = 'Active'
+        """
+        cursor.execute(query, (course_id,))
+        result = cursor.fetchone()
+        return result if result else None
+    except pymysql.MySQLError as e:
+        print(f"Error checking active course: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
 
+
+def add_chapter_to_db(chap_id, textbook_id, is_hidden, created_by, chap_title):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = '''INSERT INTO Chapter(chapter_id, textbook_id, is_hidden, created_by, title) 
+                   VALUES(%s, %s, %s, %s, %s)'''
+        cursor.execute(query, (chap_id, textbook_id, is_hidden, created_by, chap_title))
+        conn.commit()
+        return True
+    except pymysql.Error as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def fetch_chapters(etextbook_id, chapter_id):
+    """Fetch chapter details based on textbook and chapter IDs."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        print(f"etextbook_id: {etextbook_id}, chapter_id: {chapter_id}")
+        query = "SELECT * FROM Chapter WHERE textbook_id = %s AND chapter_id = %s"
+        cursor.execute(query, (etextbook_id, chapter_id,))
+        chapters = cursor.fetchall()
+        return chapters
+    except pymysql.Error as e:
+        print(f"Database error: {e}")
+        return None
+    finally:
+        cursor.close()
+        conn.close()
+
+def add_section_to_db(section_id, chap_id, textbook_id, is_hidden, created_by, sec_title):
+    """Add a new section to the Section table."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = '''INSERT INTO Section (section_id, textbook_id, chapter_id, title, is_hidden, created_by)
+                   VALUES (%s, %s, %s, %s, %s, %s)'''
+        cursor.execute(query, (section_id, textbook_id, chap_id, sec_title, is_hidden, created_by))
+        conn.commit()
+        return True
+    except pymysql.Error as e:
+        conn.rollback()
+        print(f"Database error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
 
