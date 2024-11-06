@@ -99,31 +99,21 @@
 <body>
     <!-- Navigation bar -->
     <div class="navbar">
-        Admin Dashboard
+        E-Textbook and Assessment Platform
     </div>
 
     <div class="container">
         <h2>Add Activity</h2>
 
-        <form method="POST" action="{{ url_for('admin.save_activity') }}">
+        <form method="POST" action="{{ url_for('ta.save_activity2') }}">
             <label for="activity_id">Activity ID:</label>
             <input type="text" id="activity_id" name="activity_id" required>
 
             <!-- Buttons for Add Question, Go Back, and Landing Page -->
             <div class="buttons">
                 <button type="submit" name="action" value="add_question" class="add-button">Add Question</button>
+                    <a href="{{ url_for('ta.add_new_content_block2') }}" class="go-back">Go Back</a>
 
-                <!-- Link for Go Back styled as a button -->
-                {% if call_type == 'modify' %}
-                    <a href="{{ url_for('admin.modify_content_block') }}" class="go-back">Go Back</a>
-                {% elif call_type == 'new' %}
-                    <a href="{{ url_for('admin.add_new_content_block') }}" class="go-back">Go Back</a>
-                {% endif %}
-
-                <!-- <a href="{{ url_for('admin.add_new_content_block') }}" class="go-back">Go Back</a> -->
-
-                <!-- Link for Landing Page styled as a button -->
-                <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
             </div>
         </form>
     </div>

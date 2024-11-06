@@ -99,13 +99,13 @@
 <body>
     <!-- Navigation bar -->
     <div class="navbar">
-        Admin Dashboard
+        E-Textbook and Assessment Platform
     </div>
 
     <div class="container">
         <h2>Add New Content Block</h2>
 
-        <form method="POST" action="{{ url_for('admin.save_content_block') }}">
+        <form method="POST" action="{{ url_for('ta.save_content_block2') }}">
             <label for="content_block_id">Content Block ID:</label>
             <input type="text" id="content_block_id" name="content_block_id" required>
 
@@ -114,17 +114,7 @@
                 <button type="submit" name="action" value="add_text" class="add-option">Add Text</button>
                 <button type="submit" name="action" value="add_picture" class="add-option">Add Picture</button>
                 <button type="submit" name="action" value="add_activity" class="add-option">Add Activity</button>
-
-                <!-- Link for Go Back styled as a button -->
-                {% if call_type == 'modify' %}
-                    <a href="{{ url_for('admin.modify_section') }}" class="go-back">Go Back</a>
-                {% elif call_type == 'new' %}
-                    <a href="{{ url_for('admin.add_new_section') }}" class="go-back">Go Back</a>
-                {% endif %}
-                <!-- <a href="{{ url_for('admin.add_new_section') }}" class="go-back">Go Back</a> -->
-
-                <!-- Link for Landing Page styled as a button -->
-                <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
+                    <a href="{{ url_for('ta.add_new_section2') }}" class="go-back">Go Back</a>
             </div>
         </form>
     </div>

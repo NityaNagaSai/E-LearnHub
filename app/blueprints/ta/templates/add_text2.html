@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Picture</title>
+    <title>Add Text</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -48,9 +48,12 @@
             text-align: left;
         }
 
-        input[type="file"] {
-            padding: 5px;
+        input {
+            padding: 8px;
             font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
 
         /* Styling for buttons */
@@ -96,33 +99,23 @@
 <body>
     <!-- Navigation bar -->
     <div class="navbar">
-        Admin Dashboard
+        E-Textbook and Assessment Platform
     </div>
 
     <div class="container">
-        <h2>Add Picture</h2>
+        <h2>Add Text</h2>
         <p>For Content Block ID: "{{ content_block_id }}"</p>
 
 
-        <form method="POST" action="{{ url_for('admin.save_picture') }}" enctype="multipart/form-data">
-            <label for="picture">Upload Picture:</label>
-            <input type="file" id="picture" name="picture" accept="image/*" required>
+        <form method="POST" action="{{ url_for('ta.save_text2') }}">
+            <label for="text">Text:</label>
+            <input type="text" id="text" name="text" required>
 
             <!-- Buttons for Add, Go Back, and Landing Page -->
             <div class="buttons">
                 <button type="submit" name="action" value="add" class="add-button">Add</button>
+                    <a href="{{ url_for('ta.add_new_content_block2') }}" class="go-back">Go Back</a>
 
-                <!-- Link for Go Back styled as a button -->
-                {% if call_type == 'modify' %}
-                    <a href="{{ url_for('admin.modify_content_block') }}" class="go-back">Go Back</a>
-                {% elif call_type == 'new' %}
-                    <a href="{{ url_for('admin.add_new_content_block') }}" class="go-back">Go Back</a>
-                {% endif %}
-
-                <!-- <a href="{{ url_for('admin.add_new_content_block') }}" class="go-back">Go Back</a> -->
-
-                <!-- Link for Landing Page styled as a button -->
-                <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
             </div>
         </form>
     </div>
