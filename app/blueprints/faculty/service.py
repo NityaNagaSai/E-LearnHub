@@ -393,3 +393,106 @@ def delete_content(etextbook_id, chapter_id, section_id, content_block_id):
     finally:
         cursor.close()
         conn.close()
+
+
+def create_new_ta(first_name, last_name, email, password):
+    first_day_of_current_month = datetime.now().replace(day=1)
+
+    previous_month = first_day_of_current_month - timedelta(days=1)
+    user_id = first_name[:2] + last_name[:2] + previous_month.strftime("%m%y")
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = '''INSERT INTO User(user_id, first_name, last_name, email, password, role) 
+                   VALUES(%s, %s, %s, %s, %s, %s)'''
+        cursor.execute(query, (user_id, first_name, last_name, email, password, 'TA'))
+        conn.commit()
+        return user_id
+    except Error as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def add_ta_to_course(user_id, course_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = '''UPDATE Course SET ta_user_id = %s WHERE course_id = %s'''
+        cursor.execute(query, (user_id, course_id))
+        conn.commit()
+        return True
+    except Error as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def get_assigned_courses(faculty_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = '''SELECT course_id, course_title FROM Course WHERE faculty_user_id = %s'''
+        cursor.execute(query, (faculty_id,))
+        courses = cursor.fetchall()  
+        assigned_courses = [{"courseID": row[0], "name": row[1]} for row in courses]
+        return assigned_courses
+        
+    except Error as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def validate_current_password(user_id, current_password):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Fetch the stored password for the user
+        query = "SELECT password FROM User WHERE user_id = %s"
+        cursor.execute(query, (user_id,))
+        result = cursor.fetchone()
+        
+        if result:
+            stored_password = result[0]
+            print(f"Stored password for user {user_id}: {stored_password}")
+            print(f"Entered password for user {user_id}: {current_password}")
+
+            # Directly compare stored password with the entered password
+            password_matches = stored_password == current_password
+            print(f"Password match result: {password_matches}")
+            return password_matches
+        else:
+            print(f"No result found for user_id: {user_id}")
+            return False
+    except Exception as e:
+        print(f"Error validating password: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+
+def update_user_password(user_id, new_password):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Use the new password directly as plain text
+        query = "UPDATE User SET password = %s WHERE user_id = %s"
+        cursor.execute(query, (new_password, user_id))
+        conn.commit()
+        
+        print("Password updated successfully.")
+        return True
+    finally:
+        cursor.close()
+        conn.close()
