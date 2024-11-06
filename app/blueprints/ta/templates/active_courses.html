@@ -1,92 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TA</title>
     <style>
-        /* Styling for the navigation bar */
-        .navbar {
-            background-color: black;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
+      /* Styling for the navigation bar */
+      .navbar {
+        background-color: black;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 24px;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
 
-        /* Center the content on the page */
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 80vh;
-            text-align: center;
-            flex-direction: column;
-            margin-top: 60px; /* Adjust for the fixed navbar */
-        }
+      /* Center the content on the page */
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        text-align: center;
+        flex-direction: column;
+        margin-top: 60px; /* Adjust for the fixed navbar */
+      }
 
-        /* Styling for the menu list */
-        ul {
-            list-style-type: none;
-            padding: 0;
-        }
+      /* Styling for the menu list */
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
 
-        li {
-            margin: 10px 0;
-        }
+      li {
+        margin: 10px 0;
+      }
 
-        a {
-            text-decoration: none;
-            font-size: 18px;
-            color: #007bff;
-        }
+      a {
+        text-decoration: none;
+        font-size: 18px;
+        color: #007bff;
+      }
 
-        a:hover {
-            color: #0056b3;
-        }
+      a:hover {
+        color: #0056b3;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navigation bar -->
-    <div class="navbar">
-        E-Textbook and Assessment Platform
-    </div>
+    <div class="navbar">E-Textbook and Assessment Platform</div>
 
     <!-- Centered content -->
     <div class="container">
-        <h2>Please Select an Option</h2>
-        <form id="active_course_menu" action="{{ url_for('ta.verify_course') }}" method="POST">
-            <label for="course_id">Enter Course ID:</label>
-            <input type="text" id="course_id" name="course_id" required><br><br>
-    
-            <h2>Choose an option:</h2>
-            <ol>
-                <li><a href="#" onclick="submitForm('view_students')">View Students</a></li>
-                <li><a href="#" onclick="submitForm('add_chapter')">Add New Chapter</a></li>
-                <li><a href="#" onclick="submitForm('modify_chapters')">Modify Chapters</a></li>
-                <li><a href="#" onclick="submitForm('go_back')">Back</a></li>
-            </ol>
-            <input type="hidden" id="action" name="action">
-    
-        </form>
-        <script>
-            // Function to set the action and submit the form
-            function submitForm(action) {
-                const courseId = document.getElementById('course_id').value;
-                
-                if (action !== 'go_back' && !courseId) {
-                    alert("Please enter the Course ID to proceed.");
-                    return;
-                }
-                
-                document.getElementById('action').value = action;
-                document.getElementById('active_course_menu').submit();
-            }
-        </script>
+      <h2>Please Select an Option</h2>
+      <form
+        id="active_course_menu"
+        action="{{ url_for('ta.verify_course') }}"
+        method="POST"
+      >
+        <label for="course_id">Enter Course ID:</label>
+        <input
+          type="text"
+          id="course_id"
+          name="course_id"
+          required
+        /><br /><br />
+
+        <h2>Choose an option:</h2>
+        <ol>
+          <li>
+            <a href="#" onclick="submitForm('view_students')">View Students</a>
+          </li>
+          <li>
+            <a href="#" onclick="submitForm('add_chapter')">Add New Chapter</a>
+          </li>
+          <li>
+            <a href="#" onclick="submitForm('modify_chapters')"
+              >Modify Chapters</a
+            >
+          </li>
+          <li><a href="#" onclick="submitForm('go_back')">Back</a></li>
+        </ol>
+        <input type="hidden" id="action" name="action" />
+      </form>
+      <script>
+        // Function to set the action and submit the form
+        function submitForm(action) {
+          document.getElementById("action").value = action;
+          document.getElementById("active_course_menu").submit();
+        }
+      </script>
     </div>
-</body>
+  </body>
 </html>

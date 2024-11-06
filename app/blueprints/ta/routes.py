@@ -76,7 +76,7 @@ def update_password():
 
 
 # View Students
-@ta_bp.route('/viewstudents/<course_id>', methods=['GET','POST'])
+@ta_bp.route('/view_students/<course_id>', methods=['GET','POST'])
 def view_students(course_id):
     if course_id:
         students = fetch_students(course_id)
@@ -94,7 +94,7 @@ def view_students(course_id):
 def verify_course():
     # Get the course_id from the form
     course_id = request.form.get('course_id')
-
+    action = request.form['action']
     # Validate that the course exists and is active
     course = check_active_course(course_id)
 
@@ -102,7 +102,15 @@ def verify_course():
         # Access elements in course tuple by index
         session['course_id'] = course[0]  # course_id
         session['textbook_id'] = course[2]  # textbook_id
-        return redirect(url_for('ta.add_chapter_form'))
+        # Redirect to the appropriate template based on the selected option
+        if action == 'view_students':
+            return redirect(url_for('ta.view_students', course_id = course_id))
+        elif action == 'add_chapter':
+            return redirect(url_for('ta.add_chapter_form'))
+        elif action == 'modify_chapters':
+            return redirect(url_for('ta.ta_modify_chapter'))
+        elif action == 'go_back':
+            return render_template('ta_landing.html')  # Redirect to the user’s landing page
     else:
         # Flash an error message and redirect back to the active courses page
         flash("Course ID is invalid or the course is not active.")
@@ -224,8 +232,6 @@ def add_new_content_block2():
 def save_content_block2():
     content_block_id = request.form.get('content_block_id')
     session['content_block_id'] = content_block_id  # Store content_block_id in session
-
-
     action = request.form.get('action')
     if action == 'add_text':
         return redirect(url_for('ta.add_text2'))
@@ -285,28 +291,105 @@ def save_text2():
         else:
             flash("Text was not saved!", "fail")
             return redirect(url_for('ta.add_new_content_block2'))
-# Add New Chapter
 
 # Modify Chapter
 
-# Add New Section
+@ta_bp.route('/modify_chapter', methods=['GET','POST'])
+def ta_modify_chapter():
+    if request.method == 'POST':
+        # etextbook_id = session.get('etextbook_id')
+        chapter_id = request.form.get('chapter_id')
+        session['chapter_id'] = chapter_id
+        textbook_id = session.get('textbook_id')
+        course_id = session.get('course_id')
+        print(textbook_id, chapter_id)
+        action = request.form.get('action')
+        # Logic to modify the chapter in the specified E-textbook in the database
+        chapter_list = fetch_chapters(textbook_id, chapter_id)
+        print(chapter_list)
+        if chapter_list:
+            if action == "add_new_section":
+                return redirect(url_for('ta.add_new_section2'))
+            elif action == "modify_section":
+                return redirect(url_for('ta.ta_modify_section'))
+        else:
+            flash("No chapter exists with the current chapter id or TA is not assigned to this course/chapter. Please try again.", "error")
+            # # flash(f"Chapter modified for E-textbook ID {etextbook_id}.", "success")
+            return redirect(url_for('ta.ta_modify_chapter'))
 
-# Add New Content Block
+    return render_template('ta_modify_chapter.html')
 
-# Add Text
-
-# Add Picture
-
-# Add Activity
-
-# Add Question
 
 # Modify Section
 
+@ta_bp.route('/modify_section', methods=['GET', 'POST'])
+def ta_modify_section():
+    # if request.method == "GET":
+    etextbook_id = session.get('textbook_id')
+    chapter_id = session.get('chapter_id')
+    course_id = session.get('course_id')
+    if request.method == 'POST':
+        print("Inside modify section method")
+        section_number = request.form.get('section_number')
+        session['section_number'] = section_number
+        action = request.form.get("action")
+        sections_list = fetch_sections(etextbook_id, chapter_id, section_number)
+        if sections_list:
+            if action == "add_new_content_block":
+                return redirect(url_for("ta.add_new_content_block2"))
+            elif action == "modify_content_block":
+                return redirect(url_for("ta.ta_modify_content_block"))
+            elif action == "delete_content_block":
+                return redirect(url_for("ta.ta_delete_content_block"))
+            elif action == "hide_content_block":
+                return redirect(url_for("ta.ta_hide_content_block"))
+        else:
+            flash(f"Section number {section_number} does not exist. Please try again", "error")
+            return redirect(url_for('ta.ta_modify_section'))
+    return render_template('ta_modify_section.html', etextbook_id = etextbook_id, chapter_id=chapter_id)
+
 # Modify Content Block
+@ta_bp.route('/modify_content_block', methods=['GET', 'POST'])
+def ta_modify_content_block():
+    if request.method == 'POST':
+        content_block_id = request.form.get('content_block_id')
+        session['content_block_id'] = content_block_id  # Store content_block_id in session
+
+        action = request.form.get('action')
+        if action == 'add_text':
+            return redirect(url_for('ta.add_text2', call_type="modify"))
+        elif action == 'add_picture':
+            return redirect(url_for('ta.add_picture2', call_type="modify"))
+        elif action == 'modify_activity':
+            return redirect(url_for('ta.add_activity2'))
+        else:
+            flash("Invalid action selected", "error")
+            return redirect(url_for('ta.ta_modify_content_block'))
+    return render_template('ta_modify_content_block.html')
 
 # Delete Content Block
-
+@ta_bp.route('/delete_content_block', methods=['GET', 'POST'])
+def ta_delete_content_block():
+    if request.method == 'POST':
+        content_block_id = request.form.get('content_block_id')
+        session['content_block_id'] = content_block_id  # Store content_block_id in session
+        course_id = session.get('course_id')
+        textbook_id = session.get('textbook_id')
+        chapter_id = session.get('chapter_id')
+        section_id = session.get('section_number')
+        action = request.form.get('action')
+        print(textbook_id, chapter_id, section_id, content_block_id)
+        if action == 'delete_block':
+            # method to delete the block from db table
+            result = delete_content(textbook_id, chapter_id, section_id, content_block_id)
+            if result:
+                flash("Content Block successfully deleted", "success")
+            else:
+                flash(f"There is no {content_block_id} in the Contents", "error")
+        else:
+            flash("Invalid action selected", "error")
+        return redirect(url_for('ta.ta_delete_content_block'))
+    return render_template('ta_delete_content_block.html')
 # Hide Content Block
 
 
@@ -319,7 +402,7 @@ def save_picture2():
     flash("Text added successfully!", "success")
     section_id = session.get('section_id')
     content_block_id = session.get('content_block_id')
-    etextbook_id = session.get('etextbook_id')
+    etextbook_id = session.get('textbook_id')
     chapter_id = session.get('chap_id')
     admin_id = session.get('user_id')
     is_hidden= "no"
@@ -354,7 +437,7 @@ def save_activity2():
     session['activity_id'] = activity_id  # Store activity ID in session for adding questions
     section_id = session.get('section_id')
     content_block_id = session.get('content_block_id')
-    etextbook_id = session.get('etextbook_id')
+    etextbook_id = session.get('textbook_id')
     chapter_id = session.get('chap_id')
     admin_id = session.get('user_id')
 

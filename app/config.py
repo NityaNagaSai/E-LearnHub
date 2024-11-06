@@ -4,11 +4,17 @@ from mysql.connector import errorcode
 def get_db_connection():
     try:
         conn = mysql.connector.connect(
-            user ='root',
-            password = 'Nitya@123',
+            # user ='root',
+            # password = 'Nitya@123',
+            # host = '127.0.0.1',
+            # port = '3306',
+            # database = 'dbms'
+            user ='mgaddam',
+            password = '200538368',
             host = '127.0.0.1',
-            port = '3306',
-            database = 'dbms',
+            port = '63987',
+            database = 'mgaddam',
+            allow_local_infile=True
         )
 
         return conn
