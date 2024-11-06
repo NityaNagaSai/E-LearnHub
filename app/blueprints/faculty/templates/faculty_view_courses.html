@@ -67,13 +67,12 @@
         <h2>View Courses</h2>
         <ul class="menu">
             {% for course in courses %}
-            <li>{{ course.name }}</li>
+            <li>Course ID: {{ course.courseID }} Course Name: {{ course.name }}</li>
             {% endfor %}
         </ul>
 
         <h3>Select an Option</h3>
-        <form method="POST">
-            <input type="hidden" name="course_id" id="hidden_course_id">
+        <form method="GET" action="/faculty/faculty_home">
             <ul class="menu">
                 <li><button type="submit" name="option" value="1">Go Back</button></li>
             </ul>

@@ -44,7 +44,7 @@ def go_to_active_course():
         elif option == '5':
             return redirect(url_for('faculty.modify_chapters', course_id=course_id))
         elif option == '6':
-            return redirect(url_for('faculty.add_ta', course_id=course_id))
+            return redirect(url_for('faculty.create_ta'))
         elif option == '7':
             return redirect(url_for('faculty.faculty_home'))
         else:
@@ -59,7 +59,7 @@ def go_to_evaluation_course():
         course_id = request.form.get('course_id')
         option = request.form.get('option')
         session['course_id'] = course_id  # Save the selected course_id for later use
-        course_list = check_course(course_id, 'Evaluation' )
+        course_list = check_course(course_id, 'Evaluation')
         
         if len(course_list) == 0:
             print("Please enter a valid Course ID", "error")
@@ -76,15 +76,16 @@ def go_to_evaluation_course():
     return render_template('evaluation_course.html')  # Replace with your template
 
 # Route for 'View Courses'
-@faculty_bp.route('/view_courses')
+@faculty_bp.route('/view_courses', methods=["GET", "POST"])
 def view_courses():
-   assigned_courses = [{"couseID" : "CSC 540", "name": "CSC 540 DBMS"},
-                       {"couseID" : "CSC 591 A", "name":"CSC 591 ML with Graphs"} , 
-                       {"couseID" : "CSC 591 B", "name":"CSC 591 Programmer Centered Design and Research"}]
+   user_id = session.get('user_id')
+   assigned_courses = get_assigned_courses(user_id)
+   print(assigned_courses)
+   if len(assigned_courses) == 0:
+        print("NO COURSES!", "error")
+        return redirect(url_for('faculty.faculty_home'))
 
    if request.method == 'POST':
-   #Query Courses from DB and send it
-   # assigned_courses = Course.query.filter_by(faculty_id=faculty_id).all()
     option = request.form.get('option')
     
     if option == '1':
@@ -92,7 +93,7 @@ def view_courses():
     else:
         flash("Invalid option selected.", "error")
         return redirect(url_for('go_to_active_course'))
-   return render_template('view_courses.html', courses=assigned_courses)  # Replace with your template
+   return render_template('faculty_view_courses.html', courses=assigned_courses) 
 
 @faculty_bp.route('/view_students/<course_id>', methods=["GET", "POST"])
 def view_students(course_id):
@@ -100,7 +101,7 @@ def view_students(course_id):
     print(student_list)
     return render_template('view_student_list.html', student_list=student_list, courseID=course_id)
 
-@faculty_bp.route('/approve_enrollment/<course_id>')
+@faculty_bp.route('/approve_enrollment/<course_id>' , methods=["GET", "POST"])
 def approve_enrollment(course_id):
     return render_template('approve_enrollment.html', course_id = course_id)
 
@@ -114,7 +115,6 @@ def add_chapter(course_id):
 @faculty_bp.route('/save_chapter', methods=['POST'])
 def save_chapter():
     etextbook_id = session.get('etextbook_id')
-    # Retrieve chapter data from form
     chapter_id = request.form.get('chapter_id')
     chapter_title = request.form.get('chapter_title')
     hide_chap_id= "no"
@@ -134,7 +134,6 @@ def save_chapter():
     else:
         flash('Textbook with Id does not exist. Please enter a new one', 'error') 
 
-    # Redirect to the Add New Section page
     return redirect(url_for('faculty.faculty_home'))
 
 @faculty_bp.route('/add_new_section')
@@ -191,20 +190,9 @@ def view_worklist(course_id):
     return render_template('view_worklist.html', waitlist=waitlist, courseID=course_id)
 
 # Route for 'Change Password'
-@faculty_bp.route('/faculty/change_password', methods=['GET', 'POST'])
+@faculty_bp.route('/change_password', methods=['GET', 'POST'])
 def change_password():
-    if request.method == 'POST':
-        current_password = request.form.get('current_password')
-        new_password = request.form.get('new_password')
-        confirm_password = request.form.get('confirm_password')
-        
-        # Logic to validate and update password (e.g., check current_password, then update)
-        if new_password == confirm_password:
-            flash("Password updated successfully", "success")
-        else:
-            flash("Passwords do not match", "error")
-        
-    return render_template('change_password.html')  # Replace with your template
+    return render_template('faculty_change_password.html')  # Replace with your template
 
 # Route for 'Logout'
 @faculty_bp.route('/logout')
@@ -220,3 +208,55 @@ def login():
         session['user_role'] = 'faculty'  # Mock login
         return redirect(url_for('faculty_home'))
     return render_template('login.html')
+
+@faculty_bp.route('/create_ta', methods=["GET", "POST"])
+def create_ta():
+    if request.method == "GET":
+        return render_template('create_ta.html')
+    elif request.method == "POST":
+        first_name = request.form['first_name']
+        last_name = request.form['last_name']
+        email = request.form['email']
+        password = request.form['password']
+        course_id = session.get('course_id')
+        user_id = create_new_ta(first_name, last_name, email, password)
+        if user_id:
+            course_status = add_ta_to_course(user_id,course_id)
+            if course_status: 
+                flash('New TA account created successfully!', 'success')
+        else:
+            flash('An error occured in creating the account', 'error')
+        return redirect(url_for('admin.admin_landing')) 
+
+@faculty_bp.route('/update_password', methods=['POST'])
+def update_password_faculty():
+    user_id = session.get('user_id')  # Retrieve user_id from session
+    if not user_id:
+        flash("You must be logged in to change your password.", "error")
+        return redirect(url_for('main.login'))
+
+    existing_password = request.form['curr_password']
+    new_password = request.form['new_password']
+    confirm_new_password = request.form['confirm_new_password']
+    action = request.form['action']
+
+    if action == "update":
+        if new_password != confirm_new_password:
+            flash("New password and confirmation do not match.", "error")
+            return redirect(url_for('faculty.change_password'))
+
+        # Verify the current password
+        if not validate_current_password(user_id, existing_password):
+            flash("Existing password is incorrect.", "error")
+            return redirect(url_for('faculty.change_password'))
+
+        # Update the password in the database
+        if update_user_password(user_id, new_password):
+            flash("Password updated successfully.", "success")
+            return redirect(url_for('faculty.faculty_home'))
+        else:
+            flash("Failed to update password.", "error")
+            return redirect(url_for('faculty.change_password'))
+
+    elif action == "go_back":
+        return redirect(url_for('faculty.faculty_home'))

@@ -9,7 +9,7 @@ import pymysql
 
 HOST = '127.0.0.1'
 USER = 'root'
-PASSWORD = '1234'
+PASSWORD = 'Stupid!3198'
 DATABASE = 'elearnhub'
 PORT = 3306
 

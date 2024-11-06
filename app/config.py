@@ -5,7 +5,7 @@ def get_db_connection():
     try:
         conn = mysql.connector.connect(
             user ='root',
-            password = '1234',
+            password = 'Stupid!3198',
             host = '127.0.0.1',
             port = '3306',
             database = 'elearnhub',
