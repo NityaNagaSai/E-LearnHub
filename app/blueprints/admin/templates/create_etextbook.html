@@ -95,6 +95,11 @@
 
     <div class="container">
         <h2>Create E-textbook</h2>
+        
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
         <!-- Single form for creating E-textbook and proceeding to add chapter -->
         <form method="POST" action="{{ url_for('admin.add_etextbook') }}">
             <label for="title">Title of the E-textbook:</label>

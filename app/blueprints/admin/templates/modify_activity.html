@@ -105,6 +105,11 @@
     <div class="container">
         <h2>Add Activity</h2>
 
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+
         <form method="POST" action="{{ url_for('admin.save_modified_activity') }}">
             <label for="activity_id">Activity ID:</label>
             <input type="text" id="activity_id" name="activity_id" value="{{ existing_activity_id }}" required>

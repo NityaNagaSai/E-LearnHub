@@ -99,6 +99,12 @@
 
     <div class="container">
         <h2>Modify Content Block</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+            
         <form method="POST" action="{{ url_for('admin.modify_content_block') }}">
             <label for="content_block_id">Content Block ID:</label>
             <input type="text" id="content_block_id" name="content_block_id" required>

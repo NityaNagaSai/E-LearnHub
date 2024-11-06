@@ -104,6 +104,10 @@
 
     <div class="container">
         <h2>Create New Evaluation Course</h2>
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
         <form method="POST" action="{{ url_for('admin.save_evaluation_course') }}">
             <label for="course_id">Unique Course ID:</label>
             <input type="text" id="course_id" name="course_id" required>

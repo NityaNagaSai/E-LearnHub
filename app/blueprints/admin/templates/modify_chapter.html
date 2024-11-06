@@ -106,6 +106,12 @@
 
     <div class="container">
         <h2>Modify Chapter</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+            
         <form method="POST" action="{{ url_for('admin.modify_chapter') }}">
             <label for="chapter_id">Unique Chapter ID:</label>
             <input type="text" id="chapter_id" name="chapter_id" required>
