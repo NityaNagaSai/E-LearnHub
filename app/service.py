@@ -28,9 +28,9 @@ def retrieval_sql_query1(textbook_id):
     try:
         query = '''SELECT COUNT(*) AS number_of_sections
                    FROM Section s
-                   WHERE s.textbook_id = %s AND s.chapter_id = 'chap01';'''
+                   WHERE s.textbook_id = %s AND s.chapter_id = %s;'''
         
-        cursor.execute(query, (textbook_id))
+        cursor.execute(query, (textbook_id, "chap01"))
         return cursor.fetchall()
     except Error as e:
         print(f"Error: {e}")
@@ -134,16 +134,29 @@ def retrieval_sql_query6():
 
     try:
         query = '''SELECT Q.option1, Q.explanation_op1, Q.option2, Q.explanation_op2, 
-                    Q.option3, Q.explanation_op3, Q.option4, Q.explanation_op4
+                    Q.option3, Q.explanation_op3, Q.option4, Q.explanation_op4, Q.correct_answer
                     FROM Question Q
-                    WHERE Q.textbook_id = 101 AND Q.chapter_id = 'Chap01' 
-                        AND Q.section_id = 'Sec02' AND Q.content_block_id = 'Activity0' 
+                    WHERE Q.textbook_id = 101 AND Q.chapter_id = 'chap01' 
+                        AND Q.section_id = 'Sec02' AND Q.content_block_id = 'Block01' 
+                        AND activity_id = 'ACT0'
                         AND Q.question_id = 'Q2'
                     AND Q.correct_answer NOT IN (Q.option1, Q.option2, Q.option3, Q.option4);
                 '''
         
         cursor.execute(query)
-        return cursor.fetchall()
+        result = cursor.fetchone()
+        if result:
+            options = [
+                (result[0], result[1]),  # option1 and explanation_op1
+                (result[2], result[3]),  # option2 and explanation_op2
+                (result[4], result[5]),  # option3 and explanation_op3
+                (result[6], result[7])   # option4 and explanation_op4
+            ]
+            correct_answer = result[8]
+            return options, correct_answer
+        else:
+            return None, None
+    
     except Error as e:
         print(f"Error: {e}")
         return False
@@ -162,7 +175,7 @@ def retrieval_sql_query7():
                         AND C1.course_type = 'Active' AND C2.course_type = 'Evaluation'
                         AND C1.faculty_user_id != C2.faculty_user_id;
                 '''
-        
+        #
         cursor.execute(query)
         return cursor.fetchall()
     except Error as e:

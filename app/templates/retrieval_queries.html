@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,27 +27,60 @@
             height: 80vh;
             text-align: center;
             flex-direction: column;
-            margin-top: 60px; /* Adjust for the fixed navbar */
+            margin-top: 60px;
+            /* Adjust for the fixed navbar */
+            width: 100%;
         }
 
-        /* Styling for the menu list */
-        ul {
-            list-style-type: none;
-            padding: 0;
+        /* Styling for the form and buttons */
+        form {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
         }
 
-        li {
-            margin: 10px 0;
+        .query-button {
+            padding: 10px 15px;
+            font-size: 16px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            /* Make button fill the container width */
+            max-width: 500px;
+            /* Limit max width for centering */
         }
 
-        a {
+        .query-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Back button styling */
+        .back-button {
+            padding: 10px;
+            font-size: 16px;
+            color: white;
+            background-color: #6c757d;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+            /* Limit max width for centering */
+            margin-top: 20px;
             text-decoration: none;
-            font-size: 18px;
-            color: #007bff;
+            display: inline-block;
         }
 
-        a:hover {
-            color: #0056b3;
+        .back-button:hover {
+            background-color: #5a6268;
         }
     </style>
 </head>
@@ -54,28 +88,40 @@
 <body>
     <!-- Navigation bar -->
     <div class="navbar">
-        E-Textbook and Assessment Platform
+        E-Textbook and Assessment Platform - Queries
     </div>
 
     <!-- Centered content -->
     <div class="container">
-        <h2>Please Select an Option</h2>
+        <h2>Select a Query</h2>
         <form method="POST" action="{{ url_for('main.retrieval_queries') }}">
-            <ol class="menu">
-                <li><button type="submit" name="option" value="1">Write a query that prints the number of sections of the first chapter of a textbook.</button></li>
-                <li><button type="submit" name="option" value="2">Print the names of faculty and TAs of all courses. For each person print their role next to
-                    their names.</button></li>
-                <li><button type="submit" name="option" value="3">For each active course, print the course id, faculty member and total number of students</button></li>
-                <li><button type="submit" name="option" value="4">Find the course which the largest waiting list, print the course id and the total number of
-                    people on the list</button></li>
-                <li><button type="submit" name="option" value="5">Print the contents of Chapter 02 of textbook 101 in proper sequence</button></li>
-                <li><button type="submit" name="option" value="6">For Q2 of Activity0 in Sec02 of Chap01 in textbook 101, print the incorrect answers for
-                    that question and their corresponding explanations.</button></li>
-                <li><button type="submit" name="option" value="7">Find any book that is in active status by one instructor but evaluation status by a different
-                    instructor.</button></li>
-            </ol>
+            <button type="submit" name="option" value="1" class="query-button">
+                Write a query that prints the number of sections of the first chapter of a textbook.
+            </button>
+            <button type="submit" name="option" value="2" class="query-button">
+                Print the names of faculty and TAs of all courses. For each person print their role next to their names.
+            </button>
+            <button type="submit" name="option" value="3" class="query-button">
+                For each active course, print the course id, faculty member, and total number of students.
+            </button>
+            <button type="submit" name="option" value="4" class="query-button">
+                Find the course with the largest waiting list, print the course id and the total number of people on the
+                list.
+            </button>
+            <button type="submit" name="option" value="5" class="query-button">
+                Print the contents of Chapter 02 of textbook 101 in proper sequence.
+            </button>
+            <button type="submit" name="option" value="6" class="query-button">
+                For Q2 of Activity0 in Sec02 of Chap01 in textbook 101, print the incorrect answers for that question
+                and their corresponding explanations.
+            </button>
+            <button type="submit" name="option" value="7" class="query-button">
+                Find any book that is in active status by one instructor but evaluation status by a different
+                instructor.
+            </button>
         </form>
-       
+
     </div>
 </body>
+
 </html>

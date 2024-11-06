@@ -58,26 +58,43 @@ def login():
         flash("Login Incorrect. Please try again.")
     return render_template('login.html', role=role)
 
-
 @main_bp.route('/retrieval_queries', methods=['GET', 'POST'])
 def retrieval_queries():
     if request.method == 'GET':
         return render_template('retrieval_queries.html')
+    
     if request.method == 'POST':
-        option = request.form.get('option')
+        option = int(request.form.get('option'))
+        
         if option == 1:
-            pass
-        if option == 2:
+            section_count = retrieval_sql_query1(101)[0][0]
+            return render_template('query1_result.html', section_count=section_count, textbook_id=101)
+        
+        elif option == 2:
             data = retrieval_sql_query2()
-
-        if option == 3:
-            pass
-        if option == 4:
-            pass
-        if option == 5:
-            pass
-        if option == 6:
-            pass
-        if option == 7:
-            pass
+            return render_template('query2_result.html', data=data)
+        
+        elif option == 3:
+            data = retrieval_sql_query3()
+            return render_template('query3_result.html', data=data)
+        
+        elif option == 4:
+            data = retrieval_sql_query4()
+            return render_template('query4_result.html', data=data)
+        
+        elif option == 5:
+            data = retrieval_sql_query5()
+            return render_template('query5_result.html', data=data)
+        
+        elif option == 6:
+            data, op = retrieval_sql_query6()
+            return render_template('query6_result.html', options=data, correct_answer= int(op)-1)
+        
+        elif option == 7:
+            data = retrieval_sql_query7()
+            return render_template('query7_result.html', data=data)
+        
+        else:
+            flash("Invalid option selected.", "error")
+            return redirect(url_for('main.retrieval_queries'))
 
