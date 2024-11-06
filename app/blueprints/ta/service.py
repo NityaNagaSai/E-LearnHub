@@ -12,7 +12,7 @@ def fetch_courses(user_id):
             SELECT course_id, course_title from Course
             WHERE ta_user_id = %s;
         """
-        cursor.execute(query, (user_id))
+        cursor.execute(query, (user_id,))
         result = cursor.fetchall()
         print(result)
         conn.commit()
@@ -42,7 +42,7 @@ def fetch_students(course_id):
                 AND u.role = "Student"
                 WHERE c.course_id = %s;
                 """
-        cursor.execute(query, (course_id))
+        cursor.execute(query, (course_id,))
         result = cursor.fetchall()
         print(result)
         conn.commit()
@@ -296,13 +296,34 @@ def delete_content(etextbook_id, chapter_id, section_id, content_block_id):
     cursor = conn.cursor()
 
     try:
-        query = "DELETE FROM ContentBlock WHERE textbook_id = %s AND chapter_id = %s AND section_id = %s AND content_block_id = %s;"
+        query = """
+        DELETE FROM ContentBlock WHERE 
+        textbook_id = %s AND 
+        chapter_id = %s AND 
+        section_id = %s AND 
+        content_block_id = %s;"""
         cursor.execute(query, (etextbook_id, chapter_id, section_id, content_block_id))
         # print(etextbook_id+ " " + chapter_id)
         return True
     except Error as e:
         print(f"Error: {e}")
         return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def fetch_sections(etextbook_id, chapter_id, section_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = "SELECT * FROM Section WHERE textbook_id = %s and chapter_id = %s and section_id = %s"
+        cursor.execute(query, (etextbook_id, chapter_id, section_id))
+        chap_data = cursor.fetchall()
+        return chap_data
+    except Error as e:
+        print(f"Error: {e}")
+        return None
     finally:
         cursor.close()
         conn.close()

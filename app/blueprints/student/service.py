@@ -182,7 +182,7 @@ def get_student_course_id(student_id):
             FROM Enrollment
             WHERE student_user_id = %s AND status = 'Enrolled'
             LIMIT 1
-        """, (student_id))
+        """, (student_id,))
         result = cursor.fetchone()
     conn.close()
     
@@ -228,13 +228,13 @@ def update_or_insert_student_participation(student_id, course_id):
             # Update the existing record
             cursor.execute("""
                 UPDATE StudentParticipation
-                SET participation_points = %s, finished_activites = %s
+                SET participation_points = %s, finished_activities = %s
                 WHERE student_id = %s AND course_id = %s
             """, (participation_points, finished_activities, student_id, course_id))
         else:
             # Insert a new record
             cursor.execute("""
-                INSERT INTO StudentParticipation (student_id, course_id, participation_points, finished_activites)
+                INSERT INTO StudentParticipation (student_id, course_id, participation_points, finished_activities)
                 VALUES (%s, %s, %s, %s)
             """, (student_id, course_id, participation_points, finished_activities))
         
@@ -249,7 +249,7 @@ def get_student_participation_data(student_id, course_id):
     conn = get_db_connection()
     with conn.cursor() as cursor:
         cursor.execute("""
-            SELECT participation_points, finished_activites
+            SELECT participation_points, finished_activities
             FROM StudentParticipation
             WHERE student_id = %s AND course_id = %s
         """, (student_id, course_id))

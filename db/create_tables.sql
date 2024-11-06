@@ -37,10 +37,10 @@ CREATE TABLE IF NOT EXISTS Section (
 );
 
 CREATE TABLE IF NOT EXISTS ContentBlock (
-    content_block_id VARCHAR(25) NOT NULL,
     textbook_id INT NOT NULL,
     chapter_id VARCHAR(25) NOT NULL,
     section_id VARCHAR(25) NOT NULL,
+    content_block_id VARCHAR(25) NOT NULL,
     content_type ENUM('text', 'image', 'activity') NOT NULL,
     content TEXT NOT NULL,
     is_hidden ENUM('yes', 'no') NOT NULL,
@@ -62,25 +62,28 @@ CREATE TABLE IF NOT EXISTS Activity (
     FOREIGN KEY (textbook_id, chapter_id, section_id, content_block_id) REFERENCES ContentBlock(textbook_id, chapter_id, section_id, content_block_id) ON DELETE CASCADE
 );
 
+
+
 CREATE TABLE IF NOT EXISTS Question (
-    question_id VARCHAR(25),
-    activity_id VARCHAR(25) NOT NULL,
-    content_block_id VARCHAR(25) NOT NULL,
     textbook_id INT NOT NULL,
-    section_id VARCHAR(25) NOT NULL,
     chapter_id VARCHAR(25) NOT NULL,
+    section_id VARCHAR(25) NOT NULL,
+    content_block_id VARCHAR(25) NOT NULL,
+    activity_id VARCHAR(25) NOT NULL,
+    question_id VARCHAR(25) NOT NULL,
     question TEXT NOT NULL,
-    correct_answer VARCHAR(255) NOT NULL,
     option1 VARCHAR(255) NOT NULL,
-    option2 VARCHAR(255) NOT NULL,
-    option3 VARCHAR(255) NOT NULL,
-    option4 VARCHAR(255) NOT NULL,
     explanation_op1 VARCHAR(255) NOT NULL,
+    option2 VARCHAR(255) NOT NULL,
     explanation_op2 VARCHAR(255) NOT NULL,
+    option3 VARCHAR(255) NOT NULL,
     explanation_op3 VARCHAR(255) NOT NULL,
+    option4 VARCHAR(255) NOT NULL,
     explanation_op4 VARCHAR(255) NOT NULL,
+    correct_answer VARCHAR(255) NOT NULL,
     PRIMARY KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id, question_id),
-    FOREIGN KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id) REFERENCES Activity(textbook_id, chapter_id, section_id, content_block_id, activity_id) ON DELETE CASCADE
+    FOREIGN KEY (textbook_id, chapter_id, section_id, content_block_id, activity_id) 
+    REFERENCES Activity(textbook_id, chapter_id, section_id, content_block_id, activity_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Course (
