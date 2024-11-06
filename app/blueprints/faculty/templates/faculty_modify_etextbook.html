@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modify Chapter</title>
+    <title>Modify E-textbook</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -27,8 +26,7 @@
             height: 80vh;
             text-align: center;
             flex-direction: column;
-            margin-top: 60px;
-            /* Adjust for the fixed navbar */
+            margin-top: 60px; /* Adjust for the fixed navbar */
         }
 
         /* Styling for the form */
@@ -44,8 +42,7 @@
             margin-bottom: 20px;
         }
 
-        label,
-        input {
+        label, input {
             width: 100%;
             margin: 5px 0;
             font-size: 16px;
@@ -60,13 +57,12 @@
             box-sizing: border-box;
         }
 
-        /* Styling for links */
+        /* Styling for buttons */
         .buttons {
             display: flex;
             flex-direction: column;
             gap: 10px;
-            width: 300px;
-            /* Matches the width of the form */
+            width: 300px; /* Matches the width of the form */
         }
 
         .button-link {
@@ -85,18 +81,15 @@
             background-color: #333333;
         }
 
-        .go-back,
-        .landing-page {
+        .go-back, .landing-page {
             background-color: #6c757d;
         }
 
-        .go-back:hover,
-        .landing-page:hover {
+        .go-back:hover, .landing-page:hover {
             background-color: #5a6268;
         }
     </style>
 </head>
-
 <body>
 
     <!-- Navigation bar -->
@@ -105,19 +98,21 @@
     </div>
 
     <div class="container">
-        <h2>Modify Chapter</h2>
-        <form method="POST" action="{{ url_for('admin.modify_chapter') }}">
-            <label for="chapter_id">Unique Chapter ID:</label>
-            <input type="text" id="chapter_id" name="chapter_id" required>
+        <h2>Modify E-textbook</h2>
+        <form method="POST" action="{{ url_for('admin.modify_etextbook') }}">
+            <label for="etextbook_id">Unique E-textbook ID:</label>
+            <input type="text" id="etextbook_id" name="etextbook_id" required>
+
             <div class="buttons">
-                <button type="submit" name="action" value="add_new_section" class="button-link">Add New Section</button>
-                <button type="submit" name="action" value="modify_section" class="button-link">Modify Section</button>
-                <a href="{{ url_for('admin.modify_etextbook') }}" class="button-link go-back">Go Back</a>
+                <button type="submit"  name="action" value="add_chapter" class="button-link">Add New Chapter</button>
+                <button type="submit" name="action" value="modify_chapter" class="button-link">Modify Chapter</button>
+
+                <a href="{{ url_for('admin.admin_landing') }}" class="button-link go-back">Go Back</a>
                 <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>
+    
             </div>
         </form>
     </div>
 
 </body>
-
 </html>

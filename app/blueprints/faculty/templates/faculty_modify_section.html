@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modify Chapter</title>
+    <title>Modify Section</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -60,7 +60,7 @@
             box-sizing: border-box;
         }
 
-        /* Styling for links */
+        /* Styling for links as buttons */
         .buttons {
             display: flex;
             flex-direction: column;
@@ -101,21 +101,34 @@
 
     <!-- Navigation bar -->
     <div class="navbar">
-        Admin Dashboard
+        Faculty Dashboard
     </div>
 
     <div class="container">
-        <h2>Modify Chapter</h2>
-        <form method="POST" action="{{ url_for('admin.modify_chapter') }}">
-            <label for="chapter_id">Unique Chapter ID:</label>
-            <input type="text" id="chapter_id" name="chapter_id" required>
+        <h2>Modify Section</h2>
+        <form method="POST" action="{{ url_for('faculty.modify_section_faculty') }}">
+            <!-- <label for="section_number">Unique E-textbook ID:</label>
+            <input type="text" id="etextbook_id" name="etextbook_id" required value = "{{etextbook_id}}">
+
+            <label for="section_number">Chapter ID:</label>
+            <input type="text" id="chapter_id" name="chapter_id" required value ="{{chapter_id}}"> -->
+
+            <label for="section_number">Section Number:</label>
+            <input type="text" id="section_number" name="section_number" required>
+
             <div class="buttons">
-                <button type="submit" name="action" value="add_new_section" class="button-link">Add New Section</button>
-                <button type="submit" name="action" value="modify_section" class="button-link">Modify Section</button>
-                <a href="{{ url_for('admin.modify_etextbook') }}" class="button-link go-back">Go Back</a>
-                <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>
+                <button type="submit" name="action" value="hide" class="button-link">Hide Section</button>
+                <button type="submit" name="action" value="delete" class="button-link">Delete Section</button>
+                <button type="submit" name="action" value="add_new_content_block" class="button-link">Add New Content
+                    Block</button>
+                <button type="submit" name="action" value="modify_content_block" class="button-link">Modify Content
+                    Block</button>
+                <a href="{{ url_for('faculty.modify_chapter_faculty') }}" class="button-link go-back">Go Back</a>
+                <a href="{{ url_for('faculty.faculty_home') }}" class="button-link landing-page">Landing Page</a>
             </div>
+
         </form>
+
     </div>
 
 </body>

@@ -101,19 +101,21 @@
 
     <!-- Navigation bar -->
     <div class="navbar">
-        Admin Dashboard
+        Faculty Dashboard
     </div>
 
     <div class="container">
         <h2>Modify Chapter</h2>
-        <form method="POST" action="{{ url_for('admin.modify_chapter') }}">
+        <form method="POST" action="{{ url_for('faculty.modify_chapter_faculty') }}">
             <label for="chapter_id">Unique Chapter ID:</label>
             <input type="text" id="chapter_id" name="chapter_id" required>
             <div class="buttons">
+                <button type="submit" name="action" value="hide_chapter" class="button-link">Hide Chapter</button>
+                <button type="submit" name="action" value="delete" class="button-link">Delete Chapter</button>
                 <button type="submit" name="action" value="add_new_section" class="button-link">Add New Section</button>
                 <button type="submit" name="action" value="modify_section" class="button-link">Modify Section</button>
-                <a href="{{ url_for('admin.modify_etextbook') }}" class="button-link go-back">Go Back</a>
-                <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>
+                <a href="{{ url_for('faculty.go_to_active_course') }}" class="button-link go-back">Go Back</a>
+                <a href="{{ url_for('faculty.faculty_home') }}" class="button-link landing-page">Landing Page</a>
             </div>
         </form>
     </div>
