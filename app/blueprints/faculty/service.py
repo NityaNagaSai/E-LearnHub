@@ -4,18 +4,60 @@ from app.models import User
 from datetime import datetime, timedelta
 from mysql.connector import Error
 
-def create_new_faculty_account(first_name, last_name, email, password):
-    first_day_of_current_month = datetime.now().replace(day=1)
-
-    previous_month = first_day_of_current_month - timedelta(days=1)
-    user_id = first_name[:2] + last_name[:2] + previous_month.strftime("%m%y")
+def check_course(course_id, type):
     conn = get_db_connection()
     cursor = conn.cursor()
 
     try:
-        query = '''INSERT INTO User(user_id, first_name, last_name, email, password, role) 
-                   VALUES(%s, %s, %s, %s, %s, %s)'''
-        cursor.execute(query, (user_id, first_name, last_name, email, password, 'Faculty'))
+        query = '''SELECT * FROM Course WHERE course_id = %s and course_type = %s'''
+        cursor.execute(query, (course_id, type),)
+        course = cursor.fetchall()
+        print(course_id)
+        return course
+    except Error as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def get_waitlisted_students(course_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = '''SELECT student_user_id FROM Enrollment WHERE course_id = %s and status = %s'''
+        cursor.execute(query, (course_id, 'Pending'))
+        waitlist = cursor.fetchall()
+        user_ids = [row[0] for row in waitlist]
+        if not user_ids:
+            return []
+        
+        format_strings = ','.join(['%s'] * len(user_ids))
+        name_query = f"SELECT user_id, first_name FROM User WHERE user_id IN ({format_strings})"
+        cursor.execute(name_query, tuple(user_ids))
+        student_names = cursor.fetchall()  # List of tuples (user_id, first_name)
+
+        # Format names into the desired list of dictionaries
+        names = [{"studentID": row[0], "name": row[1]} for row in student_names]
+        return names
+        
+    except Error as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
+def save_student_to_db(course_id, student_user_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        # Update the status to 'Enrolled' for the specified student and course
+        query = '''UPDATE Enrollment SET status = %s WHERE course_id = %s AND student_user_id = %s'''
+        cursor.execute(query, ('Enrolled', course_id, student_user_id))
         conn.commit()
         return True
     except Error as e:
@@ -26,16 +68,27 @@ def create_new_faculty_account(first_name, last_name, email, password):
         cursor.close()
         conn.close()
 
-def add_etextbook_to_db(etextbook_id, title):
+
+def get_students(course_id):
     conn = get_db_connection()
     cursor = conn.cursor()
 
     try:
-        query = '''INSERT INTO ETextBook(textbook_id, title) 
-                   VALUES(%s, %s)'''
-        cursor.execute(query, (etextbook_id, title))
-        conn.commit()
-        return True
+        query = '''SELECT student_user_id FROM Enrollment WHERE course_id = %s and status = %s'''
+        cursor.execute(query, (course_id, 'Enrolled'))
+        waitlist = cursor.fetchall()
+        user_ids = [row[0] for row in waitlist]
+        if not user_ids:
+            return []
+        
+        format_strings = ','.join(['%s'] * len(user_ids))
+        name_query = f"SELECT user_id, first_name, last_name FROM User WHERE user_id IN ({format_strings})"
+        cursor.execute(name_query, tuple(user_ids))
+        student_names = cursor.fetchall()  
+
+        names = [{"studentID": row[0], "name": row[1] + " " + row[2]} for row in student_names]
+        return names
+        
     except Error as e:
         conn.rollback()
         print(f"Error: {e}")
@@ -43,6 +96,31 @@ def add_etextbook_to_db(etextbook_id, title):
     finally:
         cursor.close()
         conn.close()
+
+def get_etextbook_id(course_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+
+    try:
+        query = "SELECT textbook_id FROM Course WHERE course_id = %s"
+        cursor.execute(query, (course_id,))
+        result = cursor.fetchone()  
+
+        if result:  
+            textbook_id = result[0]  
+            textbook = fetch_etextbooks(textbook_id)
+            if textbook:
+                textbook_name = textbook[0] 
+                return (textbook_id, textbook_name)
+        return None 
+    except Error as e:
+        conn.rollback()
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+
 
 def fetch_etextbooks(etextbook_id):
     conn = get_db_connection()
@@ -106,7 +184,6 @@ def fetch_chapters(etextbook_id, chapter_id):
         query = "SELECT * FROM Chapter WHERE textbook_id = %s and chapter_id = %s"
         cursor.execute(query, (etextbook_id, chapter_id,))
         chap_data = cursor.fetchall()
-        print(etextbook_id+ " " + chapter_id)
         return chap_data
     except Error as e:
         print(f"Error: {e}")
@@ -209,7 +286,7 @@ def add_new_course(course_id, course_name, course_type, etextbook_id, faculty_id
 
     try:
         query = '''INSERT INTO Course(course_id, course_title, course_type, faculty_user_id, 
-                                        textbook_id, start_date, end_date, capacity, token) 
+                                        textbook_id, course_start_date, course_end_date, capacity, token) 
                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)'''
         cursor.execute(query, (course_id, course_name, course_type, faculty_id, etextbook_id, start_date, end_date, capacity, unique_token))
         conn.commit()

@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS Course (
     token VARCHAR(255),
     FOREIGN KEY (faculty_user_id) REFERENCES User(user_id) ON DELETE CASCADE,
     FOREIGN KEY (ta_user_id) REFERENCES User(user_id) ON DELETE SET NULL,
-    FOREIGN KEY (textbook_id) REFERENCES ETextBook(textbook_id) ON DELETE CASCADE
+    FOREIGN KEY (textbook_id) REFERENCES ETextBook (textbook_id)
 );
 
 CREATE TABLE IF NOT EXISTS StudentActivityPoint (

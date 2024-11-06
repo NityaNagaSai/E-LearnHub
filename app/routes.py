@@ -42,8 +42,10 @@ def login():
             if status:
                 return redirect(url_for(f'{role}.{role}_landing'))
         elif role == 'faculty':
-            # add validation code
-            return redirect(url_for(f'{role}.{role}_landing'))
+            status = validate_user(user_id, password, role)
+            session['user_id'] = user_id
+            if status:
+                return redirect(url_for(f'{role}.{role}_home'))
         elif role == 'ta':
             # add validation code
             status = validate_user(user_id, password, role)

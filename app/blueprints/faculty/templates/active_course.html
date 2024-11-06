@@ -61,6 +61,8 @@
             const courseIdInput = document.getElementById("course_id").value;
             if (courseIdInput.trim() !== "") {
                 document.getElementById("options").style.display = "block";
+                // Set hidden field's value to course_id
+                document.getElementById("hidden_course_id").value = courseIdInput;
             } else {
                 alert("Please enter a valid Course ID");
             }
@@ -84,6 +86,7 @@
         <div id="options">
             <h3>Select an Option</h3>
             <form method="POST">
+                <!-- Hidden input to hold course_id value -->
                 <input type="hidden" name="course_id" id="hidden_course_id">
                 <ul class="menu">
                     <li><button type="submit" name="option" value="1">1. View Worklist</button></li>
