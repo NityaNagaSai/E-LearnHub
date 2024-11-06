@@ -25,4 +25,5 @@ This README provides instructions on how to set up and run a Flask application t
 
 2. cd path/to/E-LearnHub
 
-3. python run.py
+3. ```bash
+   python run.py
