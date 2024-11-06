@@ -107,6 +107,7 @@
         <form method="POST" action="{{ url_for('ta.save_picture2') }}" enctype="multipart/form-data">
             <label for="picture">Upload Picture:</label>
             <input type="file" id="picture" name="picture" accept="image/*" required>
+            <input type="hidden" name="chapter_id" value="{{ chapter_id }}">
 
             <!-- Buttons for Add, Go Back, and Landing Page -->
             <div class="buttons">

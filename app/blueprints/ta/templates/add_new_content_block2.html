@@ -107,6 +107,10 @@
 
         <form method="POST" action="{{ url_for('ta.save_content_block2') }}">
             <label for="content_block_id">Content Block ID:</label>
+            <input type="hidden" name="course_id" value="{{ course_id }}">
+            <input type="hidden" name="textbook_id" value="{{ textbook_id }}">
+            <input type="hidden" name="section_id" value="{{ section_number }}">
+            <input type="hidden" name="chapter_id" value="{{ chapter_id }}">
             <input type="text" id="content_block_id" name="content_block_id" required>
 
             <!-- Buttons for Add Text, Add Picture, Add Activity, Go Back, and Landing Page -->

@@ -174,7 +174,6 @@ def add_new_section2():
 
     return render_template('add_new_section2.html', chapter_id=chapter_id, textbook_id=textbook_id)
 
-# Route to save the section details after form submission
 @ta_bp.route('/save_section2', methods=['POST'])
 def save_section2():
     # Retrieve form data
@@ -199,11 +198,13 @@ def save_section2():
             # Save section details in session for future use
             session['section_id'] = section_id
             session['section_title'] = section_title
+            session['etextbook_id'] = textbook_id  # Ensure this is saved for later use
+            session['chap_id'] = chapter_id 
 
             # Flash a success message and redirect to add a content block
             flash("Section added successfully!", "success")
             print(f"This block : 1")
-            return redirect(url_for('ta.add_new_content_block2', section_number=section_id))
+            return redirect(url_for('ta.add_new_content_block2',chapter_id=chapter_id, section_number=section_id))
         else:
             flash("Failed to add section. Please try again.", "error")
             print(f"This block : 2")
@@ -217,41 +218,45 @@ def save_section2():
 def add_new_content_block2():
     section_number = session.get('section_number')
     section_title = session.get('section_title')
-    return render_template('add_new_content_block2.html',section_number=section_number, section_title=section_title)
+    chapter_id = request.args.get('chapter_id')
+    return render_template('add_new_content_block2.html',chapter_id=chapter_id,section_number=section_number, section_title=section_title)
 
 
 @ta_bp.route('/save_content_block2', methods=['POST'])
 def save_content_block2():
     content_block_id = request.form.get('content_block_id')
-    session['content_block_id'] = content_block_id  # Store content_block_id in session
-
-
+    chapter_id = request.form.get('chapter_id')
+    session['content_block_id'] = content_block_id
     action = request.form.get('action')
     if action == 'add_text':
-        return redirect(url_for('ta.add_text2'))
+        return redirect(url_for('ta.add_text2',chapter_id=chapter_id))
     elif action == 'add_picture':
-        return redirect(url_for('ta.add_picture2'))
+        return redirect(url_for('ta.add_picture2',chapter_id=chapter_id))
     elif action == 'add_activity':
-        return redirect(url_for('ta.add_activity2'))
+        return redirect(url_for('ta.add_activity2',chapter_id=chapter_id))
     else:
         flash("Invalid action selected", "error")
-        return redirect(url_for('ta.add_new_content_block2'))
+        return redirect(url_for('ta.add_new_content_block2',chapter_id=chapter_id))
     
 
 @ta_bp.route('/add_text2')
 def add_text2():
+    chapter_id = request.args.get('chapter_id')
     content_block_id = session.get('content_block_id')
-    return render_template('add_text2.html', content_block_id=content_block_id)
+    
+    return render_template('add_text2.html', content_block_id=content_block_id,chapter_id=chapter_id)
 
 @ta_bp.route('/add_picture2')
 def add_picture2():
+    chapter_id = request.args.get('chapter_id')
     content_block_id = session.get('content_block_id')
-    return render_template('add_picture2.html', content_block_id=content_block_id)
+    return render_template('add_picture2.html', content_block_id=content_block_id,chapter_id=chapter_id)
 
 @ta_bp.route('/add_activity2')
 def add_activity2():
     content_block_id = session.get('content_block_id')
-    return render_template('add_activity2.html', content_block_id=content_block_id)
+    chapter_id = request.args.get('chapter_id')
+    return render_template('add_activity2.html', content_block_id=content_block_id,chapter_id=chapter_id)
 
 @ta_bp.route('/save_text2', methods=['POST'])
 def save_text2():
@@ -259,8 +264,8 @@ def save_text2():
     flash("Text added successfully!", "success")
     section_id = session.get('section_id')
     content_block_id = session.get('content_block_id')
-    etextbook_id = session.get('etextbook_id')
-    chapter_id = session.get('chap_id')
+    etextbook_id = session.get('textbook_id')
+    chapter_id = request.form.get('chapter_id')
     admin_id = session.get('user_id')
     is_hidden= "no"
     content_block_list = fetch_content_blocks(etextbook_id, chapter_id, section_id, content_block_id)
@@ -319,15 +324,20 @@ def save_picture2():
     flash("Text added successfully!", "success")
     section_id = session.get('section_id')
     content_block_id = session.get('content_block_id')
-    etextbook_id = session.get('etextbook_id')
-    chapter_id = session.get('chap_id')
+    textbook_id = session.get('textbook_id')
+    chapter_id = request.form.get('chapter_id')
     admin_id = session.get('user_id')
+    print(f"Section ID: {section_id}")
+    print(f"Content Block ID: {content_block_id}")
+    print(f"eTextbook ID: {textbook_id}")
+    print(f"Chapter ID: {chapter_id}")
+    print(f"Admin ID: {admin_id}")
     is_hidden= "no"
-    content_block_list = fetch_content_blocks(etextbook_id, chapter_id, section_id, content_block_id)
+    content_block_list = fetch_content_blocks(textbook_id, chapter_id, section_id, content_block_id)
     if content_block_list:
-        delete_status = delete_content(etextbook_id, chapter_id, section_id, content_block_id)
+        delete_status = delete_content(textbook_id, chapter_id, section_id, content_block_id)
         if delete_status:
-            status = add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, is_hidden, admin_id, 'image', picture_url)
+            status = add_content_to_db(content_block_id, section_id, chapter_id, textbook_id, is_hidden, admin_id, 'image', picture_url)
             if status:
                 flash("Picture saved successfully!", "success")
                 return redirect(url_for('ta.add_new_content_block2'))  
@@ -338,7 +348,7 @@ def save_picture2():
             flash("Picture was not saved!", "fail")
             return redirect(url_for('ta.add_new_content_block2'))
     else:
-        status = add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, is_hidden, admin_id, 'image', picture_url)
+        status = add_content_to_db(content_block_id, section_id, chapter_id, textbook_id, is_hidden, admin_id, 'image', picture_url)
         if status:
             flash("Picture saved successfully!", "success")
             return redirect(url_for('ta.add_new_content_block2'))  
@@ -354,8 +364,8 @@ def save_activity2():
     session['activity_id'] = activity_id  # Store activity ID in session for adding questions
     section_id = session.get('section_id')
     content_block_id = session.get('content_block_id')
-    etextbook_id = session.get('etextbook_id')
-    chapter_id = session.get('chap_id')
+    etextbook_id = session.get('textbook_id')
+    chapter_id = request.form.get('chapter_id')
     admin_id = session.get('user_id')
 
     print("inside save_activity method:",etextbook_id)
@@ -370,13 +380,13 @@ def save_activity2():
             status = add_activity_to_db(etextbook_id, chapter_id, section_id, content_block_id, 
                                             activity_id, "no", admin_id)
             if status:
-                return redirect(url_for('ta.add_question'))
+                return redirect(url_for('ta.add_question2',chapter_id=chapter_id))
             else:
                 flash("Error in saving the activity. Please try again.", "error")
-                return redirect(url_for('ta.add_activity'))
+                return redirect(url_for('ta.add_activity2'))
         else:
             flash("Error in saving the Block. Please try again.", "error")
-            return redirect(url_for('ta.add_activity'))
+            return redirect(url_for('ta.add_activity2'))
 
 
 
@@ -394,19 +404,24 @@ def save_activity2():
 
 
 
-@ta_bp.route('/add_question')
-def add_question():
+@ta_bp.route('/add_question2')
+def add_question2():
     activity_id = session.get('activity_id') 
-    return render_template('add_question.html', activity_id=activity_id)
+    chapter_id = request.args.get('chapter_id')
+    return render_template('add_question2.html', activity_id=activity_id,chapter_id=chapter_id)
 
-@ta_bp.route('/save_question', methods=['POST'])
-def save_question():
+@ta_bp.route('/save_question2', methods=['POST'])
+def save_question2():
 
     section_id = session.get('section_id')
     content_block_id = session.get('content_block_id')
-    etextbook_id = session.get('etextbook_id')
-    chapter_id = session.get('chap_id')
+    etextbook_id = session.get('textbook_id')
+    chapter_id = request.form.get('chapter_id')
     activity_id = session.get('activity_id')
+    print(f"Section ID: {section_id}")
+    print(f"Content Block ID: {content_block_id}")
+    print(f"eTextbook ID: {etextbook_id}")
+    print(f"Chapter ID: {chapter_id}")
     print("Inside save_question method:", etextbook_id)
     # Retrieve question and option details from the form
     question_id = request.form.get('question_id')
@@ -454,9 +469,9 @@ def save_question():
         if status:
             # Flash a success message and redirect to Add Activity page
             flash("Question added successfully!", "success")
-            return redirect(url_for('ta.add_activity'))
+            return redirect(url_for('ta.add_activity2'))
         else:
             flash("Error in adding the question", "error")
-            return redirect(url_for('ta.add_question'))
+            return redirect(url_for('ta.add_question2'))
 
 
