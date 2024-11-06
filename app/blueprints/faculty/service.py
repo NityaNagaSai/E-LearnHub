@@ -7,12 +7,12 @@ from mysql.connector import Error
 def check_course(course_id, type):
     conn = get_db_connection()
     cursor = conn.cursor()
-
+    print(course_id, type)
     try:
-        query = '''SELECT * FROM Course WHERE course_id = %s and course_type = %s'''
+        query = '''SELECT * FROM Course WHERE course_id = %s and course_type = %s;'''
         cursor.execute(query, (course_id, type),)
         course = cursor.fetchall()
-        print(course_id)
+        print("Inside course_id:",course_id)
         return course
     except Error as e:
         conn.rollback()

@@ -354,39 +354,39 @@ def save_activity():
         if content_type == 'activity':
             activity_data = fetch_activity(etextbook_id, chapter_id, section_id, content_block_id, activity_id)
             if activity_data:
-                return redirect(url_for('admin.add_question'))
+                return redirect(url_for('admin.add_question', call_type=call_type))
             else:
                 status = add_activity_to_db(etextbook_id, chapter_id, section_id, content_block_id, 
                                             activity_id, "no", admin_id)
                 if status:
-                    return redirect(url_for('admin.add_question'))
+                    return redirect(url_for('admin.add_question', call_type=call_type))
                 else:
                     flash("Error in saving the activity. Please try again.", "error")
-                    return redirect(url_for('admin.add_activity'))   
+                    return redirect(url_for('admin.add_activity', call_type=call_type))   
         else:
             delete_status = delete_content(etextbook_id, chapter_id, section_id, content_block_id)
             if delete_status:
                 status = add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, 'no', admin_id, 'activity', activity_id)
                 if status:
-                    return redirect(url_for('admin.add_question'))
+                    return redirect(url_for('admin.add_question', call_type=call_type))
                 else:
                     flash("Error in saving the activity. Please try again.", "error")
-                    return redirect(url_for('admin.add_activity'))   
+                    return redirect(url_for('admin.add_activity', call_type=call_type))   
             else:
                 flash("Error in saving the activity. Please try again.", "error")
-                return redirect(url_for('admin.add_new_content_block'))         
+                return redirect(url_for('admin.add_question', call_type=call_type))         
     else:
         if add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, 'no', admin_id, 'activity', activity_id):
             status = add_activity_to_db(etextbook_id, chapter_id, section_id, content_block_id, 
                                             activity_id, "no", admin_id)
             if status:
-                return redirect(url_for('admin.add_question'))
+                return redirect(url_for('admin.add_question', call_type=call_type))
             else:
                 flash("Error in saving the activity. Please try again.", "error")
-                return redirect(url_for('admin.add_activity'))
+                return redirect(url_for('admin.add_activity', call_type=call_type))
         else:
             flash("Error in saving the Block. Please try again.", "error")
-            return redirect(url_for('admin.add_activity'))
+            return redirect(url_for('admin.add_activity', call_type=call_type))
 
 
 @admin_bp.route('/save_modified_activity', methods=['POST'])
@@ -441,7 +441,9 @@ def save_modified_activity():
 @admin_bp.route('/add_question')
 def add_question():
     activity_id = session.get('activity_id') 
-    return render_template('add_question.html', activity_id=activity_id)
+    call_type = request.args.get('call_type')
+    print(call_type)
+    return render_template('add_question.html', activity_id=activity_id, call_type=call_type)
 
 @admin_bp.route('/save_question', methods=['POST'])
 def save_question():
@@ -456,6 +458,9 @@ def save_question():
     question_id = request.form.get('question_id')
     question_text = request.form.get('question_text')
     correct_answer = request.form.get('answer_key')
+
+    call_type = request.form.get('call_type')
+    print("inside save_question:",call_type)
     
     # Option 1
     option1_text = request.form.get('option1_text')
@@ -490,7 +495,7 @@ def save_question():
     questions_list = fetch_activity_questions(etextbook_id, chapter_id, section_id, content_block_id, activity_id, question_id)
     if questions_list:
         flash("Question with same ID exists. Please enter a unique ID", "error")
-        return redirect(url_for('admin.add_question'))
+        return redirect(url_for('admin.add_question', call_type=call_type))
     else:
         status = add_activity_question(question_id, activity_id, content_block_id, etextbook_id, section_id, chapter_id,
                                        question_text, correct_answer, option1_text, option2_text, option3_text, option4_text,
@@ -498,10 +503,10 @@ def save_question():
         if status:
             # Flash a success message and redirect to Add Activity page
             flash("Question added successfully!", "success")
-            return redirect(url_for('admin.add_activity'))
+            return redirect(url_for('admin.add_activity', call_type=call_type))
         else:
             flash("Error in adding the question", "error")
-            return redirect(url_for('admin.add_question'))
+            return redirect(url_for('admin.add_question', call_type=call_type))
 
 
 @admin_bp.route('/modify_question')
@@ -569,6 +574,7 @@ def modify_chapter():
         chapter_id = request.form.get('chapter_id')
         session['chap_id'] = chapter_id
         action = request.form.get('action')
+        print(etextbook_id, chapter_id)
         # Logic to modify the chapter in the specified E-textbook in the database
         chapter_list = fetch_chapters(etextbook_id, chapter_id)
         if chapter_list:
@@ -588,12 +594,13 @@ def modify_chapter():
 def modify_section():
     # if request.method == "GET":
     etextbook_id = session.get('etextbook_id')
-    chapter_id = session.get('chapter_id')
+    chapter_id = session.get('chap_id')
     if request.method == 'POST':
         print("Inside modify section method")
         section_number = request.form.get('section_number')
         session['section_id'] = section_number
         action = request.form.get("action")
+        print(etextbook_id, chapter_id, section_number)
         sections_list = fetch_sections(etextbook_id, chapter_id, section_number)
         if sections_list:
             if action == "add_new_content_block":

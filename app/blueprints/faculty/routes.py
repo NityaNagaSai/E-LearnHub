@@ -19,8 +19,9 @@ def go_to_active_course():
         course_id = request.form.get('course_id')
         option = request.form.get('option')
         session['course_id'] = course_id  # Save the selected course_id for later use
+        print('Inside go_to_active_method:', course_id)
         course_list = check_course(course_id, 'Active' )
-        
+        print(course_list)
         if len(course_list) == 0:
             print("Please enter a valid Course ID", "error")
             return redirect(url_for('faculty.go_to_active_course'))
@@ -40,7 +41,7 @@ def go_to_active_course():
             textbook_id = get_etextbook_id(course_id)
             if len(textbook_id) == 1:
                 session["textbook_id"] = textbook_id[1]
-            return redirect(url_for('faculty.add_chapter', course_id=course_id))
+            return redirect(url_for('faculty.add_chapter', course_id=course_id, type='active'))
         elif option == '5':
             return redirect(url_for('faculty.modify_chapters', course_id=course_id))
         elif option == '6':
@@ -56,18 +57,21 @@ def go_to_active_course():
 @faculty_bp.route('/evaluation_course', methods=["GET", "POST"])
 def go_to_evaluation_course():
     if request.method == 'POST':
+        print("Form Data:", request.form)
+
         course_id = request.form.get('course_id')
         option = request.form.get('option')
         session['course_id'] = course_id  # Save the selected course_id for later use
         course_list = check_course(course_id, 'Evaluation')
-        
+        print('Inside go_to_evaluation_method:', course_id, option)
+
         if len(course_list) == 0:
             print("Please enter a valid Course ID", "error")
             return redirect(url_for('faculty.go_to_evaluation_course'))
         if option == '1':
-            return redirect(url_for('faculty.add_chapter', course_id=course_id))
+            return redirect(url_for('faculty.add_chapter', course_id=course_id, type='evaluation'))
         elif option == '2':
-            return redirect(url_for('modify_chapters', course_id=course_id))
+            return redirect(url_for('faculty.modify_chapters', course_id=course_id))
         elif option == '3':
             return redirect(url_for('faculty.faculty_home'))
         else:
@@ -109,8 +113,10 @@ def approve_enrollment(course_id):
 def add_chapter(course_id):
     text_tuple = get_etextbook_id(course_id)
     etextbook_id, etextbook_title = text_tuple[0], text_tuple[1]
+    course_type = request.args.get('type')
+    print("Inside add_chapter:", course_type)
     session['etextbook_id'] = etextbook_id
-    return render_template('faculty_add_chapter.html', etextbook_title=etextbook_title, etextbook_id=etextbook_id, call_type="new")
+    return render_template('faculty_add_chapter.html', etextbook_title=etextbook_title, etextbook_id=etextbook_id, call_type="new", course_type = course_type)
 
 @faculty_bp.route('/save_chapter', methods=['POST'])
 def save_chapter():

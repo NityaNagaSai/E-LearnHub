@@ -105,6 +105,8 @@
         <p>For E-textbook ID: "{{ etextbook_id }}" - Title: {{ etextbook_title }}</p>
 
         <form method="POST" action="{{ url_for('faculty.save_chapter') }}">
+            <input type="hidden" name="course_type" value="{{ course_type }}">
+
             <label for="chapter_id">Unique Chapter ID:</label>
             <input type="text" id="chapter_id" name="chapter_id" required>
 
@@ -119,7 +121,13 @@
 
 
                 <!-- Link for Landing Page -->
-                <a href="{{ url_for('faculty.go_to_active_course') }}" class="landing-page">Go Back</a>
+                 {% if course_type == 'active' %}
+                    <a href="{{ url_for('faculty.go_to_active_course') }}" class="landing-page">Go Back</a>
+                {% elif course_type == 'evaluation' %}
+                    <a href="{{ url_for('faculty.go_to_evaluation_course') }}" class="go-back">Go Back</a>
+                {% endif %}
+
+
             </div>
         </form>
     </div>

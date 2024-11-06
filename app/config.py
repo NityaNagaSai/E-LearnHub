@@ -8,7 +8,7 @@ def get_db_connection():
             password = 'mysql1234',
             host = '127.0.0.1',
             port = '3306',
-            database = 'dbms',
+            database = 'elearnhub',
         )
 
         return conn
