@@ -83,7 +83,7 @@ def fetch_etextbooks(etextbook_id):
 def add_chapter_to_db(chap_id, textbook_id, is_hidden, created_by, chap_title):
     conn = get_db_connection()
     cursor = conn.cursor()
-
+    print(chap_id, textbook_id, chap_title)
     try:
         query = '''INSERT INTO Chapter(chapter_id, textbook_id, is_hidden, created_by, title) 
                    VALUES(%s, %s, %s, %s, %s)'''

@@ -77,17 +77,20 @@
 
     <div class="container">
         <h2>Enter Course ID</h2>
-        <form onsubmit="event.preventDefault(); showOptions();">
+        <!-- <form onsubmit="event.preventDefault(); showOptions();">
             <label for="course_id">Course ID:</label>
             <input type="text" id="course_id" name="course_id" required><br><br>
             <button type="submit">Submit Course ID</button>
         </form>
 
-        <div id="options">
+        <div id="options"> -->
             <h3>Select an Option</h3>
-            <form method="POST">
+            <form method="POST" action="{{ url_for('faculty.go_to_active_course') }}">
                 <!-- Hidden input to hold course_id value -->
                 <input type="hidden" name="course_id" id="hidden_course_id">
+                <label for="course_id">Course ID:</label>
+                <input type="text" id="course_id" name="course_id" required><br><br>
+    
                 <ul class="menu">
                     <li><button type="submit" name="option" value="1">1. View Worklist</button></li>
                     <li><button type="submit" name="option" value="2">2. Approve Enrollment</button></li>
@@ -95,10 +98,13 @@
                     <li><button type="submit" name="option" value="4">4. Add New Chapter</button></li>
                     <li><button type="submit" name="option" value="5">5. Modify Chapters</button></li>
                     <li><button type="submit" name="option" value="6">6. Add TA</button></li>
-                    <li><button type="submit" name="option" value="7">7. Go Back</button></li>
                 </ul>
             </form>
-        </div>
+            <div class="link-buttons">
+                <a href="{{ url_for('faculty.faculty_home') }}">7. Go Back</a>
+            </div>
+        
+        <!-- </div> -->
     </div>
 </body>
 
