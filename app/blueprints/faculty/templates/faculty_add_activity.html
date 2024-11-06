@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Text</title>
+    <title>Add Activity</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -48,7 +48,7 @@
             text-align: left;
         }
 
-        input {
+        input[type="text"] {
             padding: 8px;
             font-size: 16px;
             border: 1px solid #ddd;
@@ -99,35 +99,33 @@
 <body>
     <!-- Navigation bar -->
     <div class="navbar">
-        Admin Dashboard
+        Faculty Dashboard
     </div>
 
     <div class="container">
-        <h2>Add Text</h2>
+        <h2>Add Activity</h2>
         <p>For Content Block ID: "{{ content_block_id }}"</p>
 
 
-        <form method="POST" action="{{ url_for('admin.save_text') }}">
-            <input type="hidden" name="call_type" value="{{ call_type }}">
-            
-            <label for="text">Text:</label>
-            <input type="text" id="text" name="text" required>
+        <form method="POST" action="{{ url_for('faculty.faculty_save_activity') }}">
+            <label for="activity_id">Activity ID:</label>
+            <input type="text" id="activity_id" name="activity_id" required>
 
-            <!-- Buttons for Add, Go Back, and Landing Page -->
+            <!-- Buttons for Add Question, Go Back, and Landing Page -->
             <div class="buttons">
-                <button type="submit" name="action" value="add" class="add-button">Add</button>
+                <button type="submit" name="action" value="add_question" class="add-button">Add Question</button>
 
                 <!-- Link for Go Back styled as a button -->
-                {% if call_type == 'modify' %}
-                    <a href="{{ url_for('admin.modify_content_block') }}" class="go-back">Go Back</a>
-                {% elif call_type == 'new' %}
-                    <a href="{{ url_for('admin.add_new_content_block') }}" class="go-back">Go Back</a>
-                {% endif %}
+                <!-- {% if call_type == 'modify' %} -->
+                    <!-- <a href="{{ url_for('admin.modify_content_block') }}" class="go-back">Go Back</a> -->
+                <!-- {% elif call_type == 'new' %} -->
+                <a href="{{ url_for('faculty.faculty_add_new_content_block') }}" class="go-back">Go Back</a>
+                <!-- {% endif %} -->
 
                 <!-- <a href="{{ url_for('admin.add_new_content_block') }}" class="go-back">Go Back</a> -->
 
                 <!-- Link for Landing Page styled as a button -->
-                <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
+                <a href="{{ url_for('faculty.faculty_home') }}" class="landing-page">Landing Page</a>
             </div>
         </form>
     </div>

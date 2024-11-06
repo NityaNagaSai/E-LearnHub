@@ -108,6 +108,9 @@
 
 
         <form method="POST" action="{{ url_for('admin.save_activity') }}">
+
+            <input type="hidden" name="call_type" value="{{ call_type }}">
+
             <label for="activity_id">Activity ID:</label>
             <input type="text" id="activity_id" name="activity_id" required>
 

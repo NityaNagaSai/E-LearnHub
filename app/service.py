@@ -6,7 +6,7 @@ def validate_user(user_id, password, role):
     print("Inside validate user",conn)
     cursor = conn.cursor()
     try:
-        query = "SELECT * FROM User WHERE user_id = %s AND password = %s AND role = %s"
+        query = "SELECT * FROM User WHERE user_id = %s AND user_password = %s AND user_role = %s"
         cursor.execute(query, (user_id, password, role))
         user_data = cursor.fetchall()
         if user_data:

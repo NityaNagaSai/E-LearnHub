@@ -105,8 +105,10 @@
 
 
         <form method="POST" action="{{ url_for('admin.save_picture') }}" enctype="multipart/form-data">
+            <input type="hidden" name="call_type" value="{{ call_type }}">
+
             <label for="picture">Upload Picture:</label>
-            <input type="file" id="picture" name="picture" accept="image/*" required>
+            <input type="text" id="picture" name="picture" required>
 
             <!-- Buttons for Add, Go Back, and Landing Page -->
             <div class="buttons">

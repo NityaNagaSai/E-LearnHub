@@ -140,16 +140,20 @@ def save_chapter():
 def add_new_section():
     chapter_id = session.get('chap_id')
     chapter_title = session.get('chap_title')
-    return render_template('add_new_section.html', chapter_id=chapter_id, chapter_title=chapter_title, call_type="new")
+    print("Inside add new section faculty")
+    return render_template('faculty_add_section.html', chapter_id=chapter_id, chapter_title=chapter_title, call_type="new")
 
 @faculty_bp.route('/save_section', methods=['POST'])
-def save_section():
+def faculty_save_section():
+    print("inside save_section_faculty")
     section_id = request.form.get('section_number')
     section_title = request.form.get('section_title')
+
 
     etextbook_id = session.get('etextbook_id')
     chapter_id = session.get('chap_id')
     faculty_id = session.get('user_id')
+
 
     hide_section_id= "no"
     chapter_list = fetch_chapters(etextbook_id, chapter_id)
@@ -159,16 +163,258 @@ def save_section():
             session['section_id'] = section_id
             session['section_title'] = section_title
             # Flash message to confirm the chapter was saved
-            flash("Chapter saved successfully!", "success")
-            return redirect(url_for('faculty.add_new_content_block', section_number=section_id))  
+            # flash("Chapter saved successfully!", "success")
+            return redirect(url_for('faculty.faculty_add_new_content_block', section_number=section_id)) 
         else:
             flash("Chapter was not saved!", "fail")
             return redirect(url_for('faculty.faculty_home'))
     else:
         flash('Textbook with Id does not exist. Please enter a new one', 'error')
 
-    flash("Section saved successfully!", "success")
+
+    # flash("Section saved successfully!", "success")
     return redirect(url_for('faculty.faculty_home'))
+
+@faculty_bp.route('/add_new_content_block')
+def faculty_add_new_content_block():
+   section_number = session.get('section_number')
+   section_title = session.get('section_title')
+   return render_template('faculty_add_new_content_block.html',section_number=section_number, section_title=section_title, call_type="new")
+
+@faculty_bp.route('/save_content_block', methods=['POST'])
+def faculty_save_content_block():
+   content_block_id = request.form.get('content_block_id')
+   session['content_block_id'] = content_block_id  # Store content_block_id in session
+   action = request.form.get('action')
+   if action == 'add_text':
+       return redirect(url_for('faculty.faculty_add_text', call_type="new"))
+   elif action == 'add_picture':
+       return redirect(url_for('faculty.faculty_add_picture', call_type="new"))
+   elif action == 'add_activity':
+       return redirect(url_for('faculty.faculty_add_activity'))
+   else:
+       flash("Invalid action selected", "error")
+       return redirect(url_for('faculty.faculty_add_new_content_block'))
+
+
+@faculty_bp.route('/add_text')
+def faculty_add_text():
+   call_type = request.args.get('call_type')
+   content_block_id = session.get('content_block_id')
+   return render_template('faculty_add_text.html', content_block_id=content_block_id, call_type = call_type)
+
+
+@faculty_bp.route('/add_picture')
+def faculty_add_picture():
+   call_type = request.args.get('call_type')
+   content_block_id = session.get('content_block_id')
+   return render_template('faculty_add_picture.html', content_block_id=content_block_id, call_type = call_type)
+
+
+@faculty_bp.route('/add_activity')
+def faculty_add_activity():
+   call_type = request.args.get('call_type')
+   content_block_id = session.get('content_block_id')
+   return render_template('faculty_add_activity.html', content_block_id=content_block_id)
+
+
+@faculty_bp.route('/save_text', methods=['POST'])
+def faculty_save_text():
+   text = request.form.get('text')
+   # Save the text content block (you would save it in the database)
+   flash("Text added successfully!", "success")
+   section_id = session.get('section_id')
+   content_block_id = session.get('content_block_id')
+   etextbook_id = session.get('etextbook_id')
+   chapter_id = session.get('chap_id')
+   admin_id = session.get('user_id')
+   is_hidden= "no"
+   content_block_list = fetch_content_blocks(etextbook_id, chapter_id, section_id, content_block_id)
+   if content_block_list:
+       delete_status = delete_content(etextbook_id, chapter_id, section_id, content_block_id)
+       if delete_status:
+           status = add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, is_hidden, admin_id, 'text', text)
+           if status:
+               flash("Text saved successfully!", "success")
+               return redirect(url_for('faculty.faculty_add_new_content_block')) 
+           else:
+               flash("Text was not saved!", "fail")
+               return redirect(url_for('faculty.faculty_add_new_content_block'))
+       else:
+           flash("Text was not saved!", "fail")
+           return redirect(url_for('faculty.faculty_add_new_content_block'))
+   else:
+       status = add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, is_hidden, admin_id, 'text', text)
+       if status:
+           flash("Text saved successfully!", "success")
+           return redirect(url_for('faculty.faculty_add_new_content_block')) 
+       else:
+           flash("Text was not saved!", "fail")
+           return redirect(url_for('faculty.faculty_add_new_content_block'))
+
+
+@faculty_bp.route('/save_picture', methods=['POST'])
+def faculty_save_picture():
+   picture_url = request.form.get('picture')
+   #request.form.get('picture')
+   # Save the picture content block
+   # flash("Text added successfully!", "success")
+   section_id = session.get('section_id')
+   content_block_id = session.get('content_block_id')
+   etextbook_id = session.get('etextbook_id')
+   chapter_id = session.get('chap_id')
+   admin_id = session.get('user_id')
+   is_hidden= "no"
+   content_block_list = fetch_content_blocks(etextbook_id, chapter_id, section_id, content_block_id)
+   print("Inside save_picture method:", content_block_list)
+   if content_block_list:
+       delete_status = delete_content(etextbook_id, chapter_id, section_id, content_block_id)
+       print(delete_status)
+       if delete_status:
+           status = add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, is_hidden, admin_id, 'image', picture_url)
+           if status:
+               flash("Picture saved successfully!", "success")
+               return redirect(url_for('faculty.faculty_add_new_content_block')) 
+           else:
+               flash("Picture was not saved!", "fail")
+               return redirect(url_for('faculty.faculty_add_new_content_block'))
+       else:
+           flash("Picture was not saved!", "fail")
+           return redirect(url_for('faculty.faculty_add_new_content_block'))
+   else:
+       status = add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, is_hidden, admin_id, 'image', picture_url)
+       if status:
+           flash("Picture saved successfully!", "success")
+           return redirect(url_for('faculty.faculty_add_new_content_block')) 
+       else:
+           flash("Picture was not saved!", "fail")
+           return redirect(url_for('faculty.faculty_add_new_content_block'))
+
+
+@faculty_bp.route('/save_activity', methods=['POST'])
+def faculty_save_activity():
+   activity_id = request.form.get('activity_id')
+   session['activity_id'] = activity_id  # Store activity ID in session for adding questions
+   section_id = session.get('section_id')
+   content_block_id = session.get('content_block_id')
+   etextbook_id = session.get('etextbook_id')
+   chapter_id = session.get('chap_id')
+   admin_id = session.get('user_id')
+
+
+   print("inside save_activity method:",etextbook_id)
+   content_block_list = fetch_content_blocks(etextbook_id, chapter_id, section_id, content_block_id)
+   if content_block_list:
+       content_type = content_block_list[0][4]
+       if content_type == 'activity':
+           activity_data = fetch_activity(etextbook_id, chapter_id, section_id, content_block_id, activity_id)
+           if activity_data:
+               return redirect(url_for('faculty.faculty_add_question'))
+           else:
+               status = add_activity_to_db(etextbook_id, chapter_id, section_id, content_block_id,
+                                           activity_id, "no", admin_id)
+               if status:
+                   return redirect(url_for('faculty.faculty_add_question'))
+               else:
+                   flash("Error in saving the activity. Please try again.", "error")
+                   return redirect(url_for('faculty.faculty_add_activity'))  
+       else:
+           delete_status = delete_content(etextbook_id, chapter_id, section_id, content_block_id)
+           if delete_status:
+               status = add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, 'no', admin_id, 'activity', activity_id)
+               if status:
+                   return redirect(url_for('faculty.faculty_add_question'))
+               else:
+                   flash("Error in saving the activity. Please try again.", "error")
+                   return redirect(url_for('faculty.faculty_add_activity'))  
+           else:
+               flash("Error in saving the activity. Please try again.", "error")
+               return redirect(url_for('faculty.faculty_add_new_content_block'))        
+   else:
+       if add_content_to_db(content_block_id, section_id, chapter_id, etextbook_id, 'no', admin_id, 'activity', activity_id):
+           status = add_activity_to_db(etextbook_id, chapter_id, section_id, content_block_id,
+                                           activity_id, "no", admin_id)
+           if status:
+               return redirect(url_for('faculty.faculty_add_question'))
+           else:
+               flash("Error in saving the activity. Please try again.", "error")
+               return redirect(url_for('faculty.faculty_add_activity'))
+       else:
+           flash("Error in saving the Block. Please try again.", "error")
+           return redirect(url_for('faculty.faculty_add_activity'))
+
+
+@faculty_bp.route('/add_question')
+def faculty_add_question():
+   activity_id = session.get('activity_id')
+   return render_template('faculty_add_question.html', activity_id=activity_id)
+
+
+@faculty_bp.route('/save_question', methods=['POST'])
+def faculty_save_question():
+
+
+   section_id = session.get('section_id')
+   content_block_id = session.get('content_block_id')
+   etextbook_id = session.get('etextbook_id')
+   chapter_id = session.get('chap_id')
+   activity_id = session.get('activity_id')
+   print("Inside save_question method:", etextbook_id)
+   # Retrieve question and option details from the form
+   question_id = request.form.get('question_id')
+   question_text = request.form.get('question_text')
+   correct_answer = request.form.get('answer_key')
+  
+   # Option 1
+   option1_text = request.form.get('option1_text')
+   option1_explanation = request.form.get('option1_explanation')
+   # option1_label = request.form.get('option1_label')
+
+
+   # Option 2
+   option2_text = request.form.get('option2_text')
+   option2_explanation = request.form.get('option2_explanation')
+   # option2_label = request.form.get('option2_label')
+
+
+   # Option 3
+   option3_text = request.form.get('option3_text')
+   option3_explanation = request.form.get('option3_explanation')
+   # option3_label = request.form.get('option3_label')
+
+
+   # Option 4
+   option4_text = request.form.get('option4_text')
+   option4_explanation = request.form.get('option4_explanation')
+   # option4_label = request.form.get('option4_label')
+
+
+   # if option1_label == "Correct":
+   #     correct_answer = 1
+   # elif option2_label == "Correct":
+   #     correct_answer = 2
+   # elif option3_label == "Correct":
+   #     correct_answer = 3
+   # else:
+   #     correct_answer = 4
+
+
+   # Here you would save the question and options to the database
+   questions_list = fetch_activity_questions(etextbook_id, chapter_id, section_id, content_block_id, activity_id, question_id)
+   if questions_list:
+       flash("Question with same ID exists. Please enter a unique ID", "error")
+       return redirect(url_for('faculty.faculty_add_question'))
+   else:
+       status = add_activity_question(question_id, activity_id, content_block_id, etextbook_id, section_id, chapter_id,
+                                      question_text, correct_answer, option1_text, option2_text, option3_text, option4_text,
+                                      option1_explanation, option2_explanation, option3_explanation, option4_explanation)
+       if status:
+           # Flash a success message and redirect to Add Activity page
+           flash("Question added successfully!", "success")
+           return redirect(url_for('faculty.faculty_add_activity'))
+       else:
+           flash("Error in adding the question", "error")
+           return redirect(url_for('faculty.faculty_add_question'))
 
 @faculty_bp.route('/save_student', methods=['POST'])
 def save_student():
@@ -197,8 +443,9 @@ def change_password():
 # Route for 'Logout'
 @faculty_bp.route('/logout')
 def logout():
-    session.pop('user_role', None)  # Remove user session data
-    return redirect(url_for('login'))
+    print("Inside logout method")
+    session.clear()
+    return redirect(url_for('main.index'))
 
 # Dummy login route for testing
 @faculty_bp.route('/login', methods=['GET', 'POST'])

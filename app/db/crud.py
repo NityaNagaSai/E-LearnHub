@@ -23,7 +23,7 @@ def create_tables():
             if command:  # Check if the command is not empty
                 if command.upper().startswith("CREATE TABLE"):
                     # Extract the table name and print it
-                    table_name = command.split()[2].strip('`')
+                    table_name = command.split()[5].strip('`')
                     print(f"Creating table: {table_name}")
                 cursor.execute(command)
         conn.commit()  # Commit the transaction
@@ -46,7 +46,7 @@ def insert_users():
             
             cursor = conn.cursor()
             query = '''
-                INSERT INTO User (user_id, first_name, last_name, email, password, role)
+                INSERT INTO User (user_id, first_name, last_name, email, user_password, user_role)
                 VALUES (%s, %s, %s, %s, %s, %s)
             '''
             
