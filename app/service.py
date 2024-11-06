@@ -147,10 +147,10 @@ def retrieval_sql_query6():
         result = cursor.fetchone()
         if result:
             options = [
-                (result[0], result[1]),  # option1 and explanation_op1
-                (result[2], result[3]),  # option2 and explanation_op2
-                (result[4], result[5]),  # option3 and explanation_op3
-                (result[6], result[7])   # option4 and explanation_op4
+                (1, result[0], result[1]),  # option1 and explanation_op1
+                (2, result[2], result[3]),  # option2 and explanation_op2
+                (3, result[4], result[5]),  # option3 and explanation_op3
+                (4, result[6], result[7])   # option4 and explanation_op4
             ]
             correct_answer = result[8]
             return options, correct_answer

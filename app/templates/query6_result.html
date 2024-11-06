@@ -84,8 +84,8 @@
         <h2>Incorrect Answers and Explanations for Question Q2</h2>
         <div class="result-box">
             {% if options %}
-            {% for option, explanation in options %}
-            {% if option != correct_answer %}
+            {% for val, option, explanation in options %}
+            {% if val != correct_answer %}
             <p><span class="answer">{{ option }}:</span> {{ explanation }}</p>
             {% endif %}
             {% endfor %}

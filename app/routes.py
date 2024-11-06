@@ -88,7 +88,7 @@ def retrieval_queries():
         
         elif option == 6:
             data, op = retrieval_sql_query6()
-            return render_template('query6_result.html', options=data, correct_answer= int(op)-1)
+            return render_template('query6_result.html', options=data, correct_answer= int(op))
         
         elif option == 7:
             data = retrieval_sql_query7()
