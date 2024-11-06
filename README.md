@@ -16,14 +16,16 @@ This README provides instructions on how to set up and run a Flask application t
 - MySQL Server
 
 ## Setup
-
 1. Install the required Python packages:
-
    ```bash
    pip install Flask
    pip install mysql-connector-python
-
-2. cd path/to/E-LearnHub
-
-3. ```bash
+   
+2. Start the MySQL Server
+3. Navigate to the E-LearnHub project directory
+     ```bash
+     cd E-LearnHub
+     
+4. Run the application:
+   ```bash
    python run.py
