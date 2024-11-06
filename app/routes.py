@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, request, flash, Blueprint, session
-from app.service import validate_user
+from app.service import *
 
 main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
@@ -57,3 +57,27 @@ def login():
             return redirect(url_for(f'{role}.{role}_landing'))
         flash("Login Incorrect. Please try again.")
     return render_template('login.html', role=role)
+
+
+@main_bp.route('/retrieval_queries', methods=['GET', 'POST'])
+def retrieval_queries():
+    if request.method == 'GET':
+        return render_template('retrieval_queries.html')
+    if request.method == 'POST':
+        option = request.form.get('option')
+        if option == 1:
+            pass
+        if option == 2:
+            data = retrieval_sql_query2()
+
+        if option == 3:
+            pass
+        if option == 4:
+            pass
+        if option == 5:
+            pass
+        if option == 6:
+            pass
+        if option == 7:
+            pass
+

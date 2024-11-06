@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queries Page</title>
+    <style>
+        /* Styling for the navigation bar */
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Center the content on the page */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+            flex-direction: column;
+            margin-top: 60px; /* Adjust for the fixed navbar */
+        }
+
+        /* Styling for the menu list */
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        a {
+            text-decoration: none;
+            font-size: 18px;
+            color: #007bff;
+        }
+
+        a:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        E-Textbook and Assessment Platform
+    </div>
+
+    <!-- Centered content -->
+    <div class="container">
+        <h2>Please Select an Option</h2>
+        <form method="POST" action="{{ url_for('main.retrieval_queries') }}">
+            <ol class="menu">
+                <li><button type="submit" name="option" value="1">Write a query that prints the number of sections of the first chapter of a textbook.</button></li>
+                <li><button type="submit" name="option" value="2">Print the names of faculty and TAs of all courses. For each person print their role next to
+                    their names.</button></li>
+                <li><button type="submit" name="option" value="3">For each active course, print the course id, faculty member and total number of students</button></li>
+                <li><button type="submit" name="option" value="4">Find the course which the largest waiting list, print the course id and the total number of
+                    people on the list</button></li>
+                <li><button type="submit" name="option" value="5">Print the contents of Chapter 02 of textbook 101 in proper sequence</button></li>
+                <li><button type="submit" name="option" value="6">For Q2 of Activity0 in Sec02 of Chap01 in textbook 101, print the incorrect answers for
+                    that question and their corresponding explanations.</button></li>
+                <li><button type="submit" name="option" value="7">Find any book that is in active status by one instructor but evaluation status by a different
+                    instructor.</button></li>
+            </ol>
+        </form>
+       
+    </div>
+</body>
+</html>
