@@ -8,7 +8,7 @@ def ta_landing():
     return render_template('ta_landing.html')
 
 # Go To Active Course
-@ta_bp.route('/activecourse')
+@ta_bp.route('/activecourse')   
 def active_course():
     return render_template('active_courses.html')
 
@@ -88,6 +88,132 @@ def view_students(course_id):
     else:
         flash("Please enter the Course ID!")
         return render_template('view_students.html')
+    
+
+@ta_bp.route('/verify_course', methods=['POST'])
+def verify_course():
+    # Get the course_id from the form
+    course_id = request.form.get('course_id')
+
+    # Validate that the course exists and is active
+    course = check_active_course(course_id)
+
+    if course:
+        # Access elements in course tuple by index
+        session['course_id'] = course[0]  # course_id
+        session['textbook_id'] = course[2]  # textbook_id
+        return redirect(url_for('ta.add_chapter_form'))
+    else:
+        # Flash an error message and redirect back to the active courses page
+        flash("Course ID is invalid or the course is not active.")
+        return redirect(url_for('ta.active_course'))
+    
+
+@ta_bp.route('/add_chapter', methods=['GET', 'POST'])
+def add_chapter():
+    if request.method == 'POST':
+        course_id = request.form.get('course_id')
+        
+        # Validate course_id and check if course is active
+        course = check_active_course(course_id)
+        
+        if not course:
+            flash("Course ID is invalid or the course is not active.")
+            return redirect(url_for('ta.active_course'))  # Redirect back to active courses page if invalid
+
+        # Save course_id in session for future use (like in add_chapter.html)
+        session['course_id'] = course_id
+        session['textbook_id'] = course['textbook_id']  # Save textbook_id to use in chapter creation
+        
+        # Redirect to add_chapter.html with necessary course information
+        return redirect(url_for('ta.add_chapter_form'))
+
+    return redirect(url_for('ta.active_course'))
+
+@ta_bp.route('/add_chapter_form', methods=['GET', 'POST'])
+def add_chapter_form():
+    if request.method == 'POST':
+        action = request.form.get('action')
+
+        # If 'Go Back' button is clicked, redirect to active course menu
+        if action == 'go_back':
+            return redirect(url_for('ta.active_course_menu'))
+        
+        # Proceed with adding the chapter if 'Add Chapter' is clicked
+        chapter_id = request.form.get('chapter_id')
+        chapter_title = request.form.get('chapter_title')
+        is_hidden = "no"
+        created_by = session.get('user_id')
+        textbook_id = session.get('textbook_id')
+        course_id = session.get('course_id')  # Retrieve course_id from session
+        print(f"chapter_id: {chapter_id}")
+        print(f"chapter_title: {chapter_title}")
+        print(f"is_hidden: {is_hidden}")
+        print(f"created_by (user_id): {created_by}")
+        print(f"textbook_id: {textbook_id}")
+        print(f"course_id: {course_id}")
+
+        # Call the updated add_chapter function with correct arguments
+        success = add_chapter_to_db(chapter_id, textbook_id, is_hidden, created_by, chapter_title)
+        
+        message = "Chapter added successfully!" if success else "Failed to add chapter."
+        flash(message)
+
+        # Pass course_id and textbook_id as query parameters to add_section route
+        return redirect(url_for('ta.add_new_section', chapter_id=chapter_id, textbook_id=textbook_id))
+
+    return render_template('add_chapter.html')
+
+
+@ta_bp.route('/add_new_section')
+def add_new_section():
+    chapter_id = request.args.get('chapter_id')
+    textbook_id = request.args.get('textbook_id')  
+    print(f"chapter_id: {chapter_id}")
+    print(f"textbook_id: {textbook_id}")
+
+    return render_template('add_new_section.html', chapter_id=chapter_id, textbook_id=textbook_id)
+
+# Route to save the section details after form submission
+@ta_bp.route('/save_section', methods=['POST'])
+def save_section():
+    # Retrieve form data
+    section_id = request.form.get('section_number')
+    section_title = request.form.get('section_title')
+
+    # Retrieve necessary data from the session
+    chapter_id = request.form.get('chapter_id')
+    textbook_id = session.get('textbook_id')
+    
+    user_id = session.get('user_id')
+    is_hidden = "no"  # Default visibility setting
+    print(f"chapter_id: {chapter_id}")
+    print(f"textbook_id: {textbook_id}")
+
+    # Fetch chapters to validate the existence of the chapter
+    chapter_list = fetch_chapters(textbook_id, chapter_id)
+    if chapter_list:
+        # If the chapter exists, proceed to save the section
+        status = add_section_to_db(section_id, chapter_id, textbook_id, is_hidden, user_id, section_title)
+        if status:
+            # Save section details in session for future use
+            session['section_id'] = section_id
+            session['section_title'] = section_title
+
+            # Flash a success message and redirect to add a content block
+            flash("Section added successfully!", "success")
+            print(f"This block : 1")
+            return redirect(url_for('admin.add_new_content_block', section_number=section_id))
+        else:
+            flash("Failed to add section. Please try again.", "error")
+            print(f"This block : 2")
+            return redirect(url_for('admin.add_new_section'))
+    else:
+        flash("The specified chapter does not exist. Please enter a valid chapter ID.", "error")
+        print(f"This block : 3")
+        return redirect(url_for('admin.add_new_section'))
+
+
 
 
 # Add New Chapter

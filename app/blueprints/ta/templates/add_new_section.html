@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Section</title>
+    <style>
+        /* Styling for the navigation bar */
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Center the content on the page */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+            flex-direction: column;
+            margin-top: 60px; /* Adjust for the fixed navbar */
+        }
+
+        /* Styling for the form */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            width: 300px;
+        }
+
+        label, input {
+            width: 100%;
+            margin: 5px 0;
+            font-size: 16px;
+        }
+
+        /* Styling for buttons */
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .add-content {
+            background-color: black;
+            color: white;
+            border: none;
+        }
+
+        .add-content:hover {
+            background-color: #333333;
+        }
+
+        .go-back, .landing-page {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            text-decoration: none;
+            padding: 10px;
+            font-size: 16px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .go-back:hover, .landing-page:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        E-Textbook and Assessment Platform
+    </div>
+
+    <div class="container">
+        <h2>Add New Section</h2>
+
+        <form method="POST" action="{{ url_for('ta.save_section') }}">
+            <input type="hidden" name="chapter_id" value="{{ chapter_id }}">
+            <input type="hidden" name="textbook_id" value="{{ textbook_id }}">
+            <label for="section_number">Section Number:</label>
+            <input type="text" id="section_number" name="section_number" required>
+
+            <label for="section_title">Section Title:</label>
+            <input type="text" id="section_title" name="section_title" required>
+
+            <!-- Buttons for Add New Content Block, Go Back, and Landing Page -->
+            <div class="buttons">
+                <!-- Submit button for adding the section and moving to the Add New Content Block page -->
+                <button type="submit" name="action" value="add_content_block" class="add-content">Add New Content Block</button>
+                    <a href="{{ url_for('ta.add_chapter') }}" class="go-back">Go Back</a>
+
+            </div>
+        </form>
+    </div>
+</body>
+</html>

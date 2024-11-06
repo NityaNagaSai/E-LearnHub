@@ -1,5 +1,4 @@
 from app.config import get_db_connection
-# from app.db_connect import get_db_connection
 from app.models import User
 
 def validate_user(user_id, password, role):

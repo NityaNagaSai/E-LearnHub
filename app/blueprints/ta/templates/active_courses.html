@@ -59,7 +59,7 @@
     <!-- Centered content -->
     <div class="container">
         <h2>Please Select an Option</h2>
-        <form id="active_course_menu" action="{{ url_for('ta.active_course_menu') }}" method="POST">
+        <form id="active_course_menu" action="{{ url_for('ta.verify_course') }}" method="POST">
             <label for="course_id">Enter Course ID:</label>
             <input type="text" id="course_id" name="course_id" required><br><br>
     
@@ -76,6 +76,13 @@
         <script>
             // Function to set the action and submit the form
             function submitForm(action) {
+                const courseId = document.getElementById('course_id').value;
+                
+                if (action !== 'go_back' && !courseId) {
+                    alert("Please enter the Course ID to proceed.");
+                    return;
+                }
+                
                 document.getElementById('action').value = action;
                 document.getElementById('active_course_menu').submit();
             }

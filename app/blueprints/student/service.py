@@ -1,5 +1,4 @@
-from app.db_connect import get_db_connection
-from datetime import datetime, timedelta
+from app.config import get_db_connection
 from app.models import User
 # Student Enrollment
 def enroll_student(first_name, last_name, email, password, course_id):
