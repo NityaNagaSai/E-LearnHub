@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Change Password</title>
+    <title>Modify Chapter</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -35,12 +35,13 @@
         form {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             width: 300px;
             padding: 20px;
             background-color: #f9f9f9;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
         }
 
         label,
@@ -59,72 +60,66 @@
             box-sizing: border-box;
         }
 
-        /* Styling for buttons */
+        /* Styling for links */
         .buttons {
             display: flex;
+            flex-direction: column;
             gap: 10px;
-            margin-top: 15px;
-            width: 100%;
+            width: 300px;
+            /* Matches the width of the form */
         }
 
-        .update-password,
-        .go-back {
+        .button-link {
+            background-color: black;
+            color: white;
             padding: 10px;
             font-size: 16px;
-            cursor: pointer;
-            width: 100%;
             border-radius: 4px;
             text-align: center;
-            color: white;
             text-decoration: none;
-            display: inline-block;
-            box-sizing: border-box;
-            border: none;
+            display: block;
+            width: 100%;
         }
 
-        .update-password {
-            background-color: black;
-        }
-
-        .update-password:hover {
+        .button-link:hover {
             background-color: #333333;
         }
 
-        .go-back {
+        .go-back,
+        .landing-page {
             background-color: #6c757d;
         }
 
-        .go-back:hover {
+        .go-back:hover,
+        .landing-page:hover {
             background-color: #5a6268;
         }
     </style>
 </head>
 
 <body>
+
     <!-- Navigation bar -->
-    <div class="navbar">E-Textbook and Assessment Platform - Change Password</div>
+    <div class="navbar">
+        Faculty Dashboard
+    </div>
 
-    <!-- Centered content -->
     <div class="container">
-        <h2>Enter the following details</h2>
-
-        <form id="change_password" action="{{ url_for('faculty.update_password_faculty') }}" method="POST">
-            <label for="curr_password">Enter Current Password:</label>
-            <input type="password" id="curr_password" name="curr_password" required><br>
-
-            <label for="new_password">Enter New Password:</label>
-            <input type="password" id="new_password" name="new_password" required><br>
-
-            <label for="confirm_new_password">Confirm New Password:</label>
-            <input type="password" id="confirm_new_password" name="confirm_new_password" required><br>
-
-            <!-- Buttons for Update and Go Back -->
+        <h2>Modify Chapter</h2>
+        <form method="POST" action="{{ url_for('faculty.modify_chapter_faculty') }}">
+            <label for="chapter_id">Unique Chapter ID:</label>
+            <input type="text" id="chapter_id" name="chapter_id" required>
             <div class="buttons">
-                <button type="submit" name="action" value="update" class="update-password">Update</button>
-                <a href="{{ url_for('faculty.faculty_home') }}" class="go-back">Go Back</a>
+                <button type="submit" name="action" value="hide_chapter" class="button-link">Hide Chapter</button>
+                <button type="submit" name="action" value="delete" class="button-link">Delete Chapter</button>
+                <button type="submit" name="action" value="add_new_section" class="button-link">Add New Section</button>
+                <button type="submit" name="action" value="modify_section" class="button-link">Modify Section</button>
+                <a href="{{ url_for('faculty.go_to_active_course') }}" class="button-link go-back">Go Back</a>
+                <a href="{{ url_for('faculty.faculty_home') }}" class="button-link landing-page">Landing Page</a>
             </div>
         </form>
     </div>
+
 </body>
 
 </html>

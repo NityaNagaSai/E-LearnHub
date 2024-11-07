@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Modify Question</title>
+    <title>Add Question</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -122,98 +122,95 @@
 
 <!-- Navigation bar -->
 <div class="navbar">
-    Admin Dashboard
+    Faculty Dashboard
 </div>
 
 <div class="container">
-    <h2>Modify Question</h2>
+    <h2>Add Question</h2>
     <p>For Activity ID: "{{ activity_id }}"</p>
 
-    {% with messages = get_flashed_messages(with_categories=true) %} {% if
-        messages %} {% for category, message in messages %}
-        <div class="alert alert-{{ category }}">{{ message }}</div>
-        {% endfor %} {% endif %} {% endwith %}
-
-    <form method="POST" action="{{ url_for('admin.save_modified_question') }}">
+    <form method="POST" action="{{ url_for('faculty.faculty_save_question') }}">
         <!-- Question ID and Text -->
         <label for="question_id">Question ID:</label>
-        <input type="text" id="question_id" name="question_id" value="{{ question_id }}" required>
+        <input type="text" id="question_id" name="question_id" required>
 
         <label for="question_text">Question Text:</label>
-        <textarea id="question_text" name="question_text" rows="3" required>{{ question_text }}</textarea>
+        <textarea id="question_text" name="question_text" rows="3" required></textarea>
 
         <!-- Option 1 -->
         <div class="option-group">
             <h3>Option 1</h3>
             <label for="option1_text">Text:</label>
-            <input type="text" id="option1_text" name="option1_text" value="{{ option1_text }}" required>
+            <input type="text" id="option1_text" name="option1_text" required>
 
             <label for="option1_explanation">Explanation:</label>
-            <textarea id="option1_explanation" name="option1_explanation" rows="2">{{ option1_explanation }}</textarea>
+            <textarea id="option1_explanation" name="option1_explanation" rows="2"></textarea>
 
-            <label for="option1_label">Label:</label>
+            <!-- <label for="option1_label">Label:</label>
             <select id="option1_label" name="option1_label">
-                <option value="Correct" {% if option1_label == 'Correct' %}selected{% endif %}>Correct</option>
-                <option value="Incorrect" {% if option1_label == 'Incorrect' %}selected{% endif %}>Incorrect</option>
-            </select>
+                <option value="Correct">Correct</option>
+                <option value="Incorrect">Incorrect</option>
+            </select> -->
         </div>
 
         <!-- Option 2 -->
         <div class="option-group">
             <h3>Option 2</h3>
             <label for="option2_text">Text:</label>
-            <input type="text" id="option2_text" name="option2_text" value="{{ option2_text }}" required>
+            <input type="text" id="option2_text" name="option2_text" required>
 
             <label for="option2_explanation">Explanation:</label>
-            <textarea id="option2_explanation" name="option2_explanation" rows="2">{{ option2_explanation }}</textarea>
+            <textarea id="option2_explanation" name="option2_explanation" rows="2"></textarea>
 
-            <label for="option2_label">Label:</label>
+            <!-- <label for="option2_label">Label:</label>
             <select id="option2_label" name="option2_label">
-                <option value="Correct" {% if option2_label == 'Correct' %}selected{% endif %}>Correct</option>
-                <option value="Incorrect" {% if option2_label == 'Incorrect' %}selected{% endif %}>Incorrect</option>
-            </select>
+                <option value="Correct">Correct</option>
+                <option value="Incorrect">Incorrect</option>
+            </select> -->
         </div>
 
         <!-- Option 3 -->
         <div class="option-group">
             <h3>Option 3</h3>
             <label for="option3_text">Text:</label>
-            <input type="text" id="option3_text" name="option3_text" value="{{ option3_text }}">
+            <input type="text" id="option3_text" name="option3_text">
 
             <label for="option3_explanation">Explanation:</label>
-            <textarea id="option3_explanation" name="option3_explanation" rows="2">{{ option3_explanation }}</textarea>
+            <textarea id="option3_explanation" name="option3_explanation" rows="2"></textarea>
 
-            <label for="option3_label">Label:</label>
+            <!-- <label for="option3_label">Label:</label>
             <select id="option3_label" name="option3_label">
-                <option value="Correct" {% if option3_label == 'Correct' %}selected{% endif %}>Correct</option>
-                <option value="Incorrect" {% if option3_label == 'Incorrect' %}selected{% endif %}>Incorrect</option>
-            </select>
+                <option value="Correct">Correct</option>
+                <option value="Incorrect">Incorrect</option>
+            </select> -->
         </div>
 
         <!-- Option 4 -->
         <div class="option-group">
             <h3>Option 4</h3>
             <label for="option4_text">Text:</label>
-            <input type="text" id="option4_text" name="option4_text" value="{{ option4_text }}">
+            <input type="text" id="option4_text" name="option4_text">
 
             <label for="option4_explanation">Explanation:</label>
-            <textarea id="option4_explanation" name="option4_explanation" rows="2">{{ option4_explanation }}</textarea>
+            <textarea id="option4_explanation" name="option4_explanation" rows="2"></textarea>
 
-            <label for="option4_label">Label:</label>
+            <!-- <label for="option4_label">Label:</label>
             <select id="option4_label" name="option4_label">
-                <option value="Correct" {% if option4_label == 'Correct' %}selected{% endif %}>Correct</option>
-                <option value="Incorrect" {% if option4_label == 'Incorrect' %}selected{% endif %}>Incorrect</option>
-            </select>
+                <option value="Correct">Correct</option>
+                <option value="Incorrect">Incorrect</option>
+            </select> -->
         </div>
+        <label for="answer_key">Answer:</label>
+        <input type="number" id="answer_key" name="answer_key" required>
 
         <!-- Submit Button -->
-        <button type="submit">Save Modifications</button>
+        <button type="submit">Save Question</button>
     </form>
 
     <!-- Navigation Links -->
     <div class="link-buttons">
-        <a href="{{ url_for('admin.modify_activity') }}">Go Back</a>
-        <a href="{{ url_for('admin.admin_landing') }}">Landing Page</a>
+        <a href="{{ url_for('faculty.faculty_add_activity') }}">Go Back</a>
+        <a href="{{ url_for('faculty.faculty_home') }}">Landing Page</a>
     </div>
 </div>
 

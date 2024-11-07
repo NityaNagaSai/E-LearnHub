@@ -110,6 +110,7 @@
         <form method="POST" action="{{ url_for('ta.save_text2') }}">
             <label for="text">Text:</label>
             <input type="text" id="text" name="text" required>
+            <input type="hidden" name="chapter_id" value="{{ chapter_id }}">
 
             <!-- Buttons for Add, Go Back, and Landing Page -->
             <div class="buttons">

@@ -1,5 +1,5 @@
 from flask import render_template, redirect, url_for, request, flash, Blueprint, session
-from app.service import validate_user
+from app.service import *
 
 main_bp = Blueprint('main', __name__)
 @main_bp.route('/')
@@ -57,3 +57,44 @@ def login():
             return redirect(url_for(f'{role}.{role}_landing'))
         flash("Login Incorrect. Please try again.")
     return render_template('login.html', role=role)
+
+@main_bp.route('/retrieval_queries', methods=['GET', 'POST'])
+def retrieval_queries():
+    if request.method == 'GET':
+        return render_template('retrieval_queries.html')
+    
+    if request.method == 'POST':
+        option = int(request.form.get('option'))
+        
+        if option == 1:
+            section_count = retrieval_sql_query1(101)[0][0]
+            return render_template('query1_result.html', section_count=section_count, textbook_id=101)
+        
+        elif option == 2:
+            data = retrieval_sql_query2()
+            return render_template('query2_result.html', data=data)
+        
+        elif option == 3:
+            data = retrieval_sql_query3()
+            return render_template('query3_result.html', data=data)
+        
+        elif option == 4:
+            data = retrieval_sql_query4()
+            return render_template('query4_result.html', data=data)
+        
+        elif option == 5:
+            data = retrieval_sql_query5()
+            return render_template('query5_result.html', data=data)
+        
+        elif option == 6:
+            data, op = retrieval_sql_query6()
+            return render_template('query6_result.html', options=data, correct_answer= int(op))
+        
+        elif option == 7:
+            data = retrieval_sql_query7()
+            return render_template('query7_result.html', data=data)
+        
+        else:
+            flash("Invalid option selected.", "error")
+            return redirect(url_for('main.retrieval_queries'))
+

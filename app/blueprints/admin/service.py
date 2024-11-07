@@ -13,7 +13,7 @@ def create_new_faculty_account(first_name, last_name, email, password):
     cursor = conn.cursor()
 
     try:
-        query = '''INSERT INTO User(user_id, first_name, last_name, email, password, role) 
+        query = '''INSERT INTO User(user_id, first_name, last_name, email, user_password, user_role) 
                    VALUES(%s, %s, %s, %s, %s, %s)'''
         cursor.execute(query, (user_id, first_name, last_name, email, password, 'Faculty'))
         conn.commit()
@@ -83,7 +83,7 @@ def fetch_etextbooks(etextbook_id):
 def add_chapter_to_db(chap_id, textbook_id, is_hidden, created_by, chap_title):
     conn = get_db_connection()
     cursor = conn.cursor()
-
+    print(chap_id, textbook_id, chap_title)
     try:
         query = '''INSERT INTO Chapter(chapter_id, textbook_id, is_hidden, created_by, title) 
                    VALUES(%s, %s, %s, %s, %s)'''
@@ -106,7 +106,7 @@ def fetch_chapters(etextbook_id, chapter_id):
         query = "SELECT * FROM Chapter WHERE textbook_id = %s and chapter_id = %s"
         cursor.execute(query, (etextbook_id, chapter_id,))
         chap_data = cursor.fetchall()
-        print(etextbook_id+ " " + chapter_id)
+        # print(etextbook_id+ " " + chapter_id)
         return chap_data
     except Error as e:
         print(f"Error: {e}")
@@ -159,6 +159,7 @@ def add_content_to_db(cb_id, section_id, chap_id, textbook_id, is_hidden, create
                    VALUES(%s, %s, %s, %s, %s, %s, %s, %s)'''
         cursor.execute(query, (cb_id, textbook_id, section_id, chap_id, content_type, content, is_hidden, created_by))
         conn.commit()
+        print("Inside add_content_to_db method")
         return True
     except Error as e:
         conn.rollback()
@@ -304,11 +305,14 @@ def fetch_activity_questions(textbook_id, chapter_id, section_id, content_block_
 def delete_content(etextbook_id, chapter_id, section_id, content_block_id):
     conn = get_db_connection()
     cursor = conn.cursor()
-
+    print("Inside delete_content method")
     try:
         query = "DELETE FROM ContentBlock WHERE textbook_id = %s AND chapter_id = %s AND section_id = %s AND content_block_id = %s;"
         cursor.execute(query, (etextbook_id, chapter_id, section_id, content_block_id))
-        # print(etextbook_id+ " " + chapter_id)
+        conn.commit()
+        # query1 = "SELECT * FROM ContentBlock WHERE textbook_id = %s AND chapter_id = %s AND section_id = %s AND content_block_id = %s;"
+        # cursor.execute(query1, (etextbook_id, chapter_id, section_id, content_block_id))
+        # print(cursor.fetchall())
         return True
     except Error as e:
         print(f"Error: {e}")

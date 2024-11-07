@@ -15,6 +15,11 @@ def get_db_connection():
             port = '63987',
             database = 'mgaddam',
             allow_local_infile=True
+            user='root',               # Remote MySQL username
+            password='Stupid!3198',         # Remote MySQL password
+            host='127.0.0.1',             # Accessing via SSH tunnel on localhost
+            port=3306,                    # The port you forwarded in PuTTY
+            database='elearnhub'            # Database name on the remote server
         )
 
         return conn

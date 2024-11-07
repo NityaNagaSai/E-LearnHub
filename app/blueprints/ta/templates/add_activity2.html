@@ -108,6 +108,7 @@
         <form method="POST" action="{{ url_for('ta.save_activity2') }}">
             <label for="activity_id">Activity ID:</label>
             <input type="text" id="activity_id" name="activity_id" required>
+            <input type="hidden" name="chapter_id" value="{{ chapter_id }}">
 
             <!-- Buttons for Add Question, Go Back, and Landing Page -->
             <div class="buttons">

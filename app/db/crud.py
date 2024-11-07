@@ -46,7 +46,7 @@ def insert_users():
             
             cursor = conn.cursor()
             query = '''
-                INSERT INTO User (user_id, first_name, last_name, email, password, role)
+                INSERT INTO User (user_id, first_name, last_name, email, user_password, user_role)
                 VALUES (%s, %s, %s, %s, %s, %s)
             '''
             

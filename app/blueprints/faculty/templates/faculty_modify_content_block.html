@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Change Password</title>
+    <title>Modify Content Block</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -35,12 +35,13 @@
         form {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             width: 300px;
             padding: 20px;
             background-color: #f9f9f9;
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
         }
 
         label,
@@ -59,72 +60,73 @@
             box-sizing: border-box;
         }
 
-        /* Styling for buttons */
+        /* Styling for links as buttons */
         .buttons {
             display: flex;
+            flex-direction: column;
             gap: 10px;
-            margin-top: 15px;
-            width: 100%;
+            width: 300px;
+            /* Matches the width of the form */
         }
 
-        .update-password,
-        .go-back {
+        .button-link {
+            background-color: black;
+            color: white;
             padding: 10px;
             font-size: 16px;
-            cursor: pointer;
-            width: 100%;
             border-radius: 4px;
             text-align: center;
-            color: white;
             text-decoration: none;
-            display: inline-block;
-            box-sizing: border-box;
-            border: none;
+            display: block;
+            width: 100%;
         }
 
-        .update-password {
-            background-color: black;
-        }
-
-        .update-password:hover {
+        .button-link:hover {
             background-color: #333333;
         }
 
-        .go-back {
+        .go-back,
+        .landing-page {
             background-color: #6c757d;
         }
 
-        .go-back:hover {
+        .go-back:hover,
+        .landing-page:hover {
             background-color: #5a6268;
         }
     </style>
 </head>
 
 <body>
+
     <!-- Navigation bar -->
-    <div class="navbar">E-Textbook and Assessment Platform - Change Password</div>
-
-    <!-- Centered content -->
-    <div class="container">
-        <h2>Enter the following details</h2>
-
-        <form id="change_password" action="{{ url_for('faculty.update_password_faculty') }}" method="POST">
-            <label for="curr_password">Enter Current Password:</label>
-            <input type="password" id="curr_password" name="curr_password" required><br>
-
-            <label for="new_password">Enter New Password:</label>
-            <input type="password" id="new_password" name="new_password" required><br>
-
-            <label for="confirm_new_password">Confirm New Password:</label>
-            <input type="password" id="confirm_new_password" name="confirm_new_password" required><br>
-
-            <!-- Buttons for Update and Go Back -->
-            <div class="buttons">
-                <button type="submit" name="action" value="update" class="update-password">Update</button>
-                <a href="{{ url_for('faculty.faculty_home') }}" class="go-back">Go Back</a>
-            </div>
-        </form>
+    <div class="navbar">
+        Faculty Dashboard
     </div>
+
+    <div class="container">
+        <h2>Modify Content Block</h2>
+        <form method="POST" action="{{ url_for('faculty.modify_content_block_faculty') }}">
+            <label for="content_block_id">Content Block ID:</label>
+            <input type="text" id="content_block_id" name="content_block_id" required>
+
+            <div class="buttons">
+                <button type="submit" name="action" value="hide" class="button-link">Hide Content</button>
+                <button type="submit" name="action" value="delete" class="button-link">Delete Content</button>
+                <button type="submit" name="action" value="modify_text" class="button-link">Add Text</button>
+                <button type="submit" name="action" value="modify_picture" class="button-link">Add Picture</button>
+                <button type="submit" name="action" value="modify_activity" class="button-link">Add New
+                    Activity</button>
+                <button type="submit" name="action" value="hide_activity" class="button-link">Hide Activity</button>
+                <button type="submit" name="action" value="delete_activity" class="button-link">Delete Activity</button>
+                <a href="{{ url_for('faculty.modify_section_faculty') }}" class="button-link go-back">Go Back</a>
+                <a href="{{ url_for('faculty.faculty_home') }}" class="button-link landing-page">Landing Page</a>
+            </div>
+
+        </form>
+
+    </div>
+
 </body>
 
 </html>

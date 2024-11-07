@@ -132,6 +132,7 @@
         <!-- Question ID and Text -->
         <label for="question_id">Question ID:</label>
         <input type="text" id="question_id" name="question_id" required>
+        <input type="hidden" name="chapter_id" value="{{ chapter_id }}">
 
         <label for="question_text">Question Text:</label>
         <textarea id="question_text" name="question_text" rows="3" required></textarea>
@@ -208,7 +209,7 @@
 
     <!-- Navigation Links -->
     <div class="link-buttons">
-        <a href="{{ url_for('ta.add_activity') }}">Go Back</a>
+        <a href="{{ url_for('ta.add_activity2') }}">Go Back</a>
     </div>
 </div>
 

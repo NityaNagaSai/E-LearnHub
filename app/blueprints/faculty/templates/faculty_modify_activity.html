@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Chapter</title>
+    <title>Add Activity</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -33,7 +33,7 @@
         form {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             width: 300px;
             padding: 20px;
             background-color: #f9f9f9;
@@ -45,11 +45,21 @@
             width: 100%;
             margin: 5px 0;
             font-size: 16px;
+            text-align: left;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
         }
 
         /* Styling for buttons */
         .buttons {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-top: 15px;
             width: 100%;
@@ -65,14 +75,15 @@
             color: white;
             text-decoration: none;
             display: inline-block;
+            box-sizing: border-box;
         }
 
-        .add-section {
+        .modify-button {
             background-color: black;
             border: none;
         }
 
-        .add-section:hover {
+        .modify-button:hover {
             background-color: #333333;
         }
 
@@ -91,38 +102,21 @@
         Admin Dashboard
     </div>
 
-    <!-- Centered content -->
     <div class="container">
-        <h2>Add New Chapter</h2>
+        <h2>Add Activity</h2>
 
-        {% with messages = get_flashed_messages(with_categories=true) %} {% if
-            messages %} {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %} {% endif %} {% endwith %}
-            
-            
-        <p>For E-textbook ID: "{{ etextbook_id }}" - Title: {{ etextbook_title }}</p>
+        <form method="POST" action="{{ url_for('admin.save_modified_activity') }}">
+            <label for="activity_id">Activity ID:</label>
+            <input type="text" id="activity_id" name="activity_id" value="{{ existing_activity_id }}" required>
 
-        <form method="POST" action="{{ url_for('admin.save_chapter') }}">
-            <label for="chapter_id">Unique Chapter ID:</label>
-            <input type="text" id="chapter_id" name="chapter_id" required>
-
-            <label for="chapter_title">Chapter Title:</label>
-            <input type="text" id="chapter_title" name="chapter_title" required>
-
-            <!-- Buttons for Add New Section, Go Back, and Landing Page -->
+            <!-- Buttons for Modify, Go Back, and Landing Page -->
             <div class="buttons">
-                <!-- Submit button for adding the section and moving to the next page -->
-                <button type="submit" name="action" value="add_section" class="add-section">Add New Section</button>
+                <button type="submit" name="action" value="modify" class="modify-button">Modify Activity</button>
 
-                <!-- Link for Go Back -->
-                {% if call_type == 'modify' %}
-                    <a href="{{ url_for('admin.modify_etextbook') }}" class="go-back">Go Back</a>
-                {% elif call_type == 'new' %}
-                    <a href="{{ url_for('admin.create_etextbook') }}" class="go-back">Go Back</a>
-                {% endif %}
-    
-                <!-- Link for Landing Page -->
+                <!-- Link for Go Back styled as a button -->
+                <a href="{{ url_for('admin.modify_content_block') }}" class="go-back">Go Back</a>
+
+                <!-- Link for Landing Page styled as a button -->
                 <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
             </div>
         </form>

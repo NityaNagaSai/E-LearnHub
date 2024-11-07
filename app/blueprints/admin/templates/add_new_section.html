@@ -90,6 +90,14 @@
 
     <div class="container">
         <h2>Add New Section</h2>
+
+        
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+            
+            
         <p>For Chapter ID: {{ chapter_id }} - Title: {{ chapter_title }}</p>
 
         <form method="POST" action="{{ url_for('admin.save_section') }}">

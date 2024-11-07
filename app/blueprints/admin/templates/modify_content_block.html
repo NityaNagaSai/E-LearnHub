@@ -99,13 +99,19 @@
 
     <div class="container">
         <h2>Modify Content Block</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+            
         <form method="POST" action="{{ url_for('admin.modify_content_block') }}">
             <label for="content_block_id">Content Block ID:</label>
             <input type="text" id="content_block_id" name="content_block_id" required>
 
             <div class="buttons">
-                <button type="submit"  name="action" value="add_text" class="button-link">Add Text</button>
-                <button type="submit"  name="action" value="add_picture" class="button-link">Add Picture</button>
+                <button type="submit"  name="action" value="modify_text" class="button-link">Add Text</button>
+                <button type="submit"  name="action" value="modify_picture" class="button-link">Add Picture</button>
                 <button type="submit"  name="action" value="modify_activity" class="button-link">Add New Activity</button>
                 <a href="{{ url_for('admin.modify_section') }}" class="button-link go-back">Go Back</a>
                 <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>

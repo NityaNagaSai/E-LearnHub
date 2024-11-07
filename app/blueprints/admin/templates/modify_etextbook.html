@@ -99,6 +99,12 @@
 
     <div class="container">
         <h2>Modify E-textbook</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+            
         <form method="POST" action="{{ url_for('admin.modify_etextbook') }}">
             <label for="etextbook_id">Unique E-textbook ID:</label>
             <input type="text" id="etextbook_id" name="etextbook_id" required>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add New Chapter</title>
+    <title>Add Picture</title>
     <style>
         /* Styling for the navigation bar */
         .navbar {
@@ -33,7 +33,7 @@
         form {
             display: flex;
             flex-direction: column;
-            align-items: flex-start;
+            align-items: center;
             width: 300px;
             padding: 20px;
             background-color: #f9f9f9;
@@ -45,11 +45,18 @@
             width: 100%;
             margin: 5px 0;
             font-size: 16px;
+            text-align: left;
+        }
+
+        input[type="file"] {
+            padding: 5px;
+            font-size: 16px;
         }
 
         /* Styling for buttons */
         .buttons {
             display: flex;
+            flex-direction: column;
             gap: 10px;
             margin-top: 15px;
             width: 100%;
@@ -65,14 +72,15 @@
             color: white;
             text-decoration: none;
             display: inline-block;
+            box-sizing: border-box;
         }
 
-        .add-section {
+        .add-button {
             background-color: black;
             border: none;
         }
 
-        .add-section:hover {
+        .add-button:hover {
             background-color: #333333;
         }
 
@@ -88,42 +96,33 @@
 <body>
     <!-- Navigation bar -->
     <div class="navbar">
-        Admin Dashboard
+        Faculty Dashboard
     </div>
 
-    <!-- Centered content -->
     <div class="container">
-        <h2>Add New Chapter</h2>
+        <h2>Add Picture</h2>
+        <p>For Content Block ID: "{{ content_block_id }}"</p>
 
-        {% with messages = get_flashed_messages(with_categories=true) %} {% if
-            messages %} {% for category, message in messages %}
-            <div class="alert alert-{{ category }}">{{ message }}</div>
-            {% endfor %} {% endif %} {% endwith %}
-            
-            
-        <p>For E-textbook ID: "{{ etextbook_id }}" - Title: {{ etextbook_title }}</p>
 
-        <form method="POST" action="{{ url_for('admin.save_chapter') }}">
-            <label for="chapter_id">Unique Chapter ID:</label>
-            <input type="text" id="chapter_id" name="chapter_id" required>
+        <form method="POST" action="{{ url_for('faculty.faculty_save_picture') }}" enctype="multipart/form-data">
+            <label for="picture">Upload Picture:</label>
+            <input type="text" id="picture" name="picture" required>
 
-            <label for="chapter_title">Chapter Title:</label>
-            <input type="text" id="chapter_title" name="chapter_title" required>
-
-            <!-- Buttons for Add New Section, Go Back, and Landing Page -->
+            <!-- Buttons for Add, Go Back, and Landing Page -->
             <div class="buttons">
-                <!-- Submit button for adding the section and moving to the next page -->
-                <button type="submit" name="action" value="add_section" class="add-section">Add New Section</button>
+                <button type="submit" name="action" value="add" class="add-button">Add</button>
 
-                <!-- Link for Go Back -->
+                <!-- Link for Go Back styled as a button -->
                 {% if call_type == 'modify' %}
-                    <a href="{{ url_for('admin.modify_etextbook') }}" class="go-back">Go Back</a>
+                    <a href="{{ url_for('faculty.modify_content_block') }}" class="go-back">Go Back</a>
                 {% elif call_type == 'new' %}
-                    <a href="{{ url_for('admin.create_etextbook') }}" class="go-back">Go Back</a>
+                    <a href="{{ url_for('faculty.faculty_add_new_content_block') }}" class="go-back">Go Back</a>
                 {% endif %}
-    
-                <!-- Link for Landing Page -->
-                <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
+
+                <!-- <a href="{{ url_for('admin.add_new_content_block') }}" class="go-back">Go Back</a> -->
+
+                <!-- Link for Landing Page styled as a button -->
+                <a href="{{ url_for('faculty.faculty_home') }}" class="landing-page">Landing Page</a>
             </div>
         </form>
     </div>

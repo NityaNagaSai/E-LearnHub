@@ -48,6 +48,7 @@
         a:hover {
             color: #0056b3;
         }
+      
     </style>
 </head>
 <body>
@@ -59,6 +60,12 @@
     <!-- Centered content -->
     <div class="container">
         <h2>Please Select an Option</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+            
         <ul>
             <li><a href="{{ url_for('admin.create_faculty') }}">Create a Faculty Account</a></li>
             <li><a href="{{ url_for('admin.create_etextbook') }}">Create E-textbook</a></li>

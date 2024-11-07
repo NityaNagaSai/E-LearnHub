@@ -101,12 +101,22 @@
 
     <div class="container">
         <h2>Add Picture</h2>
+
+        
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+            
+            
         <p>For Content Block ID: "{{ content_block_id }}"</p>
 
 
         <form method="POST" action="{{ url_for('admin.save_picture') }}" enctype="multipart/form-data">
+            <input type="hidden" name="call_type" value="{{ call_type }}">
+
             <label for="picture">Upload Picture:</label>
-            <input type="file" id="picture" name="picture" accept="image/*" required>
+            <input type="text" id="picture" name="picture" required>
 
             <!-- Buttons for Add, Go Back, and Landing Page -->
             <div class="buttons">
