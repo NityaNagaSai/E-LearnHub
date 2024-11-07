@@ -153,3 +153,73 @@ CREATE TABLE IF NOT EXISTS Notification (
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES User(user_id) ON DELETE CASCADE
 );
+
+
+DELIMITER //
+
+-- Trigger 1: Automatically Create an Enrollment Record When a Student is Assigned to a Course
+
+CREATE TRIGGER after_student_enrollment
+AFTER INSERT ON Enrollment
+FOR EACH ROW
+BEGIN
+    IF NEW.status = 'Enrolled' THEN
+        INSERT INTO StudentParticipation (student_id, course_id, participation_points, finished_activities)
+        VALUES (NEW.student_user_id, NEW.course_id, 0, 0);
+    END IF;
+END//
+
+-- Trigger 2: Update `is_read` Status on Notification
+CREATE TRIGGER after_notification_access
+AFTER SELECT ON Notification
+FOR EACH ROW
+BEGIN
+    IF OLD.is_read = FALSE THEN
+        UPDATE Notification
+        SET is_read = TRUE
+        WHERE notification_id = OLD.notification_id;
+    END IF;
+END//
+
+-- Procedure: Enroll Student in a Course
+CREATE PROCEDURE EnrollStudent(
+    IN p_student_id VARCHAR(255),
+    IN p_course_id VARCHAR(50),
+    OUT p_status_message VARCHAR(255)
+)
+BEGIN
+    DECLARE course_capacity INT DEFAULT 0;
+    DECLARE enrolled_count INT DEFAULT 0;
+
+    -- Check if the course exists and retrieve capacity
+    SELECT capacity INTO course_capacity
+    FROM Course
+    WHERE course_id = p_course_id;
+
+    IF course_capacity IS NULL THEN
+        SET p_status_message = 'Course does not exist';
+    ELSE
+        -- Check current enrollment count
+        SELECT COUNT(*) INTO enrolled_count
+        FROM Enrollment
+        WHERE course_id = p_course_id AND status = 'Enrolled';
+
+        IF enrolled_count >= course_capacity THEN
+            SET p_status_message = 'Course is full';
+        ELSE
+            -- Insert enrollment record
+            INSERT INTO Enrollment (course_id, student_user_id, status)
+            VALUES (p_course_id, p_student_id, 'Enrolled')
+            ON DUPLICATE KEY UPDATE status = 'Enrolled';
+
+            -- Insert initial participation record
+            INSERT INTO StudentParticipation (student_id, course_id, participation_points, finished_activities)
+            VALUES (p_student_id, p_course_id, 0, 0)
+            ON DUPLICATE KEY UPDATE participation_points = 0, finished_activities = 0;
+
+            SET p_status_message = 'Enrollment successful';
+        END IF;
+    END IF;
+END//
+
+DELIMITER ;
