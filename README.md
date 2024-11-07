@@ -1,6 +1,5 @@
-<<<<<<< HEAD
 # E-LearnHub
-=======
+
 # Team Members
 
 1. Nitya Naga Sai Atluri
@@ -32,4 +31,3 @@ This README provides instructions on how to set up and run a Flask application t
 4. Run the application:
    ```bash
    python run.py
->>>>>>> master
