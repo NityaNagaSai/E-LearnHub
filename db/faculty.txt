@@ -1,0 +1,6 @@
+KeOg1024,Kemafor,Ogan,Ko2024!rpc,kogan@ncsu.edu,Faculty
+JoDo1024,John,Doe,john.doe@example.com,Jd2024!abc,Faculty
+SaMi1024,Sarah,Miller,sarah.miller@domain.com,Sm#Secure2024,Faculty
+DaBr1024,David,Brown,david.b@webmail.com,DbPass123!,Faculty
+EmDa1024,Emily,Davis,emily.davis@email.com,Emily#2024!,Faculty
+MiWi1024,Michael,Wilson,michael.w@service.com,Mw987secure,Faculty

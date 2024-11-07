@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Active Course Options</title>
+    <style>
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+            flex-direction: column;
+            margin-top: 60px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        a,
+        button {
+            text-decoration: none;
+            font-size: 18px;
+            color: #007bff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        a:hover,
+        button:hover {
+            color: #0056b3;
+        }
+
+        #options {
+            display: none;
+        }
+    </style>
+    <script>
+        function showOptions() {
+            const courseIdInput = document.getElementById("course_id").value;
+            if (courseIdInput.trim() !== "") {
+                document.getElementById("options").style.display = "block";
+                // Set hidden field's value to course_id in the second form
+                document.getElementById("hidden_course_id").value = courseIdInput;
+            } else {
+                alert("Please enter a valid Course ID");
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <div class="navbar">
+        E-Textbook and Assessment Platform - Active Course Options
+    </div>
+
+    <div class="container">
+        <h2>Enter Course ID</h2>
+        <!-- First form to enter Course ID and show options -->
+        <form onsubmit="event.preventDefault(); showOptions();">
+            <label for="course_id">Course ID:</label>
+            <input type="text" id="course_id" name="course_id" required><br><br>
+            <button type="submit">Submit Course ID</button>
+        </form>
+
+        <div id="options">
+            <h3>Select an Option</h3>
+            <!-- Second form with options and hidden course_id field -->
+            <form method="POST" action="{{ url_for('faculty.go_to_active_course') }}">
+                <!-- Hidden input to hold course_id value for submission -->
+                <input type="hidden" name="course_id" id="hidden_course_id">
+
+                <ul class="menu">
+                    <li><button type="submit" name="option" value="1">1. View Worklist</button></li>
+                    <li><button type="submit" name="option" value="2">2. Approve Enrollment</button></li>
+                    <li><button type="submit" name="option" value="3">3. View Students</button></li>
+                    <li><button type="submit" name="option" value="4">4. Add New Chapter</button></li>
+                    <li><button type="submit" name="option" value="5">5. Modify Chapters</button></li>
+                    <li><button type="submit" name="option" value="6">6. Add TA</button></li>
+                </ul>
+            </form>
+
+            <div class="link-buttons">
+                <a href="{{ url_for('faculty.faculty_home') }}">7. Go Back</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

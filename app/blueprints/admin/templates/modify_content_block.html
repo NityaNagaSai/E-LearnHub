@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Content Block</title>
+    <style>
+        /* Styling for the navigation bar */
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Center the content on the page */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+            flex-direction: column;
+            margin-top: 60px; /* Adjust for the fixed navbar */
+        }
+
+        /* Styling for the form */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        label, input {
+            width: 100%;
+            margin: 5px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        input {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Styling for links as buttons */
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 300px; /* Matches the width of the form */
+        }
+
+        .button-link {
+            background-color: black;
+            color: white;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 4px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+        }
+
+        .button-link:hover {
+            background-color: #333333;
+        }
+
+        .go-back, .landing-page {
+            background-color: #6c757d;
+        }
+
+        .go-back:hover, .landing-page:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation bar -->
+    <div class="navbar">
+        Admin Dashboard
+    </div>
+
+    <div class="container">
+        <h2>Modify Content Block</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+            
+        <form method="POST" action="{{ url_for('admin.modify_content_block') }}">
+            <label for="content_block_id">Content Block ID:</label>
+            <input type="text" id="content_block_id" name="content_block_id" required>
+
+            <div class="buttons">
+                <button type="submit"  name="action" value="modify_text" class="button-link">Add Text</button>
+                <button type="submit"  name="action" value="modify_picture" class="button-link">Add Picture</button>
+                <button type="submit"  name="action" value="modify_activity" class="button-link">Add New Activity</button>
+                <a href="{{ url_for('admin.modify_section') }}" class="button-link go-back">Go Back</a>
+                <a href="{{ url_for('admin.admin_landing') }}" class="button-link landing-page">Landing Page</a>
+            </div>
+    
+        </form>
+
+    </div>
+
+</body>
+</html>

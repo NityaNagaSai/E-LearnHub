@@ -1,0 +1,5 @@
+101, "chap01", "introduction to Database", "no", created_by
+101, "chap02", "The Relational Model", "no", created_by
+102, "chap01", "introduction to Software Engineering", "no", created_by
+102, "chap02", "introduction to Software Development Life Cycle (SDLC)", "no", created_by
+103, "chap01", "Introduction to Machine Learning", "no", created_by

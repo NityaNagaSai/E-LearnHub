@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student ID Input</title>
+    <style>
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+            flex-direction: column;
+            margin-top: 60px;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            margin: 10px 0;
+        }
+
+        a,
+        button {
+            text-decoration: none;
+            font-size: 18px;
+            color: #007bff;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        a:hover,
+        button:hover {
+            color: #0056b3;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="navbar">
+        E-Textbook and Assessment Platform - Student ID Input
+    </div>
+
+    <div class="container">
+        <h2>Enter Student ID</h2>
+        <form method="POST" action="{{ url_for('faculty.save_student') }}">
+            <label for="student_id">Student ID:</label>
+            <input type="text" id="student_id" name="student_id" required><br><br>
+
+            <h3>Select an Option</h3>
+            <ul class="menu">
+                <li><button type="submit" name="option" value="1">1. Save</button></li>
+                <form method="GET" action="/faculty/active_course">
+                    <li><button type="submit" name="option" value="2">Go Back</button></li>
+                </form>
+            </ul>
+        </form>
+    </div>
+</body>
+
+</html>

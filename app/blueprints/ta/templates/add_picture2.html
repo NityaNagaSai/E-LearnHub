@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Picture</title>
+    <style>
+      /* Styling for the navigation bar */
+      .navbar {
+        background-color: black;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 24px;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+
+      /* Center the content on the page */
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        text-align: center;
+        flex-direction: column;
+        margin-top: 60px; /* Adjust for the fixed navbar */
+      }
+
+      /* Styling for the form */
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 300px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
+
+      label,
+      input {
+        width: 100%;
+        margin: 5px 0;
+        font-size: 16px;
+        text-align: left;
+      }
+
+      input[type="file"] {
+        padding: 5px;
+        font-size: 16px;
+      }
+
+      /* Styling for buttons */
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+        width: 100%;
+      }
+
+      button,
+      .go-back,
+      .landing-page {
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        width: 100%;
+        border-radius: 4px;
+        text-align: center;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        box-sizing: border-box;
+      }
+
+      .add-button {
+        background-color: black;
+        border: none;
+      }
+
+      .add-button:hover {
+        background-color: #333333;
+      }
+
+      .go-back,
+      .landing-page {
+        background-color: #6c757d;
+      }
+
+      .go-back:hover,
+      .landing-page:hover {
+        background-color: #5a6268;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation bar -->
+    <div class="navbar">E-Textbook and Assessment Platform</div>
+
+    <div class="container">
+      <h2>Add Picture</h2>
+      <p>For Content Block ID: "{{ content_block_id }}"</p>
+
+      <form
+        method="POST"
+        action="{{ url_for('ta.save_picture2') }}"
+        enctype="multipart/form-data"
+      >
+        <label for="picture">Upload Picture:</label>
+        <input
+          type="file"
+          id="picture"
+          name="picture"
+          accept="image/*"
+          required
+        />
+        <input type="hidden" name="chapter_id" value="{{ chapter_id }}" />
+
+        <!-- Buttons for Add, Go Back, and Landing Page -->
+        <div class="buttons">
+          <button type="submit" name="action" value="add" class="add-button">
+            Add
+          </button>
+          <a href="{{ url_for('ta.add_new_content_block2') }}" class="go-back"
+            >Go Back</a
+          >
+        </div>
+      </form>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="alert mt-3">{{ messages[0] }}</div>
+      {% endif %} {% endwith %}
+    </div>
+  </body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Question</title>
+    <style>
+        /* Styling for the navigation bar */
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Center the content on the page */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 90%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding-top: 80px; /* Space for the navbar */
+            font-family: Arial, sans-serif;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 0.9em;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        label {
+            margin: 5px 0;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            font-size: 0.9em;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            resize: vertical;
+        }
+
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            background-color: #f9f9f9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .option-group h3 {
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background-color: #1e1f20;
+            color: white;
+            margin-top: 15px;
+        }
+
+        button:hover {
+            background-color: #171718;
+        }
+
+        .link-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .link-buttons a {
+            text-decoration: none;
+            color: white;
+            background-color: #6c757d;
+            padding: 10px;
+            font-size: 1em;
+            text-align: center;
+            border-radius: 5px;
+            width: 48%;
+        }
+
+        .link-buttons a:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navigation bar -->
+<div class="navbar">
+    Admin Dashboard
+</div>
+
+<div class="container">
+    <h2>Modify Question</h2>
+    <p>For Activity ID: "{{ activity_id }}"</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %} {% if
+        messages %} {% for category, message in messages %}
+        <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %} {% endif %} {% endwith %}
+
+    <form method="POST" action="{{ url_for('admin.save_modified_question') }}">
+        <!-- Question ID and Text -->
+        <label for="question_id">Question ID:</label>
+        <input type="text" id="question_id" name="question_id" value="{{ question_id }}" required>
+
+        <label for="question_text">Question Text:</label>
+        <textarea id="question_text" name="question_text" rows="3" required>{{ question_text }}</textarea>
+
+        <!-- Option 1 -->
+        <div class="option-group">
+            <h3>Option 1</h3>
+            <label for="option1_text">Text:</label>
+            <input type="text" id="option1_text" name="option1_text" value="{{ option1_text }}" required>
+
+            <label for="option1_explanation">Explanation:</label>
+            <textarea id="option1_explanation" name="option1_explanation" rows="2">{{ option1_explanation }}</textarea>
+
+            <label for="option1_label">Label:</label>
+            <select id="option1_label" name="option1_label">
+                <option value="Correct" {% if option1_label == 'Correct' %}selected{% endif %}>Correct</option>
+                <option value="Incorrect" {% if option1_label == 'Incorrect' %}selected{% endif %}>Incorrect</option>
+            </select>
+        </div>
+
+        <!-- Option 2 -->
+        <div class="option-group">
+            <h3>Option 2</h3>
+            <label for="option2_text">Text:</label>
+            <input type="text" id="option2_text" name="option2_text" value="{{ option2_text }}" required>
+
+            <label for="option2_explanation">Explanation:</label>
+            <textarea id="option2_explanation" name="option2_explanation" rows="2">{{ option2_explanation }}</textarea>
+
+            <label for="option2_label">Label:</label>
+            <select id="option2_label" name="option2_label">
+                <option value="Correct" {% if option2_label == 'Correct' %}selected{% endif %}>Correct</option>
+                <option value="Incorrect" {% if option2_label == 'Incorrect' %}selected{% endif %}>Incorrect</option>
+            </select>
+        </div>
+
+        <!-- Option 3 -->
+        <div class="option-group">
+            <h3>Option 3</h3>
+            <label for="option3_text">Text:</label>
+            <input type="text" id="option3_text" name="option3_text" value="{{ option3_text }}">
+
+            <label for="option3_explanation">Explanation:</label>
+            <textarea id="option3_explanation" name="option3_explanation" rows="2">{{ option3_explanation }}</textarea>
+
+            <label for="option3_label">Label:</label>
+            <select id="option3_label" name="option3_label">
+                <option value="Correct" {% if option3_label == 'Correct' %}selected{% endif %}>Correct</option>
+                <option value="Incorrect" {% if option3_label == 'Incorrect' %}selected{% endif %}>Incorrect</option>
+            </select>
+        </div>
+
+        <!-- Option 4 -->
+        <div class="option-group">
+            <h3>Option 4</h3>
+            <label for="option4_text">Text:</label>
+            <input type="text" id="option4_text" name="option4_text" value="{{ option4_text }}">
+
+            <label for="option4_explanation">Explanation:</label>
+            <textarea id="option4_explanation" name="option4_explanation" rows="2">{{ option4_explanation }}</textarea>
+
+            <label for="option4_label">Label:</label>
+            <select id="option4_label" name="option4_label">
+                <option value="Correct" {% if option4_label == 'Correct' %}selected{% endif %}>Correct</option>
+                <option value="Incorrect" {% if option4_label == 'Incorrect' %}selected{% endif %}>Incorrect</option>
+            </select>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit">Save Modifications</button>
+    </form>
+
+    <!-- Navigation Links -->
+    <div class="link-buttons">
+        <a href="{{ url_for('admin.modify_activity') }}">Go Back</a>
+        <a href="{{ url_for('admin.admin_landing') }}">Landing Page</a>
+    </div>
+</div>
+
+</body>
+</html>

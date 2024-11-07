@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Activity</title>
+    <style>
+        /* Styling for the navigation bar */
+        .navbar {
+            background-color: black;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 24px;
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+        }
+
+        /* Center the content on the page */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+            text-align: center;
+            flex-direction: column;
+            margin-top: 60px; /* Adjust for the fixed navbar */
+        }
+
+        /* Styling for the form */
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        label, input {
+            width: 100%;
+            margin: 5px 0;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        /* Styling for buttons */
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        button, .go-back, .landing-page {
+            padding: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        .add-button {
+            background-color: black;
+            border: none;
+        }
+
+        .add-button:hover {
+            background-color: #333333;
+        }
+
+        .go-back, .landing-page {
+            background-color: #6c757d;
+        }
+
+        .go-back:hover, .landing-page:hover {
+            background-color: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation bar -->
+    <div class="navbar">
+        Admin Dashboard
+    </div>
+
+    <div class="container">
+        <h2>Add Activity</h2>
+
+        
+        {% with messages = get_flashed_messages(with_categories=true) %} {% if
+            messages %} {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %} {% endif %} {% endwith %}
+            
+            
+        <p>For Content Block ID: "{{ content_block_id }}"</p>
+
+
+        <form method="POST" action="{{ url_for('admin.save_activity') }}">
+
+            <input type="hidden" name="call_type" value="{{ call_type }}">
+
+            <label for="activity_id">Activity ID:</label>
+            <input type="text" id="activity_id" name="activity_id" required>
+
+            <!-- Buttons for Add Question, Go Back, and Landing Page -->
+            <div class="buttons">
+                <button type="submit" name="action" value="add_question" class="add-button">Add Question</button>
+
+                <!-- Link for Go Back styled as a button -->
+                {% if call_type == 'modify' %}
+                    <a href="{{ url_for('admin.modify_content_block') }}" class="go-back">Go Back</a>
+                {% elif call_type == 'new' %}
+                    <a href="{{ url_for('admin.add_new_content_block') }}" class="go-back">Go Back</a>
+                {% endif %}
+
+                <!-- <a href="{{ url_for('admin.add_new_content_block') }}" class="go-back">Go Back</a> -->
+
+                <!-- Link for Landing Page styled as a button -->
+                <a href="{{ url_for('admin.admin_landing') }}" class="landing-page">Landing Page</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TA</title>
+    <style>
+      /* Styling for the navigation bar */
+      .navbar {
+        background-color: black;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 24px;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
+
+      /* Center the content on the page */
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        text-align: center;
+        flex-direction: column;
+        margin-top: 60px; /* Adjust for the fixed navbar */
+      }
+
+      /* Styling for the menu list */
+      ul {
+        list-style-type: none;
+        padding: 0;
+      }
+
+      li {
+        margin: 10px 0;
+      }
+
+      a {
+        text-decoration: none;
+        font-size: 18px;
+        color: #007bff;
+      }
+
+      a:hover {
+        color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation bar -->
+    <div class="navbar">E-Textbook and Assessment Platform - View Courses</div>
+
+    <!-- Centered content -->
+    <div class="container">
+      <h2>Assigned Course List</h2>
+      <div class="course-list">
+        {% for c in courses %}
+        <h3>Course ID: {{c[0]}}, Course Name: {{c[1]}}</h3>
+        {% endfor %}
+      </div>
+      <ol>
+        <li><a href="{{ url_for('ta.ta_landing') }}">Go Back</a></li>
+      </ol>
+    </div>
+  </body>
+</html>

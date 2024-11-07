@@ -1,0 +1,5 @@
+JaWi1024,James,Williams,jwilliams@ncsu.edu,jwilliams@1234,TA
+LiAl0924,Lisa,Alberti,lalberti@ncsu.edu,lalberti&5678@,TA
+DaJo1024,David,Johnson,djohnson@ncsu.edu,djohnson%@1122,TA
+ElCl1024,Ellie,Clark,eclark@ncsu.edu,eclark^#3654,TA
+JeGi0924,Jeff,Gibson,jgibson@ncsu.edu,jgibson$#9877,TA

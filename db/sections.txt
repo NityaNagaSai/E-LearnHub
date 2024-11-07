@@ -1,0 +1,10 @@
+101, "chap01", "Sec01", "Database Management Systems (DBMS) Overview", "no", section_number, created_by
+101, "chap01", "Sec02", "Data Models and Schemas", "no", section_number, created_by
+101, "chap02", "Sec01", "Entities, Attributes, and Relationships", "no", section_number, created_by
+101, "chap02", "Sec02", "Normalization and Integrity Constraints", "no", section_number, created_by
+102, "chap01", "Sec01", "History and Evolution of Software Engineering", "no", section_number, created_by
+102, "chap01", "Sec02", "Key Principles of Software Engineering", "no", section_number, created_by
+102, "chap02", "Sec01", "Phases of the SDLC", "yes", section_number, created_by
+102, "chap02", "Sec02", "Agile vs. Waterfall Models", "no", section_number, created_by
+103, "chap01", "Sec01", "Overview of Machine Learning", "yes", section_number, created_by
+103, "chap01", "Sec02", "Supervised vs Unsupervised Learning", "no", section_number, created_by
