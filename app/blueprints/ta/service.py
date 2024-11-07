@@ -302,7 +302,8 @@ def delete_content(etextbook_id, chapter_id, section_id, content_block_id):
         chapter_id = %s AND 
         section_id = %s AND 
         content_block_id = %s;"""
-        cursor.execute(query, (etextbook_id, chapter_id, section_id, content_block_id))
+        cursor.execute(query, (int(etextbook_id), str(chapter_id), str(section_id), str(content_block_id)))
+        conn.commit()
         # print(etextbook_id+ " " + chapter_id)
         return True
     except Error as e:
@@ -312,6 +313,27 @@ def delete_content(etextbook_id, chapter_id, section_id, content_block_id):
         cursor.close()
         conn.close()
 
+def hide_content(textbook_id, chapter_id, section_id, content_block_id):
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    try:
+        query = """
+        UPDATE ContentBlock SET is_hidden = 'yes'
+        WHERE textbook_id = %s AND 
+        chapter_id = %s AND 
+        section_id = %s AND 
+        content_block_id = %s;"""
+        cursor.execute(query, (textbook_id, chapter_id, section_id, content_block_id))
+        conn.commit()
+        # print(etextbook_id+ " " + chapter_id)
+        return True
+    except Error as e:
+        print(f"Error: {e}")
+        return False
+    finally:
+        cursor.close()
+        conn.close()
+    
 def fetch_sections(etextbook_id, chapter_id, section_id):
     conn = get_db_connection()
     cursor = conn.cursor()
