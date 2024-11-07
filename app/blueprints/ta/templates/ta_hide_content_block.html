@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Modify Content Block</title>
+    <title>Modify Section</title>
     <style>
       /* Styling for the navigation bar */
       .navbar {
@@ -98,8 +98,14 @@
     <div class="navbar">TA Dashboard</div>
 
     <div class="container">
-      <h2>Modify Content Block</h2>
-      <form method="POST" action="{{ url_for('ta.modify_content_block') }}">
+      <h2>Hide Content Block</h2>
+      <form method="POST" action="{{ url_for('ta.ta_hide_content_block') }}">
+        <!-- <label for="section_number">Unique E-textbook ID:</label>
+            <input type="text" id="etextbook_id" name="etextbook_id" required value = "{{etextbook_id}}">
+
+            <label for="section_number">Chapter ID:</label>
+            <input type="text" id="chapter_id" name="chapter_id" required value ="{{chapter_id}}"> -->
+
         <label for="content_block_id">Content Block ID:</label>
         <input
           type="text"
@@ -112,27 +118,12 @@
           <button
             type="submit"
             name="action"
-            value="add_text"
+            value="hide_block"
             class="button-link"
           >
-            Add Text
+            Hide Content Block
           </button>
-          <button
-            type="submit"
-            name="action"
-            value="add_picture"
-            class="button-link"
-          >
-            Add Picture
-          </button>
-          <button
-            type="submit"
-            name="action"
-            value="modify_activity"
-            class="button-link"
-          >
-            Add New Activity
-          </button>
+
           <a
             href="{{ url_for('ta.ta_modify_section') }}"
             class="button-link go-back"

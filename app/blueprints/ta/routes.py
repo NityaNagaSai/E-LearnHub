@@ -233,15 +233,16 @@ def add_new_content_block2():
 @ta_bp.route('/save_content_block2', methods=['POST'])
 def save_content_block2():
     content_block_id = request.form.get('content_block_id')
-    chapter_id = request.form.get('chapter_id')
-    session['content_block_id'] = content_block_id
+    session['content_block_id'] = content_block_id  # Store content_block_id in session
+
+
     action = request.form.get('action')
     if action == 'add_text':
-        return redirect(url_for('ta.add_text2',chapter_id=chapter_id))
+        return redirect(url_for('ta.add_text2'))
     elif action == 'add_picture':
-        return redirect(url_for('ta.add_picture2',chapter_id=chapter_id))
+        return redirect(url_for('ta.add_picture2'))
     elif action == 'add_activity':
-        return redirect(url_for('ta.add_activity2',chapter_id=chapter_id))
+        return redirect(url_for('ta.add_activity2'))
     else:
         flash("Invalid action selected", "error")
         return redirect(url_for('ta.add_new_content_block2',chapter_id=chapter_id))
@@ -249,14 +250,14 @@ def save_content_block2():
 
 @ta_bp.route('/add_text2')
 def add_text2():
-    chapter_id = request.args.get('chapter_id')
+    chapter_id = session.get('chapter_id')
     content_block_id = session.get('content_block_id')
     
     return render_template('add_text2.html', content_block_id=content_block_id,chapter_id=chapter_id)
 
 @ta_bp.route('/add_picture2')
 def add_picture2():
-    chapter_id = request.args.get('chapter_id')
+    chapter_id = session.get('chapter_id')
     content_block_id = session.get('content_block_id')
     return render_template('add_picture2.html', content_block_id=content_block_id,chapter_id=chapter_id)
 
@@ -300,35 +301,30 @@ def save_text2():
             return redirect(url_for('ta.add_new_content_block2'))
 
 # Modify Chapter
-
-@ta_bp.route('/modify_chapter', methods=['GET','POST'])
+@ta_bp.route('/modify_chapter', methods = ['GET', 'POST'])
 def ta_modify_chapter():
-    if request.method == 'POST':
-        course_id = session.get("course_id")
-        course = check_active_course(course_id)
-        session['textbook_id'] = course[2]
-        # etextbook_id = session.get('etextbook_id')
-        chapter_id = request.form.get('chapter_id')
-        session['chapter_id'] = chapter_id
-        textbook_id = session.get('textbook_id')
-        course_id = session.get('course_id')
-        print(textbook_id, chapter_id)
-        action = request.form.get('action')
-        # Logic to modify the chapter in the specified E-textbook in the database
-        chapter_list = fetch_chapters(textbook_id, chapter_id)
-        print(chapter_list)
-        if chapter_list:
-            if action == "add_new_section":
-                return redirect(url_for('ta.add_new_section2'))
-            elif action == "modify_section":
-                return redirect(url_for('ta.ta_modify_section'))
-        else:
-            flash("No chapter exists with the current chapter id or TA is not assigned to this course/chapter. Please try again.", "error")
-            # # flash(f"Chapter modified for E-textbook ID {etextbook_id}.", "success")
-            return redirect(url_for('ta.ta_modify_chapter'))
-
-    return render_template('ta_modify_chapter.html')
-
+        if request.method == 'POST':
+            # Assuming we get modified data from a form
+            # modified_data = request.form.get('modified_data')
+            # Retrieve the E-textbook ID and update the relevant chapter
+            etextbook_id = session.get('textbook_id')
+            chapter_id = request.form.get('chapter_id')
+            session['chapter_id'] = chapter_id
+            action = request.form.get('action')
+            print(etextbook_id, chapter_id)
+            # Logic to modify the chapter in the specified E-textbook in the database
+            chapter_list = fetch_chapters(etextbook_id, chapter_id)
+            if chapter_list:
+                if action == "add_new_section":
+                    flash("Chapter found. Ready to add a new section.", "info")
+                    return redirect(url_for('ta.add_new_section2'))
+                elif action == "modify_section":
+                    flash("Chapter found. Ready to modify existing sections.", "info")
+                    return redirect(url_for('ta.ta_modify_section'))
+            else:
+                flash("No chapter exists with the current chapter id. Please try again.", "error")
+                return redirect(url_for('ta.ta_modify_chapter'))
+        return render_template('ta_modify_chapter.html')
 
 # Modify Section
 
@@ -400,8 +396,31 @@ def ta_delete_content_block():
             flash("Invalid action selected", "error")
         return redirect(url_for('ta.ta_delete_content_block'))
     return render_template('ta_delete_content_block.html')
-# Hide Content Block
 
+# Hide Content Block
+@ta_bp.route('/hide_content', methods = ["GET", "POST"])
+def ta_hide_content_block():
+    if request.method == 'POST':
+        content_block_id = request.form.get('content_block_id')
+        session['content_block_id'] = content_block_id  # Store content_block_id in session
+        course_id = session.get('course_id')
+        textbook_id = session.get('textbook_id')
+        chapter_id = session.get('chapter_id')
+        section_id = session.get('section_number')
+        action = request.form.get('action')
+        print(textbook_id, chapter_id, section_id, content_block_id)
+        print(type(textbook_id), type(chapter_id), type(section_id),type(content_block_id))
+        if action == 'hide_block':
+            # method to delete the block from db table
+            result = hide_content(textbook_id, chapter_id, section_id, content_block_id)
+            if result:
+                flash("Content block hidden successfully.", "success")
+            else:
+                flash(f"There is no {content_block_id} in the Contents", "error")
+        else:
+            flash("Invalid action selected", "error")
+        return redirect(url_for('ta.ta_hide_content_block'))
+    return render_template('ta_hide_content_block.html')
 
 
 @ta_bp.route('/save_picture2', methods=['POST'])

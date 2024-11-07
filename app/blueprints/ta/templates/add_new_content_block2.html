@@ -1,126 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add New Content Block</title>
     <style>
-        /* Styling for the navigation bar */
-        .navbar {
-            background-color: black;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
+      /* Styling for the navigation bar */
+      .navbar {
+        background-color: black;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 24px;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
 
-        /* Center the content on the page */
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 80vh;
-            text-align: center;
-            flex-direction: column;
-            margin-top: 60px; /* Adjust for the fixed navbar */
-        }
+      /* Center the content on the page */
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        text-align: center;
+        flex-direction: column;
+        margin-top: 60px; /* Adjust for the fixed navbar */
+      }
 
-        /* Styling for the form */
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 300px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+      /* Styling for the form */
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 300px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
 
-        label, input {
-            width: 100%;
-            margin: 5px 0;
-            font-size: 16px;
-            text-align: left;
-        }
+      label,
+      input {
+        width: 100%;
+        margin: 5px 0;
+        font-size: 16px;
+        text-align: left;
+      }
 
-        input {
-            padding: 8px;
-            font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
-        }
+      input {
+        padding: 8px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        box-sizing: border-box;
+      }
 
-        /* Styling for buttons */
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-top: 15px;
-            width: 100%;
-        }
+      /* Styling for buttons */
+      .buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 15px;
+        width: 100%;
+      }
 
-        button, .go-back, .landing-page {
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 4px;
-            text-align: center;
-            color: white;
-            text-decoration: none;
-            display: inline-block;
-            box-sizing: border-box;
-        }
+      button,
+      .go-back,
+      .landing-page {
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        width: 100%;
+        border-radius: 4px;
+        text-align: center;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        box-sizing: border-box;
+      }
 
-        .add-option {
-            background-color: black;
-            border: none;
-        }
+      .add-option {
+        background-color: black;
+        border: none;
+      }
 
-        .add-option:hover {
-            background-color: #333333;
-        }
+      .add-option:hover {
+        background-color: #333333;
+      }
 
-        .go-back, .landing-page {
-            background-color: #6c757d;
-        }
+      .go-back,
+      .landing-page {
+        background-color: #6c757d;
+      }
 
-        .go-back:hover, .landing-page:hover {
-            background-color: #5a6268;
-        }
+      .go-back:hover,
+      .landing-page:hover {
+        background-color: #5a6268;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navigation bar -->
-    <div class="navbar">
-        E-Textbook and Assessment Platform
-    </div>
+    <div class="navbar">E-Textbook and Assessment Platform</div>
 
     <div class="container">
-        <h2>Add New Content Block</h2>
+      <h2>Add New Content Block</h2>
 
-        <form method="POST" action="{{ url_for('ta.save_content_block2') }}">
-            <label for="content_block_id">Content Block ID:</label>
-            <input type="hidden" name="course_id" value="{{ course_id }}">
-            <input type="hidden" name="textbook_id" value="{{ textbook_id }}">
-            <input type="hidden" name="section_id" value="{{ section_number }}">
-            <input type="hidden" name="chapter_id" value="{{ chapter_id }}">
-            <input type="text" id="content_block_id" name="content_block_id" required>
+      <form method="POST" action="{{ url_for('ta.save_content_block2') }}">
+        <label for="content_block_id">Content Block ID:</label>
+        <input type="hidden" name="course_id" value="{{ course_id }}" />
+        <input type="hidden" name="textbook_id" value="{{ textbook_id }}" />
+        <input type="hidden" name="section_id" value="{{ section_number }}" />
+        <input type="hidden" name="chapter_id" value="{{ chapter_id }}" />
+        <input
+          type="text"
+          id="content_block_id"
+          name="content_block_id"
+          required
+        />
 
-            <!-- Buttons for Add Text, Add Picture, Add Activity, Go Back, and Landing Page -->
-            <div class="buttons">
-                <button type="submit" name="action" value="add_text" class="add-option">Add Text</button>
-                <button type="submit" name="action" value="add_picture" class="add-option">Add Picture</button>
-                <button type="submit" name="action" value="add_activity" class="add-option">Add Activity</button>
-                    <a href="{{ url_for('ta.add_new_section2') }}" class="go-back">Go Back</a>
-            </div>
-        </form>
+        <!-- Buttons for Add Text, Add Picture, Add Activity, Go Back, and Landing Page -->
+        <div class="buttons">
+          <button
+            type="submit"
+            name="action"
+            value="add_text"
+            class="add-option"
+          >
+            Add Text
+          </button>
+          <button
+            type="submit"
+            name="action"
+            value="add_picture"
+            class="add-option"
+          >
+            Add Picture
+          </button>
+          <button
+            type="submit"
+            name="action"
+            value="add_activity"
+            class="add-option"
+          >
+            Add Activity
+          </button>
+          <a href="{{ url_for('ta.add_new_section2') }}" class="go-back"
+            >Go Back</a
+          >
+        </div>
+      </form>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="alert mt-3">{{ messages[0] }}</div>
+      {% endif %} {% endwith %}
     </div>
-</body>
+  </body>
 </html>

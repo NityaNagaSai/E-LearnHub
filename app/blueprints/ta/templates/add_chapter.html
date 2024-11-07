@@ -1,114 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Add New Chapter</title>
     <style>
-        /* Styling for the navigation bar */
-        .navbar {
-            background-color: black;
-            color: white;
-            padding: 15px;
-            text-align: center;
-            font-size: 24px;
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-        }
+      /* Styling for the navigation bar */
+      .navbar {
+        background-color: black;
+        color: white;
+        padding: 15px;
+        text-align: center;
+        font-size: 24px;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+      }
 
-        /* Center the content on the page */
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 80vh;
-            text-align: center;
-            flex-direction: column;
-            margin-top: 60px; /* Adjust for the fixed navbar */
-        }
+      /* Center the content on the page */
+      .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 80vh;
+        text-align: center;
+        flex-direction: column;
+        margin-top: 60px; /* Adjust for the fixed navbar */
+      }
 
-        /* Styling for the form */
-        form {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            width: 300px;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
+      /* Styling for the form */
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        width: 300px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      }
 
-        label, input {
-            width: 100%;
-            margin: 5px 0;
-            font-size: 16px;
-        }
+      label,
+      input {
+        width: 100%;
+        margin: 5px 0;
+        font-size: 16px;
+      }
 
-        /* Styling for buttons */
-        .buttons {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-            width: 100%;
-        }
+      /* Styling for buttons */
+      .buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+        width: 100%;
+      }
 
-        button, .go-back, .landing-page {
-            padding: 10px;
-            font-size: 16px;
-            cursor: pointer;
-            width: 100%;
-            border-radius: 4px;
-            text-align: center;
-            color: white;
-            text-decoration: none;
-            display: inline-block;
-        }
+      button,
+      .go-back,
+      .landing-page {
+        padding: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        width: 100%;
+        border-radius: 4px;
+        text-align: center;
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+      }
 
-        .add-section {
-            background-color: black;
-            border: none;
-        }
+      .add-section {
+        background-color: black;
+        border: none;
+      }
 
-        .add-section:hover {
-            background-color: #333333;
-        }
+      .add-section:hover {
+        background-color: #333333;
+      }
 
-        .go-back, .landing-page {
-            background-color: #6c757d;
-        }
+      .go-back,
+      .landing-page {
+        background-color: #6c757d;
+      }
 
-        .go-back:hover, .landing-page:hover {
-            background-color: #5a6268;
-        }
+      .go-back:hover,
+      .landing-page:hover {
+        background-color: #5a6268;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Navigation bar -->
-    <div class="navbar">
-        E-Textbook and Assessment Platform
-    </div>
+    <div class="navbar">E-Textbook and Assessment Platform</div>
 
     <!-- Centered content -->
     <div class="container">
-        <h2>Add New Chapter</h2>
+      <h2>Add New Chapter</h2>
 
-        <form method="POST" action="{{ url_for('ta.add_chapter_form') }}">
-            <label for="chapter_id">Unique Chapter ID:</label>
-            <input type="text" id="chapter_id" name="chapter_id" required>
+      <form method="POST" action="{{ url_for('ta.add_chapter_form') }}">
+        <label for="chapter_id">Unique Chapter ID:</label>
+        <input type="text" id="chapter_id" name="chapter_id" required />
 
-            <label for="chapter_title">Chapter Title:</label>
-            <input type="text" id="chapter_title" name="chapter_title" required>
+        <label for="chapter_title">Chapter Title:</label>
+        <input type="text" id="chapter_title" name="chapter_title" required />
 
-            <!-- Buttons for Add New Section, Go Back, and Landing Page -->
-            <div class="buttons">
-                <!-- Submit button for adding the section and moving to the next page -->
-                <button type="submit" name="action" value="add_section" class="add-section">Add New Section</button>
-                <a href="" class="go-back">Go Back</a>
-            </div>
-        </form>
+        <!-- Buttons for Add New Section, Go Back, and Landing Page -->
+        <div class="buttons">
+          <!-- Submit button for adding the section and moving to the next page -->
+          <button
+            type="submit"
+            name="action"
+            value="add_section"
+            class="add-section"
+          >
+            Add New Section
+          </button>
+          <a href="" class="go-back">Go Back</a>
+        </div>
+      </form>
+      {% with messages = get_flashed_messages() %} {% if messages %}
+      <div class="alert mt-3">{{ messages[0] }}</div>
+      {% endif %} {% endwith %}
     </div>
-</body>
+  </body>
 </html>
